@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgUsuario"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	{
+		usuario = arg.get("aObjeto");
+
+		esNuevo = false;
+		if (usuario.login == null || usuario.login.trim().length() == 0) {
+			esNuevo = true;
+		}
+		confirmPass = usuario.getPassword();
+
+	}
+]]>
+</zscript>
+
+	<window id="dlgUsuario" title="Actualización de un Usuario"
+		maximizable="true" maximized="false" border="normal" width="50%"
+		height="70%" use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<grid>
+					<columns>
+						<column width="40%" />
+						<column width="60%" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Login" />
+							<textbox id="txtlogin"
+								value="@{usuario.login}" constraint="no empty" />
+						</row>
+						<row>
+							<label value="Password" />
+							<textbox value="@{usuario.password}"
+								type="password" />
+						</row>
+						<row>
+							<label value="Repita el Password" />
+							<textbox value="@{confirmPass}"
+								type="password" />
+						</row>
+						<row>
+							<label value="Nombre" />
+							<textbox id="txtnombre"
+								value="@{usuario.nombre}" constraint="no empty" />
+						</row>
+						<row>
+							<label value="E-mail" />
+							<textbox value="@{usuario.email}"
+								constraint="/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*([,;]\s*\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)*/: Please enter real e-mail address"
+								width="70%" />
+						</row>
+						<row>
+							<label value="Telf. Celular" />
+							<textbox value="@{usuario.numeroCelular}"
+								constraint="no empty,no negative" />
+						</row>
+						<row>
+							<label value="Otro Telf." />
+							<textbox value="@{usuario.numeroTelefonico}"
+								constraint="no empty,no negative" />
+						</row>
+						<row>
+							<label value="Activo"></label>
+							<hbox>
+								<checkbox id="chlactivo"
+									checked="@{usuario.activo}">
+								</checkbox>
+
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+
+			</center>
+			<south height="48px">
+				<div height="100%" align="right"
+					style="background:#c5e6ef">
+
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+		<zscript>
+		<![CDATA[
+	if (esNuevo) {
+		txtlogin.setDisabled(false);
+	} else {
+		txtlogin.setDisabled(true);
+	}
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (usuario != null) {
+			if (usuario.nombre != null) {
+				if (usuario.email != null) {
+					if (usuario.login != null) {
+						if (!esNuevo) {
+							busqueUsuario = userService
+									.getUserByLoginName(usuario.login);
+							if (busqueUsuario == null) {
+								throw new com.obelisco.exception.ObeliscoException(
+										"Ya existe un Usuario con este Login  !!!");
+							}
+						}
+						if (usuario.password != null) {
+							if (confirmPass != null) {
+								if ((usuario.password
+										.equals((String) confirmPass))) {
+
+									boolean esValido = true;
+									valido = new Boolean(esValido);
+								} else {
+									throw new com.obelisco.exception.ObeliscoException(
+											"Los Campos Password y la Confirmacion no son Iguales !!!");
+								}
+							} else {
+								throw new com.obelisco.exception.ObeliscoException(
+										"Debe Rellenar el Campo de Confirmacion de Password  !!!");
+							}
+						} else {
+							throw new com.obelisco.exception.ObeliscoException(
+									"Debe Rellenar el Campo Password  !!!");
+						}
+					} else {
+						throw new com.obelisco.exception.ObeliscoException(
+								"Debe Rellenar el Campo Login  !!!");
+					}
+				} else {
+					throw new com.obelisco.exception.ObeliscoException(
+							"Debe Rellenar el Campo E-Mail  !!!");
+				}
+			} else {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el Campo Nombre  !!!");
+			}
+		}
+		return valido;
+	}
+	void doConfirmData() {
+		if (!(this.chlactivo.isChecked())) {
+			usuario.setActivo(false);
+		}
+		userService.saveOrUpdate(usuario);
+
+	}
+]]>
+	</zscript>
+	</window>
+</zk>

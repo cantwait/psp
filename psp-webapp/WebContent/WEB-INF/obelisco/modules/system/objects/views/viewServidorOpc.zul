@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditServidor"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<!--	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />-->
+
+	<zscript>
+	<![CDATA[
+	servidor = arg.get("aObjeto");
+	tanques = tanqueService.getTanquesByServidor(servidor.id, true);
+	if (tanques == null) {
+		tanques = new ArrayList();
+	}
+	gruposServidor = servidorService.getServidorGrupoByServidor(servidor.id);
+	if (gruposServidor == null) {
+		gruposServidor = new ArrayList();
+	}
+
+	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
+	if (rolesServidor == null) {
+		rolesServidor = new ArrayList();
+	}
+]]>
+</zscript>
+
+	<panel id="dlgEditServidor" title="Servidor" height="100%"
+		width="100%">
+		<caption image="/images/icons/24x24/window.png" />
+		<panelchildren>
+			<style src="/css/estilo_zk.css" dynamic="true" />
+			<panel>
+				<panelchildren>
+					<tabbox>
+						<tabs>
+							<tab label="Datos Generales" />
+							<tab label="Tanques" />
+							<tab label="Grupos de Variables" />
+							<tab label="Roles" />
+						</tabs>
+						<tabpanels height="100%">
+							<tabpanel>
+								<grid height="100%"
+									oddRowSclass="background-color: white;">
+									<columns>
+										<column width="16%"
+											align="right" />
+										<column width="17%" />
+										<column width="16%"
+											align="right" />
+										<column width="17%" />
+									</columns>
+									<rows>
+										<row>
+											<label value="ID/Nombre" />
+											<hbox>
+												<label
+													value="@{servidor.id}" />
+												/
+												<label
+													value="@{servidor.nombre}" />
+											</hbox>
+											<label
+												value="Proveedor Opc" />
+											<label
+												value="@{servidor.proveedorOpc}" />
+										</row>
+										<row>
+											<label value="Clsid" />
+											<label
+												value="@{servidor.clsid}" />
+											<label value="Progid" />
+											<label
+												value="@{servidor.progid}" />
+										</row>
+
+										<row>
+											<label value="Host" />
+											<label
+												value="@{servidor.host}" />
+											<label value="Dominio" />
+											<label
+												value="@{servidor.domain}" />
+										</row>
+										<row>
+											<label value="Usuario" />
+											<label
+												value="@{servidor.username}" />
+
+											<label value="Password" />
+											<label></label>
+										</row>
+										<row>
+											<label value="Descripción" />
+											<label
+												value="@{servidor.descripcion}" />
+											<label
+												value="Intervalos de Pooling">
+											</label>
+											<label
+												value="@{servidor.sleepInterPooling}" />
+										</row>
+										<row>
+											<label
+												value="Tiempo de espera del Socket" />
+											<intbox
+												value="@{servidor.socketTimeout}"
+												constraint="no negative, no zero, no empty" readonly="true" />
+											<label
+												value="Direccion Base ModBus" />
+											<intbox
+												value="@{servidor.refAddressBase}"
+												constraint="no negative, no zero, no empty" readonly="true" />
+										</row>
+										<row>
+											<label
+												value="Metodo de Acceso" />
+											<textbox
+												value="@{servidor.accessMethod}" readonly="true" />
+										</row>
+										<row spans="4">
+											<hbox spacing="5">
+												<checkbox label="Activo"
+													checked="@{servidor.activo}" disabled="true">
+												</checkbox>
+												<checkbox
+													label="Autoconectar" checked="@{servidor.autoConectar}"
+													disabled="true">
+												</checkbox>
+												<checkbox
+													label="Leer de Cache" checked="@{servidor.itemCache}"
+													disabled="true">
+												</checkbox>
+											</hbox>
+										</row>
+
+									</rows>
+								</grid>
+							</tabpanel>
+							<tabpanel>
+								<panel height="100%">
+									<panelchildren>
+										<grid preloadSize="10"
+											id="gridTanques" model="@{tanques}" mold="paging"
+											vflex="true" pageSize="10">
+											<columns sizable="true">
+
+												<column label="Nombre"
+													align="center" valign="middle" width="100px" />
+
+												<column label="Producto"
+													align="center" valign="middle" width="200px" />
+
+
+												<column label="Activo"
+													align="center" valign="middle" />
+
+											</columns>
+											<rows>
+												<row
+													self="@{each=tanque}" value="@{tanque}">
+
+													<label
+														value="@{tanque.nombre}" />
+
+													<label
+														value="@{tanque.producto.nombre}" />
+
+													<hbox>
+														<checkbox
+															checked="@{tanque.activo}" disabled="true" />
+													</hbox>
+
+												</row>
+											</rows>
+										</grid>
+
+									</panelchildren>
+								</panel>
+							</tabpanel>
+							<tabpanel>
+								<panel height="100%">
+									<panelchildren>
+										<grid preloadSize="10"
+											id="gridGrupos" model="@{gruposServidor}" mold="paging"
+											vflex="true" pageSize="10">
+											<columns sizable="true">
+
+												<column label="Nombre"
+													align="center" valign="middle" width="150px" />
+
+												<column
+													label="Descripción" align="center" valign="middle"
+													width="220px" />
+
+												<column label="Pooling"
+													align="center" valign="middle" />
+
+											</columns>
+											<rows>
+												<row
+													self="@{each=srvgrp}" value="@{srvgrp}">
+
+													<label
+														value="@{srvgrp.grupo.nombre}" />
+
+													<label
+														value="@{srvgrp.grupo.descripcion}" />
+
+													<label
+														value="@{srvgrp.grupo.pooling}" />
+
+												</row>
+											</rows>
+										</grid>
+
+									</panelchildren>
+								</panel>
+							</tabpanel>
+							<tabpanel>
+								<panel height="100%">
+									<panelchildren>
+										<grid preloadSize="10"
+											id="gridRoles" model="@{rolesServidor}" mold="paging"
+											vflex="true" pageSize="10">
+											<columns sizable="true">
+
+												<column label="Nombre"
+													align="center" valign="middle" width="150px" />
+
+												<column
+													label="Descripción" align="center" valign="middle" />
+
+											</columns>
+											<rows>
+												<row
+													self="@{each=srvrol}" value="@{srvrol}">
+
+													<label
+														value="@{srvrol.rol.nombre}" />
+
+													<label
+														value="@{srvrol.rol.descripcion}" />
+
+												</row>
+											</rows>
+										</grid>
+
+									</panelchildren>
+								</panel>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</panelchildren>
+			</panel>
+		</panelchildren>
+	</panel>
+
+
+	<!--	<window id="dlgEditServidor" title="Servidor" height="100%" width="100%">-->
+	<!--		<caption image="/images/icons/24x24/window.png" />-->
+	<!--		<style src="/css/estilo_zk.css" dynamic="true" />-->
+	<!--		<borderlayout>-->
+	<!--			<center autoscroll="true">-->
+	<!--				<tabbox height="100%">-->
+	<!--					<tabs>-->
+	<!--						<tab label="Datos Generales" />-->
+	<!--						<tab label="Tanques" />-->
+	<!--						<tab label="Grupos de Variables" />-->
+	<!--						<tab label="Roles" />-->
+	<!--					</tabs>-->
+	<!--					<tabpanels height="100%">-->
+	<!--						<tabpanel visible="true">-->
+	<!--							<panel>-->
+	<!--								<panelchildren>-->
+	<!--									<grid height="100%">-->
+	<!--										<columns>-->
+	<!--											<column width="16%"-->
+	<!--												align="right" />-->
+	<!--											<column width="17%" />-->
+	<!--											<column width="16%"-->
+	<!--												align="right" />-->
+	<!--											<column width="17%" />-->
+	<!---->
+	<!--										</columns>-->
+	<!--										<rows>-->
+	<!--											<row>-->
+	<!--												<label value="Nombre" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.nombre}" />-->
+	<!--												<label-->
+	<!--													value="Proveedor Opc" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.proveedorOpc}" />-->
+	<!--											</row>-->
+	<!--											<row>-->
+	<!--												<label value="Clsid" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.clsid}" />-->
+	<!--												<label value="Progid" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.progid}" />-->
+	<!--											</row>-->
+	<!---->
+	<!--											<row>-->
+	<!--												<label value="Host" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.host}" />-->
+	<!--												<label value="Dominio" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.domain}" />-->
+	<!--											</row>-->
+	<!--											<row>-->
+	<!--												<label value="Usuario" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.username}" />-->
+	<!---->
+	<!--												<label value="Password" />-->
+	<!--												<label></label>-->
+	<!--											</row>-->
+	<!--											<row>-->
+	<!--												<label-->
+	<!--													value="Descripción" />-->
+	<!--												<label-->
+	<!--													value="@{servidor.descripcion}" />-->
+	<!--												<label-->
+	<!--													value="Intervalos de Pooling">-->
+	<!--												</label>-->
+	<!--												<label-->
+	<!--													value="@{servidor.sleepInterPooling}" />-->
+	<!--											</row>-->
+	<!--											<row>-->
+	<!--												<label-->
+	<!--													value="Tiempo de espera del Socket" />-->
+	<!--												<intbox-->
+	<!--													value="@{servidor.socketTimeout}"-->
+	<!--													constraint="no negative, no zero, no empty" readonly="true"/>-->
+	<!--												<label-->
+	<!--													value="Direccion Base ModBus" />-->
+	<!--												<intbox-->
+	<!--													value="@{servidor.refAddressBase}"-->
+	<!--													constraint="no negative, no zero, no empty" readonly="true"/>-->
+	<!--											</row>-->
+	<!--											<row>-->
+	<!--												<label value="Metodo de Acceso"/>-->
+	<!--												<textbox value="@{servidor.accessMethod}" readonly="true"/>-->
+	<!--											</row>-->
+	<!--											<row spans="4">-->
+	<!--												<hbox spacing="5">-->
+	<!--													<checkbox-->
+	<!--														label="Activo" checked="@{servidor.activo}"-->
+	<!--														disabled="true">-->
+	<!--													</checkbox>-->
+	<!--													<checkbox-->
+	<!--														label="Autoconectar" checked="@{servidor.autoConectar}"-->
+	<!--														disabled="true">-->
+	<!--													</checkbox>-->
+	<!--													<checkbox-->
+	<!--														label="Leer de Cache" checked="@{servidor.itemCache}"-->
+	<!--														disabled="true">-->
+	<!--													</checkbox>-->
+	<!--												</hbox>-->
+	<!--											</row>-->
+	<!---->
+	<!--										</rows>-->
+	<!--									</grid>-->
+	<!--								</panelchildren>-->
+	<!--							</panel>-->
+	<!--						</tabpanel>-->
+	<!---->
+	<!--						<tabpanel>-->
+	<!--							<panel height="100%">-->
+	<!--								<panelchildren>-->
+	<!--									<grid preloadSize="10" -->
+	<!--										id="gridTanques" model="@{tanques}" mold="paging" vflex="true"-->
+	<!--										pageSize="10">-->
+	<!--										<columns sizable="true">-->
+	<!---->
+	<!--											<column label="Nombre"-->
+	<!--												align="center" valign="middle" width="100px" />-->
+	<!---->
+	<!--											<column label="Producto"-->
+	<!--												align="center" valign="middle" width="200px" />-->
+	<!---->
+	<!---->
+	<!--											<column label="Activo"-->
+	<!--												align="center" valign="middle" />-->
+	<!---->
+	<!--										</columns>-->
+	<!--										<rows>-->
+	<!--											<row self="@{each=tanque}"-->
+	<!--												value="@{tanque}">-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{tanque.nombre}" />-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{tanque.producto.nombre}" />-->
+	<!---->
+	<!--												<hbox>-->
+	<!--													<checkbox-->
+	<!--														checked="@{tanque.activo}" disabled="true" />-->
+	<!--												</hbox>-->
+	<!---->
+	<!--											</row>-->
+	<!--										</rows>-->
+	<!--									</grid>-->
+	<!---->
+	<!--								</panelchildren>-->
+	<!--							</panel>-->
+	<!--						</tabpanel>-->
+	<!---->
+	<!--						<tabpanel>-->
+	<!--							<panel height="100%">-->
+	<!--								<panelchildren>-->
+	<!--									<grid preloadSize="10" -->
+	<!--										id="gridGrupos" model="@{gruposServidor}" mold="paging"-->
+	<!--										vflex="true" pageSize="10">-->
+	<!--										<columns sizable="true">-->
+	<!---->
+	<!--											<column label="Nombre"-->
+	<!--												align="center" valign="middle" width="150px" />-->
+	<!---->
+	<!--											<column label="Descripción"-->
+	<!--												align="center" valign="middle" width="220px" />-->
+	<!---->
+	<!--											<column label="Pooling"-->
+	<!--												align="center" valign="middle" />-->
+	<!---->
+	<!--										</columns>-->
+	<!--										<rows>-->
+	<!--											<row self="@{each=srvgrp}"-->
+	<!--												value="@{srvgrp}">-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{srvgrp.grupo.nombre}" />-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{srvgrp.grupo.descripcion}" />-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{srvgrp.grupo.pooling}" />-->
+	<!---->
+	<!--											</row>-->
+	<!--										</rows>-->
+	<!--									</grid>-->
+	<!---->
+	<!--								</panelchildren>-->
+	<!--							</panel>-->
+	<!---->
+	<!--						</tabpanel>-->
+	<!--						<tabpanel>-->
+	<!---->
+	<!--							<panel height="100%">-->
+	<!--								<panelchildren>-->
+	<!---->
+	<!--									<grid preloadSize="10" -->
+	<!--										id="gridRoles" model="@{rolesServidor}" mold="paging"-->
+	<!--										vflex="true" pageSize="10">-->
+	<!--										<columns sizable="true">-->
+	<!---->
+	<!--											<column label="Nombre"-->
+	<!--												align="center" valign="middle" width="150px" />-->
+	<!---->
+	<!--											<column label="Descripción"-->
+	<!--												align="center" valign="middle" />-->
+	<!---->
+	<!--										</columns>-->
+	<!--										<rows>-->
+	<!--											<row self="@{each=srvrol}"-->
+	<!--												value="@{srvrol}">-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{srvrol.rol.nombre}" />-->
+	<!---->
+	<!--												<label-->
+	<!--													value="@{srvrol.rol.descripcion}" />-->
+	<!---->
+	<!--											</row>-->
+	<!--										</rows>-->
+	<!--									</grid>-->
+	<!---->
+	<!--								</panelchildren>-->
+	<!--							</panel>-->
+	<!---->
+	<!--						</tabpanel>-->
+	<!---->
+	<!---->
+	<!--					</tabpanels>-->
+	<!--				</tabbox>-->
+	<!--			</center>-->
+	<!--		</borderlayout>-->
+	<!---->
+	<!--	</window>-->
+
+
+</zk>

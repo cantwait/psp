@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./uploadOpc"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+		<![CDATA[
+	org.zkoss.util.media.Media m = null;
+	items = new ArrayList();
+]]>
+	</zscript>
+
+	<window id="uploadOpc" title="Carga de Variables en Lote"
+		closable="true" height="100%" width="100%" border="normal">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<panel border="normal" width="100%" collapsible="false">
+			<panelchildren>
+				<toolbar mold="panel" style="background:#c5e6ef">
+					<button label="Subir Archivo CSV" mold="os"
+						style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+						<attribute name="onClick">
+												<![CDATA[
+	{
+		m = Fileupload.get();
+
+		if (m != null) {
+			if (importarArchivo.extensionDocumento(m.getName()).equals(".csv")) {
+
+				items = importarArchivo.getListaVariables(m.getByteData());
+				alert("Archivo Cargado Satisfactoriamente !!!");
+				if (items.size() < 1) {
+					alert("El archivo no tiene datos !!!");
+					btnGuardar.setDisabled(true);
+					binder.loadAll();
+				} else {
+					binder.loadAll();
+					btnGuardar.setDisabled(false);
+
+				}
+			} else {
+				alert("Extension de Archivo Incorrecta");
+			}
+		}
+	}
+]]>
+</attribute>
+					</button>
+
+					<button id="btnGuardar" label="Confirmar Cambios"				
+						mold="os" disabled="true"
+						style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+						<attribute name="onClick">
+						<![CDATA[
+	itemsGuardar = itemService.saveItems(items);
+	if (itemsGuardar.size() == items.size()) {
+		alert("Las Variables han sido almacenadas satisfactoriamente");
+		items.clear();
+		binder.loadAll();
+	}
+]]>
+						</attribute>
+					</button>
+				</toolbar>
+
+			</panelchildren>
+		</panel>
+<!--		<panel title="Variables Cargadas" border="normal" width="100%"-->
+<!--			collapsible="true">-->
+<!---->
+<!--			<panelchildren>-->
+<!--				 Informacion ITEM -->
+
+				<listbox preloadSize="10" model="@{items}" mold="paging"
+					pageSize="20" checkmark="false">
+					<listhead sizable="true">
+						<listheader label="Nombre" valign="middle"
+							width="100px" />
+						<listheader label="Descripcion" valign="middle"
+							width="100px" />
+						<listheader label="hda" valign="middle"
+							width="100px" />
+						<listheader label="Item OPC" valign="middle"
+							width="200px" />
+						<listheader label="Tipo de Dato" valign="middle"
+							width="100px" />
+						<listheader label="Tipo de Item" valign="middle"
+							width="150px" />
+						<listheader label="Tipo de Unidad"
+							align="center" valign="middle" width="100px" />
+					</listhead>
+					<listitem sclass="row-border item" self="@{each=i}">
+						<listcell label="@{i.nombre}" />
+						<listcell label="@{i.descripcion}" />
+						<listcell label="@{i.hda}" />
+						<listcell label="@{i.itemOpc}" />
+						<listcell label="@{i.tipoDato}" />
+						<listcell label="@{i.tipoItem}" />
+						<listcell label="@{i.unidadMedida}" />
+					</listitem>
+				</listbox>
+
+<!--			</panelchildren>-->
+		<!--		</panel>-->
+	</window>
+
+</zk>

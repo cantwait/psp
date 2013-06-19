@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="psp-webadmin">
+        <wb-resource deploy-path="/" source-path="/WebContent"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="psp-module-cs.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/psp-module-cs/psp-module-cs">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="psp-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/psp-core/psp-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="psp.services.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/psp.services/psp.services">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/psp-webadmin/build/classes"/>
+        <property name="context-root" value="webadmin"/>
+    </wb-module>
+</project-modules>

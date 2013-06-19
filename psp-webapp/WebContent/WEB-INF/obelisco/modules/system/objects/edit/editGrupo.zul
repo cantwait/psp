@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditGrupos"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	itemsOpc = new ArrayList();
+	aGrupoGeneral = arg.get("aObjeto");
+	if (aGrupoGeneral.nombre != null) {
+		itemsOpc = itemService.getItemsByGrupo(aGrupoGeneral.id);
+		if (itemsOpc == null) {
+			itemsOpc = new ArrayList();
+		}
+	}
+]]>
+</zscript>
+
+	<window id="dlgEditGrupos" title="Grupo" border="normal" width="99%"
+		closable="true" height="99%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<borderlayout>
+					<north>
+						<grid>
+							<columns>
+								<column width="40%" />
+								<column width="60%" />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<textbox id="txtNombre"
+										constraint="no empty" value="@{aGrupoGeneral.nombre}" />
+								</row>
+								<row>
+									<label value="Descripción" />
+									<textbox id="txtDescripcion"
+										value="@{aGrupoGeneral.descripcion}" cols="50" rows="2" />
+								</row>
+								<row>
+									<label value="Pooling" />
+									<intbox id="txtPool"
+										constraint="no zero, no negative, no empty"
+										value="@{aGrupoGeneral.pooling}" />
+								</row>
+								<row spans="2" align="right">
+									<hbox>
+										<checkbox id="checkActivo"
+											label="Activo" checked="@{aGrupoGeneral.activo}">
+										</checkbox>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</north>
+					<center>
+						<panel title="Variables" collapsible="false"
+							height="299px">
+							<toolbar mold="panel"
+								style="background:#c5e6ef">
+								<button label="Agregar Variable"
+									mold="os"
+									style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+									<attribute name="onClick">
+									<![CDATA[
+	{
+
+		command = new ShowDialogCommand();
+		command.parametros.put("aEntity", itemsOpc);
+
+		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoItems.zul";
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			seleccion = command.getReturnValue("CATALOG_RESULT");
+			itemsOpc.addAll(seleccion);
+			binder.loadAll();
+		}
+
+	}
+]]>
+
+									</attribute>
+								</button>
+							</toolbar>
+							<panelchildren>
+								<!-- Lista de grupos -->
+								<borderlayout height="100%">
+									<center autoscroll="true">
+										<listbox preloadSize="10" vflex="true"
+											model="@{itemsOpc}" mold="paging" pageSize="10" >
+											<listhead sizable="true">
+												<listheader
+													label="Nombre" width="300px" />
+												<listheader
+													label="Medida" width="150px" />
+												<listheader
+													label="Descripcion" width="300px" />
+												<listheader
+													label="Tag Opc" width="300px" />
+												<listheader
+													label="Operaciones" align="center" />
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=e}">
+												<listcell
+													label="@{e.nombre}" />
+												<listcell
+													label="@{e.unidadMedida.nombre}" />
+												<listcell
+													label="@{e.descripcion}" />
+												<listcell
+													label="@{e.itemOpc}" />
+												<listcell>
+													<hbox
+														spacing="5px">
+														<toolbarbutton
+															style="font-size: 9px; font-weight: normal;"
+															objeto="@{e}"
+															use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+															image="/images/icons/16x16/delete2.png"
+															tooltiptext="Eliminar ...">
+															<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		it = (com.pdvsa.psp.model.Item) c.objeto;
+		itemsOpc.remove(it);
+		binder.loadAll();
+
+	}
+]]>
+											</attribute>
+														</toolbarbutton>
+													</hbox>
+												</listcell>
+											</listitem>
+										</listbox>
+
+
+									</center>
+								</borderlayout>
+							</panelchildren>
+						</panel>
+					</center>
+				</borderlayout>
+			</center>
+			<south height="48px">
+				<div height="100%" align="right"
+					style="background:#c5e6ef">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+
+		<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (aGrupoGeneral != null) {
+			if (aGrupoGeneral.nombre == null
+					|| aGrupoGeneral.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el campo Nombre !!!");
+			}
+			if (aGrupoGeneral.pooling <= 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Pooling debe ser Mayor a 0 !!! ");
+			}
+
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+		}
+		return valido;
+	}
+	void doConfirmData() {
+
+		gruposItems = new ArrayList();
+
+		for (com.pdvsa.psp.model.Item item : itemsOpc) {
+			grupoItem = new com.pdvsa.psp.model.GrupoItem();
+			grupoItem.item = item;
+			grupoItem.grupo = aGrupoGeneral;
+			gruposItems.add(grupoItem);
+		}
+
+		grupoService.saveGrupoItems(aGrupoGeneral, gruposItems);
+
+	}
+]]>
+	</zscript>
+
+	</window>
+
+</zk>

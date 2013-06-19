@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditServidor"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	servidor = arg.get("aObjeto");
+	registers = opcInfoService.getDumpRegistersByServer(servidor.id);
+]]>
+</zscript>
+
+	<panel id="dlgEditServidor" title="Servidor" height="100%"
+		width="100%">
+		<attribute name="onClose">
+		<![CDATA[
+	{
+		timer.stop();
+	}
+]]>
+		</attribute>
+		<caption image="/images/icons/24x24/window.png" />
+		<panelchildren>
+			<style src="/css/estilo_zk.css" dynamic="true" />
+			<borderlayout>
+				<north>
+					<grid oddRowSclass="background-color: white;">
+						<columns>
+							<column width="25%" align="right" />
+							<column width="25%" />
+							<column width="25%" align="right" />
+							<column width="25%" />
+						</columns>
+						<rows>
+							<row>
+								<label value="Nombre" />
+								<label value="@{servidor.nombre}" />
+								<label value="Proveedor Opc" />
+								<label value="@{servidor.proveedorOpc}" />
+							</row>
+							<row>
+								<label value="Clsid" />
+								<label value="@{servidor.clsid}" />
+								<label value="Progid" />
+								<label value="@{servidor.progid}" />
+							</row>
+
+							<row>
+								<label value="Host" />
+								<label value="@{servidor.host}" />
+								<label value="Dominio" />
+								<label value="@{servidor.domain}" />
+							</row>
+						</rows>
+					</grid>
+				</north>
+				<center autoscroll="true">
+					<panel title="Variables">
+						<toolbar mold="panel"
+							style="background:#c5e6ef">
+							<button label="Refrescar" mold="os"
+								style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+								<attribute name="onClick">
+									<![CDATA[
+	registers = opcInfoService.getDumpRegistersByServer(servidor.id);
+	binder.loadAll();
+]]>
+									</attribute>
+							</button>
+						</toolbar>
+						<panelchildren>
+							<listbox model="@{registers}">
+								<listhead sizable="true">
+									<listheader label="Nombre"
+										valign="middle" width="100px" />
+									<listheader label="OPC"
+										valign="middle" width="200px" />
+									<listheader label="MODBUS"
+										valign="middle" width="80px" />
+									<listheader label="Tipo"
+										align="center" valign="middle" width="80px" />
+									<listheader label="Valor"
+										align="right" valign="middle" width="100px"/>
+									<listheader label="Calidad" valign="middle" width="80px"/>
+									<listheader label="Fecha de adquisicion" valign="middle" width="200px"/>
+								</listhead>
+								<listitem self="@{each=reg}">
+									<listcell label="@{reg.tagName}" />
+									<listcell label="@{reg.tagOpc}" />
+									<listcell label="@{reg.reference}" />
+									<listcell label="@{reg.regType}" />
+									<listcell label="@{reg.regValue}" />
+									<listcell label="@{reg.quality}"/>
+									<listcell label="@{reg.timestamp}"/>
+								</listitem>
+							</listbox>
+						</panelchildren>
+					</panel>
+
+				</center>
+			</borderlayout>
+
+			<timer id="timer" delay="20000" repeats="true">
+				<attribute name="onTimer">
+			<![CDATA[
+	{
+
+		registers = opcInfoService.getDumpRegistersByServer(servidor.id);
+		binder.loadAll();
+
+	}
+]]>
+			</attribute>
+			</timer>
+
+		</panelchildren>
+	</panel>
+
+</zk>

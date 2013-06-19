@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgCatalogoGrupos"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	Set listaSeleccion = new HashSet();
+	Set listaAnterior = new HashSet();
+	gruposSeleccionados = arg.get("aEntity");
+
+	listaAnterior.addAll(gruposSeleccionados);
+	Set servidorGruposParciales = new HashSet();
+	servidorGruposParciales.addAll(gruposSeleccionados);
+
+	gruposActuales = grupoService.getGruposLikeNombre("");
+
+	for (i = gruposActuales.iterator(); i.hasNext();) {
+		currgrp = i.next();
+
+		existe = false;
+		for (j = gruposSeleccionados.iterator(); j.hasNext();) {
+			currsrvgrp = j.next();
+			if (currsrvgrp.grupo.equals(currgrp)) {
+				existe = true;
+			}
+		}
+
+		if (existe) {
+			i.remove();
+		}
+
+	}
+]]>
+</zscript>
+
+	<window id="dlgCatalogoGrupos" title="Grupos de Variables"
+		maximizable="true" border="normal" width="90%" height="95%"
+		selectedEntity="@{entidadCatalogo}"
+		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<panel>
+					<panelchildren>
+
+						<listbox id="lstbox" model="@{gruposActuales}"
+							selectedItem="@{entidadCatalogo}" mold="paging" rows="15"
+							pageSize="10" preloadSize="10" multiple="true" checkmark="true"
+							vflex="true">
+							<listhead sizable="true">
+								<listheader width="15px" align="center" />
+								<listheader label="Nombre" />
+								<listheader label="Descripcion" />
+								<listheader label="Pooling" />
+							</listhead>
+							<listitem sclass="row-border item"
+								self="@{each=e}">
+								<listcell label="" />
+								<listcell label="@{e.nombre}" />
+								<listcell label="@{e.descripcion}" />
+								<listcell label="@{e.pooling}" />
+							</listitem>
+						</listbox>
+
+					</panelchildren>
+				</panel>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+		<zscript>
+		<![CDATA[
+	void doConfirmData() {
+		listaAnterior.addAll(gruposSeleccionados);
+		Collection selectionList = new ArrayList();
+		listaSeleccion.clear();
+
+		if (lstbox.getSelectedCount() > 1) {
+			selectionList.clear();
+			Set selectedListbox = lstbox.getSelectedItems();
+
+			ListModel listModel = lstbox.getModel();
+
+			for (Iterator i = selectedListbox.iterator(); i.hasNext();) {
+				Listitem item = (Listitem) i.next();
+				if (listModel != null) {
+
+					if (listModel.getElementAt(item.getIndex()) != null) {
+						Object valor = listModel.getElementAt(item.getIndex());
+						selectionList.add(valor);
+					}
+
+				}
+
+			}
+
+		} else {
+
+			if (lstbox.getSelectedCount() == 1) {
+				selectionList.clear();
+				ListModel listModel = lstbox.getModel();
+				Object valor = listModel
+						.getElementAt(lstbox.getSelectedIndex());
+				selectionList.add(valor);
+
+			}
+
+		}
+		for (a = selectionList.iterator(); a.hasNext();) {
+			sg = new ServidorGrupo();
+			g = (Grupo) a.next();
+			sg.grupo = g;
+			listaSeleccion.add(sg);
+			
+
+		}
+		
+		List items = new ArrayList();
+		List items_a = new ArrayList();
+		//		iteramos sobre lista seleccion para obtener el grupo
+
+		for (ServidorGrupo serv_g : listaSeleccion) {
+			items = grupoService.getGrupoItemByGrupo(serv_g.grupo.id);
+			for (ServidorGrupo ser_g : listaAnterior) {
+				items_a = grupoService.getGrupoItemByGrupo(ser_g.grupo.id);
+			
+				
+				for (x = items.iterator(); x.hasNext();) {
+					GrupoItem i = (GrupoItem) x.next();
+
+					for (z = items_a.iterator(); z.hasNext();) {
+						
+						GrupoItem i_a = (GrupoItem) z.next();
+						if (i.item.id == i_a.item.id) {
+							lstbox.clearSelection();
+							listaAnterior.clear();
+							throw new com.obelisco.exception.ObeliscoException(
+									"No se pudo agregar el grupo: "
+											+ i.grupo.nombre
+											+ " , debido a que contiene variable(s) identicas al grupo: "
+											+ i_a.grupo.nombre + " ");
+							
+							
+						}else{
+							listaAnterior.add(serv_g);
+						}
+					}
+				}
+			}
+			listaAnterior.add(serv_g);
+		}
+
+	}
+]]>
+	</zscript>
+	</window>
+
+</zk>

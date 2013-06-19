@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zk.ui.util.Composition"
+arg0="/WEB-INF/templates/template.zul"?>
+<?page title="Tiempo de Trabajo Expirado" ?>
+
+
+<!--
+timeout.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 31 18:11:12     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<!--<window width="100%" title="Session Timeout" border="normal">
+	-->
+<window self="@{define(areatrabajo)}" title="Sesion de Trabajo Vencida" border="normal" height="200px" width="300px" position="center">
+	<caption image="/images/icons/24x24/window.png" />
+	<vbox>
+		La pagina o componente solicitado no esta disponible.
+		Esto es normal y puede ser causado por que su sesion se vencio, existen muchos usuarios conectados o reinicio el servidor.
+		
+		<div style="margin-top: 10px">Continuar trabajando en <toolbarbutton href="./index.zul" label="PDVSA - PSP"/></div>
+	</vbox>
+</window>

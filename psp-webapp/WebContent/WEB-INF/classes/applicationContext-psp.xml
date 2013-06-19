@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+<!--			Interfaces   			-->
+
+	 <bean id="paisService" class="com.pdvsa.psp.service.IPaisService" 
+      factory-bean="clientFactoryPais" factory-method="create"/>
+    
+	<bean id="clientFactoryPais" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IPaisService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/pais/ManagePaisService"/>
+	</bean>
+
+	 <bean id="tanqueService" class="com.pdvsa.psp.service.ITanqueService" 
+      factory-bean="clientFactoryTanque" factory-method="create"/>
+    
+	<bean id="clientFactoryTanque" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.ITanqueService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/tanque/ManageTanqueService"/>
+	</bean>
+	
+	
+	 <bean id="regionService" class="com.pdvsa.psp.service.IRegionService" 
+      factory-bean="clientFactoryRegion" factory-method="create"/>
+    
+	<bean id="clientFactoryRegion" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IRegionService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/region/ManageRegionService"/>
+	</bean>
+	
+	
+	 <bean id="servidorService" class="com.pdvsa.psp.service.IServidorService" 
+      factory-bean="clientFactoryServidor" factory-method="create"/>
+    
+	<bean id="clientFactoryServidor" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IServidorService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/servidoropc/ManageServidorOpcService"/>
+	</bean>
+	
+ 	<bean id="localidadService" class="com.pdvsa.psp.service.ILocalidadService" 
+      factory-bean="clientFactoryLocalidad" factory-method="create"/>
+    
+	<bean id="clientFactoryLocalidad" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.ILocalidadService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/localidad/ManageLocalidadService"/>
+	</bean>
+
+
+ 	<bean id="grupoService" class="com.pdvsa.psp.service.IGrupoService" 
+      factory-bean="clientFactoryGrupo" factory-method="create"/>
+    
+	<bean id="clientFactoryGrupo" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IGrupoService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/grupo/ManageGrupoService"/>
+	</bean>	
+	
+	<bean id="rolService" class="com.pdvsa.psp.service.IRolService" 
+      factory-bean="clientFactoryRol" factory-method="create"/>
+    
+	<bean id="clientFactoryRol" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IRolService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/rol/ManageRolService"/>
+	</bean>	
+
+
+ 	<bean id="itemService" class="com.pdvsa.psp.service.IItemService" 
+      factory-bean="clientFactoryItem" factory-method="create"/>
+    
+	<bean id="clientFactoryItem" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IItemService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/item/ManageItemService"/>
+	</bean>
+	
+	 <bean id="productoService" class="com.pdvsa.psp.service.IProductoService" 
+      factory-bean="clientFactoryProducto" factory-method="create"/>
+    
+	<bean id="clientFactoryProducto" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" >
+	  <property name="serviceClass" value="com.pdvsa.psp.service.IProductoService" />
+	  <property name="address" value="http://rcadenas:8801/psp/services/producto/ManageProductoService"/>
+	</bean>
+</beans>
+
+

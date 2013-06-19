@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./lstArbol"?>
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<window title="Arbol de Objetos" id="lstArbol" height="100%"
+		width="100%" closable="true"
+		use="com.obelisco.vista.zk.components.GenericTreeWindow"
+		executeCustomView="true">
+		<caption image="/images/icons/24x24/window.png" />
+		<panel height="100%">
+			<toolbar id="tool" mold="panel" style="background:#c5e6ef"
+				use="com.obelisco.vista.zk.controls.Toolbar">
+			</toolbar>
+			<panelchildren>
+				<borderlayout height="100%">
+					<west title="Arbol de Objetos" width="30%"
+						style="background:#c5e6ef;" collapsible="true"
+						autoscroll="true">
+						<panel border="normal" collapsible="true">
+							<panelchildren>
+								<tree id="tree" height="100%"
+									use="com.obelisco.vista.zk.controls.PSPTree">
+									<treechildren />
+								</tree>
+							</panelchildren>
+						</panel>
+					</west>
+					<center autoscroll="true">
+						<panel id="workArea" height="100%"
+							maximizable="false" collapsible="false" framable="false">
+							<panelchildren></panelchildren>
+						</panel>
+					</center>
+				</borderlayout>
+			</panelchildren>
+		</panel>
+
+		<zscript>
+		<![CDATA[
+	void doEditEntity(Object o) {
+
+		command = new ObjectCommand();
+		command.objeto = o;
+		command.dialogo = true;
+		command.operacion = OperacionHelper
+				.getOperacion(OperationType.MODIFICAR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			//Se refresca el Arbol
+			tree.refreshTree(OperationType.MODIFICAR, o);
+
+		}
+
+	}
+	void doNewEntity(Object parent) {
+
+		nuevoElemento = null;
+		if (parent == null) {
+			nuevoElemento = new com.pdvsa.psp.model.Pais();
+		} else if (parent instanceof com.pdvsa.psp.model.Localidad) {
+			nuevoElemento = new com.pdvsa.psp.model.ServidorOpc();
+			nuevoElemento.localidad = parent;
+		} else if (parent instanceof com.pdvsa.psp.model.Region) {
+			nuevoElemento = new com.pdvsa.psp.model.Localidad();
+			nuevoElemento.region = parent;
+		} else if (parent instanceof com.pdvsa.psp.model.Pais) {
+			nuevoElemento = new com.pdvsa.psp.model.Region();
+			nuevoElemento.pais = parent;
+		} else if (parent instanceof com.pdvsa.psp.model.ObjetoNulo) {
+			nuevoElemento = new com.pdvsa.psp.model.Pais();
+		} else {
+			return;
+		}
+
+		command = new ObjectCommand();
+		command.objeto = nuevoElemento;
+		command.dialogo = true;
+		command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			//Se refresca el Arbol
+			nuevoElemento = command.getReturnValue("SAVED_VALUE");
+			tree.refreshTree(OperationType.INCLUIR, nuevoElemento);
+			//			if(nuevoElemento instanceof com.pdvsa.psp.model.ServidorOpc){
+			//				opcInfoService.addServer(nuevoElemento.localidad.region.id, nuevoElemento.id);
+			//				
+			//			}
+
+		}
+
+	}
+	void doShowEntity(Object object) {
+
+		if (object instanceof com.pdvsa.psp.model.ServidorOpc) {
+
+			command = new ObjectCommand();
+			command.objeto = object;
+			command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/monitoreoServidorOpc.zul";
+			command.execute(workArea);
+
+		} else if (object instanceof com.pdvsa.psp.model.Region) {
+
+			command = new ObjectCommand();
+			command.objeto = object;
+			command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/verEstadoRegion.zul";
+			command.execute(workArea);
+
+		} else {
+			command = new ObjectCommand();
+			command.objeto = object;
+			command.execute(workArea);
+		}
+
+	}
+	void doDeleteEntity(Object seleccion) {
+
+		if (!(seleccion instanceof com.pdvsa.psp.model.ObjetoNulo)) {
+			if (seleccion instanceof com.pdvsa.psp.model.Localidad) {
+				localidadService.removeLocalidad(seleccion.id);
+			} else if (seleccion instanceof com.pdvsa.psp.model.Region) {
+				regionService.removeRegion(seleccion.id);
+			} else if (seleccion instanceof com.pdvsa.psp.model.Pais) {
+				paisService.removePais(seleccion.id);
+			} else if (seleccion instanceof com.pdvsa.psp.model.ServidorOpc) {
+				servidorService.removeServidor(seleccion.id);
+				//				opcInfoService.removeServer(seleccion.localidad.region.id, seleccion.id);
+			}
+
+			tree.refreshTree(OperationType.ELIMINAR, seleccion);
+		}
+	}
+	void doCustomAction(Object object, Operacion operacion) {
+	}
+]]>
+</zscript>
+
+	</window>
+
+
+
+</zk>

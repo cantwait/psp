@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgItem"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<!--	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />-->
+
+	<zscript>
+	<![CDATA[
+	{
+		item = arg.get("aObjeto");
+		unidades = unidadMedidaService.getUnidadesMedidaLikeNombre("");
+		if (item.unidadMedida == null) {
+			item.unidadMedida = unidades.get(0);
+		}
+
+		dataTypes = new ArrayList();
+		for (int i = 0; i < Item.DATA_TYPE.values().length; i++) {
+			com.pdvsa.psp.model.Item.DATA_TYPE dataType = com.pdvsa.psp.model.Item.DATA_TYPE
+					.values()[i];
+			dataTypes.add(dataType);
+		}
+
+		itemTypes = new ArrayList();
+		for (int i = 0; i < Item.ITEM_TYPE.values().length; i++) {
+			com.pdvsa.psp.model.Item.ITEM_TYPE itemType = com.pdvsa.psp.model.Item.ITEM_TYPE
+					.values()[i];
+			itemTypes.add(itemType);
+		}
+	}
+]]>
+</zscript>
+
+	<window id="dlgItem" title="Variable" maximizable="true"
+		maximized="false" border="normal" width="95%" height="90%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<grid>
+					<columns>
+						<column width="40%" />
+						<column width="60%" />
+					</columns>
+					<rows>
+
+						<row>
+							<label value="Nombre" />
+							<textbox value="@{item.nombre}" />
+						</row>
+						<row>
+							<label value="Tag Opc" />
+							<textbox value="@{item.itemOpc}" />
+						</row>
+						<row>
+							<label value="Tipo de Dato" />
+							<combobox autodrop="true"
+								model="@{dataTypes}" selectedItem="@{item.tipoDato}">
+								<comboitem self="@{each=tipdat}"
+									label="@{tipdat}" />
+							</combobox>
+						</row>
+						<row>
+							<label value="Unidad de Medida" />
+							<combobox id="listaUnidades" autodrop="true"
+								model="@{unidades}" selectedItem="@{item.unidadMedida}">
+								<comboitem self="@{each=uni}"
+									label="@{uni.nombre}" description="@{uni.descripcion}" />
+							</combobox>
+						</row>
+						<row>
+							<label value="Tipo de Variable" />
+							<combobox autodrop="true"
+								model="@{itemTypes}" selectedItem="@{item.tipoItem}">
+								<comboitem self="@{each=tipitem}"
+									label="@{tipitem}" />
+							</combobox>
+						</row>
+						<row>
+							<label value="Descripcion" />
+							<textbox value="@{item.descripcion}"
+								multiline="true" width="90%" height="70px" />
+						</row>
+						<row spans="2" align="right">
+							<hbox>
+								<checkbox checked="@{item.activo}" label="Activo">
+								</checkbox>
+								<checkbox checked="@{item.hda}" label="Requiere HDA">
+								</checkbox>
+								
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</center>
+			<south height="48px">
+				<div height="100%" align="right"
+					style="background:#c5e6ef">
+
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+		<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (item != null) {
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+			if (item.nombre == null || item.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el campo Nombre !!!");
+			}
+			if (item.tipoDato == null) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Seleccionar un tipo de Dato !!!");
+			}
+			if (item.tipoItem == null ) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Seleccionar un tipo de Variable !!!");
+			}
+			if (item.unidadMedida == null) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe seleccionar un Tipo de Unidad de Medida");
+			}
+		}
+		return true;
+	}
+	void doConfirmData() {
+		
+		itemService.saveItem(item);
+	}
+]]>
+	</zscript>
+	</window>
+</zk>

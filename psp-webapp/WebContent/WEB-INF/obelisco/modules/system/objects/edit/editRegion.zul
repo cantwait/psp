@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditRegion"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	region = arg.get("aObjeto");
+]]>
+</zscript>
+
+	<window id="dlgEditRegion" title="Región" maximizable="true"
+		border="normal" width="65%" height="50%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<grid>
+					<columns>
+						<column width="40%" align="right" />
+						<column width="60%" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Nombre" />
+							<textbox value="@{region.nombre}" cols="50" />
+						</row>
+						<row>
+							<label value="Descripcion" />
+							<textbox value="@{region.descripcion}"
+								cols="50" rows="4" />
+						</row>
+						<row align="right" spans="2">
+							<hbox>
+								<checkbox label="Activo"
+									checked="@{region.activo}">
+								</checkbox>
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+	</window>
+	<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (region != null) {
+			if (region.nombre == null || region.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException("Debe Rellenar el campo Nombre !!!");
+			}						
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+		}
+		return valido;
+	}
+	void doConfirmData() {
+		region = regionService.saveRegion(region);
+		self.setAttribute("SAVED_VALUE", region);
+	}
+]]>
+	</zscript>
+
+</zk>

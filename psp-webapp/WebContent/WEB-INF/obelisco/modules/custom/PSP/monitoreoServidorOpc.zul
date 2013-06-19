@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditServidor"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<!--	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />-->
+
+	<zscript>
+	<![CDATA[
+	servidor = arg.get("aObjeto");
+	disponibilidad = opcInfoService.getServerState(servidor.id);
+]]>
+</zscript>
+
+	<panel id="dlgEditServidor" title="Servidor" height="100%"
+		width="100%">
+		<caption image="/images/icons/24x24/window.png" />
+		<panelchildren>
+			<style src="/css/estilo_zk.css" dynamic="true" />
+			<borderlayout>
+				<center autoscroll="true">
+					<grid oddRowSclass="background-color: white;">
+						<columns>
+							<column width="16%" align="right" />
+							<column width="17%" />
+							<column width="16%" align="right" />
+							<column width="17%" />
+
+						</columns>
+						<rows>
+							<row>
+								<label value="ID/Nombre" />
+								<hbox>
+									<label value="@{servidor.id}" />
+									/
+									<label value="@{servidor.nombre}" />
+
+								</hbox>
+								<label value="Proveedor Opc" />
+								<label value="@{servidor.proveedorOpc}" />
+							</row>
+							<row>
+								<label value="Clsid" />
+								<label value="@{servidor.clsid}" />
+								<label value="Progid" />
+								<label value="@{servidor.progid}" />
+							</row>
+
+							<row>
+								<label value="Host" />
+								<label value="@{servidor.host}" />
+								<label value="Dominio" />
+								<label value="@{servidor.domain}" />
+							</row>
+							<row>
+								<label value="Usuario" />
+								<label value="@{servidor.username}" />
+
+								<label value="Password" />
+								<label></label>
+							</row>
+							<row>
+								<label value="Descripción" />
+								<label value="@{servidor.descripcion}" />
+								<label value="Intervalos de Pooling">
+								</label>
+								<label
+									value="@{servidor.sleepInterPooling}" />
+							</row>
+							<row>
+								<label
+									value="Tiempo de espera del Socket" />
+								<intbox
+									value="@{servidor.socketTimeout}"
+									constraint="no negative, no zero, no empty" readonly="true" />
+								<label value="Direccion Base ModBus" />
+								<intbox
+									value="@{servidor.refAddressBase}"
+									constraint="no negative, no zero, no empty" readonly="true" />
+							</row>
+							<row>
+								<label value="Metodo de Acceso" />
+								<textbox
+									value="@{servidor.accessMethod}" readonly="true" />
+								<label value="Disponibilidad"></label>
+								<label value="@{disponibilidad}"></label>
+							</row>
+							<row spans="4">
+								<hbox spacing="5">
+									<button label="Iniciar" mold="os"
+										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										<attribute name="onClick">
+										<![CDATA[
+	//disponibilidad = opcInfoService.getServerState(servidor.id);
+	//if (disponibilidad == com.pdvsa.psp.state.ServerState.STOPPED
+	//		|| disponibilidad == com.pdvsa.psp.state.ServerState.UNKNOWN) {
+	resultado = opcInfoService.serverStart(servidor.id);
+	if (resultado) {
+		alert("La adquisición de datos del Servidor arranco satisfactoriamente");
+	} else {
+		alert("No se pudo Iniciar la adquisición de datos del servidor");
+	}
+	//} else {
+	//	alert("Para arrancar la Adquisición el Servidor debe estar en estado STOPPED");
+	//}
+	disponibilidad = opcInfoService.getServerState(servidor.id);
+	binder.loadAll();
+]]>
+					</attribute>
+									</button>
+									<button label="Detener" mold="os"
+										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										<attribute name="onClick">
+										<![CDATA[
+	//disponibilidad = opcInfoService.getServerState(servidor.id);
+	//if (disponibilidad == com.pdvsa.psp.state.ServerState.STARTED) {
+	resultado = opcInfoService.serverStop(servidor.id);
+	if (resultado) {
+		alert("La adquisición de datos del Servidor se detuvo satisfactoriamente");
+	} else {
+		alert("No se pudo Detener la adquisición de datos del servidor");
+	}
+	//} else {
+	//	alert("Para detener la Adquisición el Servidor debe estar en estado STARTED");
+	//}
+	disponibilidad = opcInfoService.getServerState(servidor.id);
+	binder.loadAll();
+]]>
+					</attribute>
+									</button>
+
+									<button label="Ver Actividad"
+										mold="os"
+										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										<attribute name="onClick">
+										<![CDATA[
+	command = new ObjectCommand();
+	command.objeto = servidor;
+	command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/verEstadoServidorOpc.zul";
+	command.execute();
+]]>
+					</attribute>
+									</button>
+
+
+									<button label="Ver Detalles"
+										mold="os"
+										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										<attribute name="onClick">
+									<![CDATA[
+	command = new ObjectCommand();
+	command.objeto = servidor;
+	command.execute();
+]]>
+					</attribute>
+									</button>
+
+									<button label="Refrescar" mold="os"
+										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										<attribute name="onClick">
+										<![CDATA[
+	disponibilidad = opcInfoService.getServerState(servidor.id);
+	binder.loadAll();
+]]>
+					</attribute>
+									</button>
+
+
+								</hbox>
+							</row>
+
+						</rows>
+					</grid>
+				</center>
+			</borderlayout>
+		</panelchildren>
+	</panel>
+
+</zk>

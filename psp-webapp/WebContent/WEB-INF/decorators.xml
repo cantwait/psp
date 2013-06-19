@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<decorators defaultdir="/WEB-INF/templates">
+	<!-- Any urls that are excluded will never be decorated by Sitemesh -->
+	<excludes>
+		<pattern>/styles/*</pattern>
+		<pattern>/scripts/*</pattern>
+		<pattern>/images/*</pattern>
+		<pattern>/img/*</pattern> 
+		<pattern>/struts/*</pattern>
+		<pattern>/nodecorate/*</pattern>
+		<pattern>/inspect_instance*</pattern>
+		
+		<pattern>/css/*</pattern>
+		<pattern>/scripts/*</pattern>
+		<pattern>/imagenes/*</pattern>
+
+		<pattern>/dojo/*</pattern>
+		<pattern>/zkau/*</pattern>
+		<pattern>/zkau*</pattern> 
+		<!-- <pattern>/*.zul*</pattern> --> 
+
+
+<!--		<pattern>/processimage*</pattern> -->
+
+	</excludes>
+
+	<decorator name="main" page="/WEB-INF/templates/template.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+
+	<decorator name="zulapp" page="/WEB-INF/templates/template.jsp">
+		<pattern>/*.zul*</pattern>
+	</decorator>
+	
+
+</decorators>

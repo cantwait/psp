@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgViewRegion"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<!--	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />-->
+
+	<zscript>
+	<![CDATA[
+	region = arg.get("aObjeto");
+]]>
+</zscript>
+
+	<panel id="dlgViewRegion" title="Región" height="100%"
+		width="100%">
+		<caption image="/images/icons/24x24/window.png" />
+		<panelchildren>
+			<style src="/css/estilo_zk.css" dynamic="true" />
+			<panel>
+				<panelchildren>
+					<grid height="100%">
+						<columns>
+
+							<column width="40%" />
+							<column width="60%" />
+						</columns>
+						<rows>
+							<row>
+								<label value="Nombre" />
+								<label value="@{region.nombre}"
+									width="90%" />
+							</row>
+							<row>
+								<label value="Descripción" />
+								<label value="@{region.descripcion}" />
+							</row>
+							<row spans="2" align="right">
+								<hbox>
+									<checkbox label="Activo"
+										checked="@{region.activo}" disabled="true">
+									</checkbox>
+								</hbox>
+							</row>
+
+							<row spans="2" align="right">
+								<hbox spacing="5">
+									<button label="Reniciar Servidores" mold="os"
+										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										<attribute name="onClick">
+										<![CDATA[
+	resultado = opcInfoService.reloadServers(region.id);
+	if (resultado) {
+		alert("La adquisición de datos de la Region arranco satisfactoriamente");
+	} else {
+		alert("No se pudo Iniciar la Adquisición de datos de la Region");
+	}
+]]>
+					</attribute>
+									</button>
+
+								</hbox>
+							</row>
+
+
+						</rows>
+					</grid>
+				</panelchildren>
+			</panel>
+		</panelchildren>
+	</panel>
+
+</zk>

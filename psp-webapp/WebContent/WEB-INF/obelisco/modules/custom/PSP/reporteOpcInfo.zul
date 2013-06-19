@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./reporteOpc"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+		<![CDATA[
+	region = new ArrayList();
+
+	region = regionService.getRegionesLikeNombre("");
+	regiones = new ArrayList();
+	com.pdvsa.psp.model.Region regionSeleccionada = new com.pdvsa.psp.model.Region();
+	regionSeleccionada.setNombre("-seleccione-");
+	regiones.add(regionSeleccionada);
+
+	if (region != null) {
+		regiones.addAll(region);
+	}
+
+	opcinfo = new ArrayList();
+]]>
+	</zscript>
+
+	<window id="reporteOpc" title="Tabla Modbus-Opc" closable="true"
+		height="100%" width="100%" border="normal">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<panel title="Criterios de Búsqueda" border="normal"
+			width="100%" collapsible="true">
+			<panelchildren>
+				<h:table border="0" width="100%" heigth="100%">
+					<h:tr>
+						<h:td>
+							<grid align="left">
+								<rows>
+									<row>
+										<label value="Regiones" />
+										<combobox id="cmbServidor"
+											autodrop="true" selectedItem="@{regionSeleccinada}"
+											model="@{regiones}">
+											<comboitem
+												self="@{each=reg}" label="@{reg.nombre}"
+												description="@{reg.descripcion}" />
+										</combobox>
+									</row>
+									<!--									<row>-->
+									<!--										<label value="Formato" />-->
+									<!--										<listbox id="formato"-->
+									<!--											mold="select" disabled="true">-->
+									<!--											<listitem label="PDF"-->
+									<!--												value="pdf" />-->
+									<!--											<listitem label="Excel"-->
+									<!--												value="xls" selected="true" />-->
+									<!--										</listbox>-->
+									<!--									</row>-->
+								</rows>
+							</grid>
+						</h:td>
+					</h:tr>
+				</h:table>
+			</panelchildren>
+		</panel>
+		<panel title="Resultados de Búsqueda" border="normal"
+			width="100%" collapsible="true">
+
+			<toolbar mold="panel" style="background:#c5e6ef">
+				<button label="Realizar Busqueda" mold="os"
+					style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
+					<attribute name="onClick">
+						<![CDATA[
+	if (cmbServidor.getSelectedIndex() != -1) {
+
+		if (regionSeleccinada.id != null && regionSeleccinada.id != -1) {
+			opcinfo = itemService.findMapItemsByRegion(regionSeleccinada.id);
+			//for(com.pdvsa.psp.model.OpcInfoRegister o : opcinfo){
+			//alert(o.getReference());
+			//}
+			formato.setDisabled(false);
+			binder.loadAll();
+		} else {
+			alert("No hay datos que mostrar !!!");
+		}
+	}
+]]>
+					</attribute>
+				</button>
+				<hbox align="center">
+					<button label="Exportar" mold="os"
+						style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
+						<attribute name="onClick">
+									<![CDATA[
+	//C:\\Desarrollos\\psp\\psp-webadmin-mvn\\WebContent\\reporte\\OpcInfo.jasper
+	if (opcinfo != null && opcinfo.size() > 0) {
+		if (formato.getSelectedItem().getValue().equals("xls")) {
+			com.obelisco.herramientas.ShowFormat.executeExcel(importarArchivo
+					.getUrl(), opcinfo, "Reporte_Opc-Modbus");
+		} else {
+			com.obelisco.herramientas.ShowFormat.execute(importarArchivo
+					.getUrl(), opcinfo, "Reporte_Opc-Modbus");
+		}
+	} else {
+		alert("No hay Datos que mostrar!!!");
+	}
+]]>
+								</attribute>
+					</button>
+
+
+					<listbox id="formato" mold="select"
+						disabled="true">
+						<listitem label="PDF" value="pdf" />
+						<listitem label="Excel" value="xls"
+							selected="true" />
+					</listbox>
+
+				</hbox>
+			</toolbar>
+			<panelchildren>
+				<!-- Informacion OPC -->
+				<listbox preloadSize="10" model="@{opcinfo}"
+					mold="paging" pageSize="10">
+					<listhead sizable="true">
+						<listheader label="ID Estacion" valign="middle"
+							width="100px" />
+						<listheader label="Estacion MODBUS"
+							valign="middle" width="100px" />
+						<listheader label="Puerto MODBUS"
+							valign="middle" width="100px" />
+						<listheader label="Nombre" valign="middle"
+							width="200px" />
+						<listheader label="Tag OPC" valign="middle"
+							width="300px" />
+						<listheader label="Registro MODBUS"
+							valign="middle" width="150px" />
+						<listheader label="Tipo" align="center"
+							valign="middle" />
+					</listhead>
+					<listitem sclass="row-border item"
+						self="@{each=e}">
+						<listcell label="@{e.stationId}" />
+						<listcell label="@{e.hostModbusSlave}" />
+						<listcell label="@{e.portModbusSlave}" />
+						<listcell label="@{e.tagName}" />
+						<listcell label="@{e.tagOpc}" />
+						<listcell label="@{e.reference}" />
+						<listcell label="@{e.regType}" />
+					</listitem>
+				</listbox>
+			</panelchildren>
+		</panel>
+	</window>
+
+</zk>

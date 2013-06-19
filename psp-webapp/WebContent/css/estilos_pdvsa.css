@@ -1,0 +1,39 @@
+/* CSS Document */
+
+body {
+	margin: 0px;
+	background-color: #FFFFFF; 
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #333333;	
+}
+
+span, div, td, a, p, li, input, select, optgroup{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+}
+
+select	{
+	border: 1px solid #555555;
+}
+optgroup {
+	color: #4C1018;
+	font-weight:bold;
+	font-style: normal;	
+}
+option {
+	color:#333333;
+}
+a {
+	color: #333333;
+}
+
+a:hover {
+	color: #3082A8;
+}
+.z-window-embedded-cnt {
+-moz-background-size:100% 100%;
+background-image:url("../images/pdvsa-2.jpg");
+background-position:0 0;
+}
+

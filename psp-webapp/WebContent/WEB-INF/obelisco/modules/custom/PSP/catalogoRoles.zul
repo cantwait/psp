@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgCatalogoRoles"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	rolesSeleccionados = arg.get("aEntity");
+	rolesActuales = rolService.getRolesLikeNombre("");
+
+	for (i = rolesActuales.iterator(); i.hasNext();) {
+		currol = i.next();
+
+		existe = false;
+		for (j = rolesSeleccionados.iterator(); j.hasNext();) {
+			currrolgrp = j.next();
+			if (currrolgrp.rol.equals(currol)) {
+				existe = true;
+			}
+		}
+
+		if (existe) {
+			i.remove();
+		}
+
+	}
+]]>
+</zscript>
+
+	<window id="dlgCatalogoRoles" title="Roles" maximizable="true"
+		border="normal" width="90%" height="95%"
+		selectedEntity="@{entidadCatalogo}"
+		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<panel>
+					<panelchildren>
+
+						<listbox id="lstbox" model="@{rolesActuales}"
+							selectedItem="@{entidadCatalogo}" mold="paging" rows="15"
+							pageSize="10" preloadSize="10" multiple="true" checkmark="true"
+							vflex="true">
+							<listhead sizable="true">
+								<listheader width="15px" align="center" />
+								<listheader label="Nombre" />
+								<listheader label="Descripcion" />
+							</listhead>
+							<listitem sclass="row-border item"
+								self="@{each=e}">
+								<listcell label="" />
+								<listcell label="@{e.nombre}" />
+								<listcell label="@{e.descripcion}" />
+							</listitem>
+						</listbox>
+
+					</panelchildren>
+				</panel>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+		<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		return true;
+	}
+	void doConfirmData() {
+	}
+]]>
+	</zscript>
+	</window>
+
+</zk>

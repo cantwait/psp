@@ -1,0 +1,56 @@
+div.z-grid {
+	background: #c5e6ef;
+	border-left: 1px solid #c5e6ef;
+	border-top: 1px solid #c5e6ef;
+	border-bottom: 0px;
+	border-right: 0px; overflow : hidden;
+	zoom: 1;
+	overflow: hidden;
+}
+
+div.z-grid-body {
+	background: white;
+	border: 0;
+	overflow: auto;
+	width: 100%;
+	 
+}
+
+td.z-row-inner {
+	padding: 5px;
+	overflow: hidden;
+}
+
+tr.z-row td.z-row-inner {
+	background: white;
+	border-top: none;
+	border-left: 1px solid white;
+	border-right: 1px solid #c5e6ef;
+	border-bottom: 1px solid #c5e6ef;
+}
+
+tr.z-grid-odd td.z-row-inner,tr.z-grid-odd {
+	background: white;
+}
+
+
+.z-textbox {
+	background: #c5e6ef;
+	border: 1px solid #7F9DB9;
+}
+
+.z-textbox-readonly {
+	background: #ECEAE4;
+}
+
+.z-textbox-focus {
+	border: 1px solid #90BCE6;
+	border-color: gray;
+}
+
+.z-textbox-text-invalid {
+	background: red;
+	border: 1px solid #DD7870;
+	position: static; clear: both; overflow: hidden;
+}
+

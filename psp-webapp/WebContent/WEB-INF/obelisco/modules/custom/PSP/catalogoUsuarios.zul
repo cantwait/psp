@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./catusuarios"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	usuariosSeleccionados = arg.get("aEntity");
+	usuariosActuales = userService.getAllUsers();
+
+	for (i = usuariosActuales.iterator(); i.hasNext();) {
+		currusu = i.next();
+
+		existe = false;
+		for (j = usuariosSeleccionados.iterator(); j.hasNext();) {
+			curselusu = j.next();
+			if (curselusu.equals(currusu)) {
+				existe = true;
+			}
+		}
+
+		if (existe) {
+			i.remove();
+		}
+
+	}
+]]>
+</zscript>
+
+	<window id="catusuarios" title="Lista de Usuarios" maximizable="false"
+		mode="modal" maximized="false" border="normal" width="90%"
+		height="80%" selectedEntity="@{entidadCatalogo}"
+		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<panel height="100%">
+					<panelchildren>
+						<listbox id="lstbox" model="@{usuariosActuales}"
+							selectedItem="@{entidadCatalogo}" mold="paging" rows="10"
+							pageSize="10" preloadSize="10" multiple="true"  vflex="true"
+							checkmark="true">
+							<listhead sizable="true">
+								<listheader label="Login"
+									width="150px" /> 
+								<listheader label="Nombre"
+									width="350px" />
+							</listhead>
+							<listitem sclass="row-border item"
+								self="@{each=e}">
+								<listcell label="@{e.nombre}" />
+								<listcell label="@{e.login}" />
+							</listitem>
+						</listbox>
+
+					</panelchildren>
+				</panel>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+
+			</south>
+		</borderlayout>
+	</window>
+
+</zk>

@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditServidor"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>	
+	<![CDATA[
+	servidor = arg.get("aObjeto");
+
+	accesMethods = new ArrayList();
+	for (int i = 0; i < ServidorOpc.ACCESS_METHOD.values().length; i++) {
+		com.pdvsa.psp.model.ServidorOpc.ACCESS_METHOD accesMethod = com.pdvsa.psp.model.ServidorOpc.ACCESS_METHOD
+				.values()[i];
+		accesMethods.add(accesMethod);
+	}
+
+	tanques = tanqueService.getTanquesByServidor(servidor.id, true);
+	if (tanques == null) {
+		tanques = new ArrayList();
+	}
+
+	gruposServidor = servidorService.getServidorGrupoByServidor(servidor.id);
+	if (gruposServidor == null) {
+		gruposServidor = new ArrayList();
+	}
+
+	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
+	if (rolesServidor == null) {
+		rolesServidor = new ArrayList();
+	}
+]]>
+
+</zscript>
+
+	<window id="dlgEditServidor" title="Servidor" maximizable="true"
+		maximized="false" border="normal" width="90%" height="80%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<tabbox height="100%">
+					<tabs>
+						<tab label="Datos Generales" />
+						<tab label="Tanques" />
+						<tab label="Grupos de Variables" />
+					</tabs>
+					<tabpanels height="100%">
+						<tabpanel visible="true">
+							<panel>
+								<panelchildren>
+									<grid height="100%">
+										<columns>
+
+											<column width="16%"
+												align="right" />
+											<column width="17%" />
+
+											<column width="16%"
+												align="right" />
+											<column width="17%" />
+
+										</columns>
+										<rows>
+											<row>
+												<label value="Nombre" />
+												<textbox
+													value="@{servidor.nombre}" width="90%"
+													constraint="no empty" />
+												<label
+													value="Proveedor Opc" />
+												<textbox
+													value="@{servidor.proveedorOpc}" width="90%" />
+											</row>
+											<row>
+												<label value="Clsid" />
+												<textbox
+													value="@{servidor.clsid}" constraint="no empty" />
+												<label value="Progid" />
+												<textbox
+													value="@{servidor.progid}" />
+											</row>
+
+											<row>
+												<label value="Host" />
+												<textbox
+ 													value="@{servidor.host}" />
+												<label value="Dominio" />
+												<textbox
+													value="@{servidor.domain}" />
+											</row>
+											<row>
+												<label value="Usuario" />
+												<textbox
+													value="@{servidor.username}" constraint="no empty" />
+
+												<label value="Password" />
+												<textbox
+													value="@{servidor.password}" type="password">
+												</textbox>
+											</row>
+											<row>
+												<label
+													value="Descripción" />
+												<textbox
+													value="@{servidor.descripcion}" cols="30" rows="4"
+													multiline="true" />
+												<label
+													value="Intervalos de Pooling">
+												</label>
+												<hbox>
+													<intbox
+														value="@{servidor.sleepInterPooling}"
+														constraint="no zero, no negative, no empty">
+													</intbox>
+													<label value="ms" />
+												</hbox>
+											</row>
+											<row>
+												<label
+													value="Tiempo de espera del Socket" />
+												<intbox
+													value="@{servidor.socketTimeout}"
+													constraint="no negative, no zero, no empty" />
+												<label
+													value="Direccion Base ModBus" />
+												<intbox
+													value="@{servidor.refAddressBase}"
+													constraint="no negative, no zero, no empty" />
+											</row>
+											<row>
+												<label
+													value="Puerta de Enlace Modbus" />
+												<textbox
+													value="@{servidor.host_adquisicion}" />
+												<label
+													value="Puerto Modbus" />
+												<intbox
+													value="@{servidor.port_adquisicion}"
+													constraint="no negative, no zero" />
+
+											</row>
+											<row spans="4">
+												<hbox spacing="5">
+													<checkbox
+														label="Activo" checked="@{servidor.activo}">
+													</checkbox>
+													<checkbox
+														label="Autoconectar" checked="@{servidor.autoConectar}">
+													</checkbox>
+													<checkbox
+														label="Leer de Cache" checked="@{servidor.itemCache}">
+													</checkbox>
+												</hbox>
+											</row>
+
+										</rows>
+									</grid>
+								</panelchildren>
+							</panel>
+						</tabpanel>
+						<tabpanel>
+							<borderlayout>
+								<center autoscroll="true">
+									<panel height="100%">
+										<toolbar mold="panel"
+											style="background:#c5e6ef;">
+											<button
+												label="Agregar Tanque" mold="os"
+												style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
+												<attribute name="onClick">
+											<![CDATA[
+	{
+
+		command = new ObjectCommand();
+		tank = new com.pdvsa.psp.model.Tanque();
+		command.objeto = tank;
+		command.dialogo = true;
+		command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			//Se refresca el Arbol
+			//tree.refreshTree(OperationType.MODIFICAR, tanque);
+			//tank.servidorOpc = servidor;
+			tanques.add(tank);
+			binder.loadAll();
+
+		}
+
+	}
+]]>
+											</attribute>
+											</button>
+										</toolbar>
+										<panelchildren>
+											<!-- Informacion de los Tanques -->
+
+											<grid preloadSize="10"
+												width="100%" id="gridTanques" model="@{tanques}"
+												mold="paging" vflex="true" pageSize="10">
+												<columns
+													sizable="true">
+
+													<column
+														label="Nombre" align="center" valign="middle"
+														width="100px" />
+
+													<column
+														label="Producto" align="center" valign="middle"
+														width="200px" />
+
+
+													<column
+														label="Activo" align="center" valign="middle"
+														width="50px" />
+
+													<column
+														label="Operacion" align="center" valign="middle" />
+												</columns>
+												<rows>
+													<row
+														self="@{each=tanque}" value="@{tanque}">
+
+														<label
+															value="@{tanque.nombre}" />
+
+														<label
+															value="@{tanque.producto.nombre}" />
+
+														<hbox>
+															<checkbox
+																checked="@{tanque.activo}" disabled="false" />
+														</hbox>
+
+														<hbox
+															spacing="5px">
+
+
+
+															<toolbarbutton
+																use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+																objeto="@{tanque}" tooltiptext="Editar ..."
+																image="/images/icons/16x16/edit.png">
+																<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		tanq = (com.pdvsa.psp.model.Tanque) c.objeto;
+
+		command = new ObjectCommand();
+		command.objeto = tanq;
+		command.dialogo = true;
+		command.operacion = OperacionHelper
+				.getOperacion(OperationType.MODIFICAR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			binder.loadAll();
+		}
+	}
+]]>
+											</attribute>
+
+															</toolbarbutton>
+
+															<toolbarbutton
+																style="font-size: 9px; font-weight: normal;"
+																objeto="@{tanque}"
+																use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+																image="/images/icons/16x16/delete2.png"
+																tooltiptext="Eliminar ...">
+																<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		tanq = c.objeto;
+		tanques.remove(tanq);
+		binder.loadAll();
+
+	}
+]]>
+											</attribute>
+															</toolbarbutton>
+
+
+														</hbox>
+
+													</row>
+												</rows>
+											</grid>
+
+										</panelchildren>
+									</panel>
+								</center>
+							</borderlayout>
+						</tabpanel>
+
+						<tabpanel>
+							<borderlayout>
+								<center autoscroll="true">
+									<panel height="100%">
+										<toolbar mold="panel"
+											style="background:#c5e6ef;">
+
+											<button
+												label="Agregar Grupos" mold="os"
+												style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
+												<attribute name="onClick">
+											<![CDATA[
+	{
+
+		command = new ShowDialogCommand();
+		command.parametros.put("aEntity", gruposServidor);
+
+		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoGrupos.zul";
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			gruposSeleccionados = command.getReturnValue("CATALOG_RESULT");
+			for (com.pdvsa.psp.model.Grupo grp : gruposSeleccionados) {
+				sgNuevo = new com.pdvsa.psp.model.ServidorGrupo();
+				sgNuevo.setServidorOpc(servidor);
+				sgNuevo.setGrupo(grp);
+				sgNuevo.pooling = grp.pooling;
+				gruposServidor.add(sgNuevo);
+			}
+			binder.loadAll();
+
+		}
+
+	}
+]]>
+											</attribute>
+											</button>
+
+
+										</toolbar>
+										<panelchildren>
+											<!-- Informacion de los Grupos-->
+
+											<grid preloadSize="10"
+												width="100%" id="gridGrupos" model="@{gruposServidor}"
+												mold="paging" vflex="true" pageSize="10">
+												<columns
+													sizable="true">
+
+													<column
+														label="Nombre" align="center" valign="middle"
+														width="150px" />
+
+													<column
+														label="Descripción" align="center" valign="middle"
+														width="220px" />
+
+													<column
+														label="Pooling" align="center" valign="middle"
+														width="60px" />
+
+													<column
+														label="Operacion" align="center" valign="middle" />
+												</columns>
+												<rows>
+													<row
+														self="@{each=srvgrp}" value="@{srvgrp}">
+
+														<label
+															value="@{srvgrp.grupo.nombre}" />
+
+														<label
+															value="@{srvgrp.grupo.descripcion}" />
+
+														<intbox
+															constraint="no zero, no negative, no empty"
+															value="@{srvgrp.pooling}" />
+
+														<hbox
+															spacing="5px">
+
+
+
+
+															<toolbarbutton
+																style="font-size: 9px; font-weight: normal;"
+																objeto="@{srvgrp}"
+																use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+																image="/images/icons/16x16/delete2.png"
+																tooltiptext="Eliminar ...">
+																<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		srvgrpsel = c.objeto;
+
+		gruposServidor.remove(srvgrpsel);
+		binder.loadAll();
+
+	}
+]]>
+											</attribute>
+															</toolbarbutton>
+
+
+														</hbox>
+
+													</row>
+												</rows>
+											</grid>
+
+										</panelchildren>
+									</panel>
+								</center>
+							</borderlayout>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+	</window>
+	<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (servidor != null) {
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+			if (servidor.nombre == null || servidor.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el campo Nombre !!!");
+			}
+			if (servidor.clsid == null || servidor.clsid.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el campo Clsid !!!");
+			}
+			if (servidor.host == null || servidor.host.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el campo Host !!!");
+			}
+			if (servidor.username == null || servidor.username.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe Rellenar el campo Usuario !!!");
+			}
+			if (servidor.host_adquisicion == null
+					|| servidor.host_adquisicion.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe rellenar el campo Puerta de Enlance Modbus");
+			}
+			if (servidor.port_adquisicion == null
+					|| servidor.port_adquisicion < 0) {
+				throw new com.obelisco.exception.ObeliscoException(
+						"Debe rellenar el campo Puerto Modbus");
+			}
+
+		}
+		return true;
+	}
+	void doConfirmData() {
+		servidor = servidorService.saveServidorOpc(servidor, tanques,
+				rolesServidor, gruposServidor);
+		self.setAttribute("SAVED_VALUE", servidor);
+
+	}
+]]>
+	</zscript>
+
+</zk>

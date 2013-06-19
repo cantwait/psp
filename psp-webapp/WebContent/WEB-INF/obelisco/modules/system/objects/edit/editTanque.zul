@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditTanks"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	aTanque = arg.get("aObjeto");
+
+	productos = productoService.getProductosLikeNombre("");
+	if (productos == null) {
+		productos = new ArrayList();
+	}
+	if (aTanque.producto == null && productos.size() > 0){
+		aTanque.producto = productos.get(0); 
+	}
+]]>
+</zscript>
+
+	<window id="dlgEditTanks" title="Tanques" maximizable="true"
+		border="normal" width="70%" height="60%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<grid>
+					<columns>
+						<column width="40%" align="right" />
+						<column width="60%" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Nombre" />
+							<textbox id="txtNombre"
+								value="@{aTanque.nombre}" />
+						</row>
+						<row>
+							<label value="Producto Contenedor" />
+							<combobox id="listaProducto"
+								model="@{productos}" selectedItem="@{aTanque.producto}">
+								<comboitem self="@{each=produc}"
+									label="@{produc.nombre}" description="@{produc.descripcion}" />
+							</combobox>
+						</row>
+						<row>
+							<label value="Descripción" />
+							<textbox id="txtDescripcion"
+								value="@{aTanque.descripcion}" cols="50" rows="4" />
+						</row>
+						<row spans="2" align="right">
+							<hbox>
+								<checkbox id="checkActivo" label="Activo"
+									checked="@{aTanque.activo}">
+								</checkbox>
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+		<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (aTanque != null) {
+
+			if (aTanque.nombre == null || aTanque.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException("Debe Rellenar el campo Nombre !!!");
+			}
+					
+			
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+		}
+		return valido;
+	}
+	void doConfirmData() {
+
+	}
+]]>
+	</zscript>
+
+	</window>
+
+</zk>

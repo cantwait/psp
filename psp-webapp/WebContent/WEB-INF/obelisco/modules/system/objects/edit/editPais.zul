@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditPais"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<!--	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />-->
+
+	<zscript>
+	<![CDATA[
+	pais = arg.get("aObjeto");
+]]>
+</zscript>
+
+	<window id="dlgEditPais" title="País" maximizable="true"
+		border="normal" width="65%" height="50%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<grid>
+					<columns>
+						<column width="40%" />
+						<column width="60%" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Nombre" />
+							<textbox value="@{pais.nombre}" cols="50" />
+						</row>
+						<row>
+							<label value="Descripcion" />
+							<textbox value="@{pais.descripcion}"
+								cols="50" rows="4" />
+						</row>
+						<row spans="2" align="right">
+							<hbox>
+								<checkbox label="Activo"
+									checked="@{pais.activo}">
+								</checkbox>
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+		<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (pais != null) {
+
+			if (pais.nombre == null || pais.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException("Debe Rellenar el campo Nombre !!!");
+			}
+			
+				
+			
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+		}
+		return valido;
+	}
+	void doConfirmData() {
+		pais = paisService.savePais(pais);
+		self.setAttribute("SAVED_VALUE", pais);
+	}
+]]>
+	</zscript>
+	</window>
+
+</zk>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditRoles"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	usuario = new ArrayList();
+	aRolGeneral = arg.get("aObjeto");
+	if (aRolGeneral.nombre != null) {
+		usuario = userService.getUsuariosByRol(aRolGeneral.id);
+		if (usuario == null) {
+			usuario = new ArrayList();		
+		}
+	}
+]]>
+</zscript>
+
+	<window id="dlgEditRoles" title="Rol" border="normal" width="95%"
+		closable="true" height="90%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<borderlayout>
+					<north>
+						<grid>
+							<columns>
+								<column width="40" />
+								<column width="60" />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<textbox id="txtNombre" constraint="no empty"
+										value="@{aRolGeneral.nombre}" />
+								</row>
+								<row>
+									<label value="Descripción" />
+									<textbox id="txtDescripcion"
+										value="@{aRolGeneral.descripcion}" cols="50" rows="2" />
+								</row>
+								<row spans="2" align="right">
+									<hbox>
+										<checkbox id="checkActivo" label="Activo"
+											checked="@{aRolGeneral.activo}">
+										</checkbox>
+									</hbox>
+									
+								</row>
+							</rows>
+						</grid>
+					</north>
+					<center>
+						<panel title="Usuarios"
+							collapsible="false" height="299px">
+							<toolbar mold="panel"
+								style="background:#c5e6ef">
+								<button label="Agregar Usuario" mold="os"
+									style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+									<attribute name="onClick">
+									<![CDATA[
+	{
+
+		command = new ShowDialogCommand();
+		command.parametros.put("aEntity", usuario);
+
+		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoUsuarios.zul";
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			seleccion = command.getReturnValue("CATALOG_RESULT");
+			usuario.addAll(seleccion);
+ 
+			binder.loadAll();
+		}
+
+	}
+]]>
+
+									</attribute>
+								</button>
+							</toolbar>
+							<panelchildren>
+								<!-- Lista de usuarios -->
+
+								<grid preloadSize="10" id="gridGrupos"
+									model="@{usuario}" mold="paging" pageSize="10">
+									<columns sizable="true">
+
+										<column label="Login"
+											align="center" valign="middle" width="150px" />
+
+										<column label="Nombre"
+											align="center" valign="middle" width="350px" />
+
+										<column label="Activo"
+											align="center" valign="middle" width="50px" />
+
+										<column label="Operacion"
+											align="center" valign="middle" />
+
+									</columns>
+									<rows>
+										<row self="@{each=usu}"
+											value="@{usu}" >
+
+											<label
+												value="@{usu.login}"  />
+
+											<label
+												value="@{usu.nombre}" />
+
+											<hbox>
+												<checkbox
+													checked="@{usu.activo}" disabled="true" />
+											</hbox>
+
+											<hbox spacing="5px">
+
+												<toolbarbutton
+													style="font-size: 9px; font-weight: normal;"
+													objeto="@{usu}"
+													use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+													image="/images/icons/16x16/delete2.png"
+													tooltiptext="Eliminar ...">
+													<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		it = (com.pdvsa.psp.model.Usuario) c.objeto;
+		usuario.remove(it);
+		binder.loadAll();
+
+	}
+]]>
+											</attribute>
+												</toolbarbutton>
+
+
+											</hbox>
+
+										</row>
+									</rows>
+								</grid>
+
+							</panelchildren>
+						</panel>
+					</center>
+				</borderlayout>
+			</center>
+			<south height="48px">
+				<div height="100%" align="right"
+					style="background:#c5e6ef">
+					<button id="btnAceptar" label="Aceptar"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
+
+
+		<zscript>
+		<![CDATA[
+	Boolean doValidate() {
+		Boolean valido = false;
+		if (aRolGeneral != null) {
+			if (aRolGeneral.nombre == null || aRolGeneral.nombre.length() == 0) {
+				throw new com.obelisco.exception.ObeliscoException("Debe Rellenar el campo Nombre !!!");
+			}
+						
+			
+			boolean esValido = true;
+			valido = new Boolean(esValido);
+		}
+		return valido;
+	}
+	void doConfirmData() {
+
+		usuarioRoles = new ArrayList();
+
+		for (com.pdvsa.psp.model.Usuario usu : usuario) {
+			usuarioRol = new com.pdvsa.psp.model.UsuarioRol();
+			usuarioRol.usuario = usu;
+			usuarioRol.rol = aRolGeneral;
+			usuarioRoles.add(usuarioRol);
+		}
+		rolService.saveRolUsuario(aRolGeneral, usuarioRoles);
+
+	}
+]]>
+	</zscript>
+
+	</window>
+
+</zk>

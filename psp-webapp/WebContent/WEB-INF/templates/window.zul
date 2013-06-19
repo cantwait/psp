@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+		
+	<window height="95%" width="95%" 
+			style="margin-bottom:10px" 			
+			title="Contenido"  
+			closable="true" maximizable="true" >
+		<style src="/css/mystyle.css" dynamic="true" />
+		<caption image="/images/icons/24x24/window.png" />
+	</window>
+</zk>
