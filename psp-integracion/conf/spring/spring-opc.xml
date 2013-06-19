@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<bean id="InitJInterop" class="com.pdvsa.psp.component.opc.UtilJInterop">
+		<constructor-arg value="${dcom.debug}" />	
+		<constructor-arg value="${dcom.disableAutoCollection}" />
+	</bean>
+
+	<bean id="OpcManagerBase" class="com.pdvsa.psp.component.opc.OpcManager" abstract="true">
+		<property name="adquisitionService" ref="opcAdquisitionService" />
+		<property name="serverReconnectDelay" value="${opc.serverReconnectDelay}" />
+		<property name="maxServerErrors" value="${opc.maxServerErrors}" />
+		<property name="stopServerForMaxError" value="${opc.stopServerForMaxError}" />
+		<property name="byteBigEndian" value="${tcp.modbus.bBigEndian}" />
+		<property name="wordBigEndian" value="${tcp.modbus.wBigEndian}" />
+		<property name="dwordBigEndian" value="${tcp.modbus.dwBigEndian}" />		
+	</bean>
+	
+	<!-- 
+	Beans que actuarán como módulos de adquisición OPC (uno por región) 
+	NOTA: Un valor de null para "regionId" implica el monitoreo a todas las regiones 
+	--> 
+	
+	<bean id="OpcManagerAllRegion" parent="OpcManagerBase">
+		<property name="regionId">
+			<null />
+		</property>
+	</bean>
+	
+	<bean id="opcControllerService" class="com.pdvsa.psp.service.impl.OpcControllerService">
+		<property name="opcManagers">
+			<list>
+				<ref local="OpcManagerAllRegion" />
+			</list>
+		</property>	
+	</bean>	
+
+	<!--  
+	<bean id="OpcManager_ROCC" parent="OpcManagerBase">
+		<property name="regionId" value="${opc.rocc.id}"/>
+	</bean>
+	<bean id="OpcManager_RORI" parent="OpcManagerBase">
+		<property name="regionId" value="${opc.rori.id}"/>
+	</bean>
+	<bean id="OpcManager_RCEN" parent="OpcManagerBase">
+		<property name="regionId" value="${opc.rcen.id}"/>
+	</bean>	
+	<bean id="OpcManager_RCENS" parent="OpcManagerBase">
+		<property name="regionId" value="${opc.rcens.id}"/>
+	</bean>
+	<bean id="OpcManager_RMET" parent="OpcManagerBase">
+		<property name="regionId" value="${opc.rmet.id}"/>
+	</bean>
+	
+	<bean id="opcControllerService" class="com.pdvsa.psp.service.impl.OpcControllerService">
+		<property name="opcManagers">
+			<list>
+				<ref local="OpcManager_ROCC" />
+				<ref local="OpcManager_RORI" />
+				<ref local="OpcManager_RCEN" />
+				<ref local="OpcManager_RCENS" />
+				<ref local="OpcManager_RMET" />
+			</list>
+		</property>	
+	</bean>
+	-->
+	
+</beans>
