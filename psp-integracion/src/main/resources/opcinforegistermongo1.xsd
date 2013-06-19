@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="opcInfoRegisterMongo">
+    <xs:sequence>
+      <xs:element name="hostModbusSlave" type="xs:string" minOccurs="0"/>
+      <xs:element name="localidadId" type="xs:long" minOccurs="0"/>
+      <xs:element name="localidadNombre" type="xs:string" minOccurs="0"/>
+      <xs:element name="paisId" type="xs:long" minOccurs="0"/>
+      <xs:element name="paisNombre" type="xs:string" minOccurs="0"/>
+      <xs:element name="portModbusSlave" type="xs:int" minOccurs="0"/>
+      <xs:element name="propagado" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="quality" type="xs:short" minOccurs="0"/>
+      <xs:element name="reference" type="xs:int" minOccurs="0"/>
+      <xs:element name="regType" type="dataTYPE" minOccurs="0"/>
+      <xs:element name="regValue" type="xs:string" minOccurs="0"/>
+      <xs:element name="regionId" type="xs:long" minOccurs="0"/>
+      <xs:element name="regionNombre" type="xs:string" minOccurs="0"/>
+      <xs:element name="stationId" type="xs:long" minOccurs="0"/>
+      <xs:element name="tagName" type="xs:string" minOccurs="0"/>
+      <xs:element name="tagOpc" type="xs:string" minOccurs="0"/>
+      <xs:element name="timestamp" type="xs:dateTime" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="dataTYPE">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="I1"/>
+      <xs:enumeration value="I2"/>
+      <xs:enumeration value="I4"/>
+      <xs:enumeration value="R4"/>
+      <xs:enumeration value="R8"/>
+      <xs:enumeration value="CY"/>
+      <xs:enumeration value="DATE"/>
+      <xs:enumeration value="BSTR"/>
+      <xs:enumeration value="BOOL"/>
+      <xs:enumeration value="UI1"/>
+      <xs:enumeration value="UI2"/>
+      <xs:enumeration value="UI4"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="psp-test">
+    <global-element name="Quartz" type="http://www.mulesoft.org/schema/mule/quartz/connector" entity-id="Quartz#1">
+        <properties>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="name" value="Quartz-Connector"/>
+            <property name="validateConnections" value="true"/>
+            <property name="dynamicNotification"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="scheduler-ref"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;0">
+                <property name="value" value="MuleScheduler1"/>
+                <property name="key" value="rg.quartz.scheduler.instanceName"/>
+                <property name="auxiliary;index" value="2"/>
+                <property name="auxiliary;wrapIn" value="2"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;1">
+                <property name="value" value="org.quartz.simpl.SimpleThreadPool"/>
+                <property name="key" value="org.quartz.threadPool.class"/>
+                <property name="auxiliary;index" value="3"/>
+                <property name="auxiliary;wrapIn" value="3"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;2">
+                <property name="value" value="3"/>
+                <property name="key" value="org.quartz.threadPool.threadCount"/>
+                <property name="auxiliary;index" value="4"/>
+                <property name="auxiliary;wrapIn" value="4"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;3">
+                <property name="value" value="false"/>
+                <property name="key" value="org.quartz.scheduler.rmi.proxy"/>
+                <property name="auxiliary;index" value="5"/>
+                <property name="auxiliary;wrapIn" value="5"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;4">
+                <property name="value" value="false"/>
+                <property name="key" value="org.quartz.scheduler.rmi.export"/>
+                <property name="auxiliary;index" value="6"/>
+                <property name="auxiliary;wrapIn" value="6"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;5">
+                <property name="value" value="org.quartz.simpl.RAMJobStore"/>
+                <property name="key" value="org.quartz.jobStore.class"/>
+                <property name="auxiliary;index" value="7"/>
+                <property name="auxiliary;wrapIn" value="7"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#1">
+        <properties>
+            <property name="factory-bean"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method"/>
+            <property name="class" value="org.home.psp.service.MulePspService"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="mule-service"/>
+            <property name="primary"/>
+            <property name="name" value="mule-service"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;index" value="9"/>
+            <property name="auxiliary;wrapIn" value="8"/>
+            <property name="depends-on"/>
+            <property-collection name="@http://www.springframework.org/schema/beans/property;0">
+                <property name="ref" value="pspService"/>
+                <property name="name" value="pspService"/>
+                <property name="auxiliary;index" value="10"/>
+                <property name="auxiliary;wrapIn" value="10"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#2">
+        <properties>
+            <property name="factory-bean"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method"/>
+            <property name="class" value="org.home.psp.service.PspService"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="pspService"/>
+            <property name="primary"/>
+            <property name="name" value="pspService"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;index" value="11"/>
+            <property name="auxiliary;wrapIn" value="8"/>
+            <property name="depends-on"/>
+            <property-collection name="@http://www.springframework.org/schema/beans/property;0">
+                <property name="ref" value="opcDataRepo"/>
+                <property name="name" value="opcDataRepo"/>
+                <property name="auxiliary;index" value="12"/>
+                <property name="auxiliary;wrapIn" value="12"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="Import" type="http://www.springframework.org/schema/beans/import" entity-id="Import#1">
+        <properties>
+            <property name="resource" value="classpath:spring-base.xml"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="auxiliary;wrapIn" value="8"/>
+            <property name="auxiliary;index" value="13"/>
+        </properties>
+    </global-element>
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#3">
+        <properties>
+            <property name="factory-bean"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method"/>
+            <property name="class" value="org.home.psp.dao.OpcInfoRegisterDAO"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="opcDataRepo"/>
+            <property name="primary"/>
+            <property name="name" value="opcDataRepo"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;index" value="14"/>
+            <property name="auxiliary;wrapIn" value="8"/>
+            <property name="depends-on"/>
+            <property-collection name="@http://www.springframework.org/schema/beans/property;0">
+                <property name="ref" value="mongoTemplate"/>
+                <property name="name" value="mongoTemplate"/>
+                <property name="auxiliary;index" value="15"/>
+                <property name="auxiliary;wrapIn" value="15"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#4">
+        <properties>
+            <property name="factory-bean"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method"/>
+            <property name="class" value="org.home.psp.service.MuleUpdateOpcInfoService"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="updateOpcService"/>
+            <property name="primary"/>
+            <property name="name" value="updateOpcService"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;index" value="16"/>
+            <property name="auxiliary;wrapIn" value="8"/>
+            <property name="depends-on"/>
+            <property-collection name="@http://www.springframework.org/schema/beans/property;0">
+                <property name="ref" value="pspService"/>
+                <property name="name" value="pspService"/>
+                <property name="auxiliary;index" value="17"/>
+                <property name="auxiliary;wrapIn" value="17"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="Mongo DB" type="http://www.mulesoft.org/schema/mule/mongo/config" entity-id="Mongo DB#1">
+        <properties>
+            <property name="port"/>
+            <property name="safe"/>
+            <property name="host" value="127.0.0.1"/>
+            <property name="connectionsPerHost"/>
+            <property name="maxWaitTime"/>
+            <property name="autoConnectRetry"/>
+            <property name="password"/>
+            <property name="database"/>
+            <property name="w"/>
+            <property name="username"/>
+            <property name="connectTimeout"/>
+            <property name="socketTimeout"/>
+            <property name="fsync"/>
+            <property name="name" value="Mongo_DB"/>
+            <property name="threadsAllowedToBlockForConnectionMultiplier"/>
+            <property name="wtimeout"/>
+            <property name="slaveOk"/>
+            <property name="auxiliary;index" value="18"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/mongo/connection-pooling-profile;0">
+                <property name="exhaustedAction" value="WHEN_EXHAUSTED_GROW"/>
+                <property name="auxiliary;index" value="19"/>
+                <property name="auxiliary;wrapIn" value="19"/>
+                <property name="initialisationPolicy" value="INITIALISE_ONE"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="Java" type="http://www.mulesoft.org/schema/mule/core/custom-transformer" entity-id="Java#1">
+        <properties>
+            <property name="returnClass"/>
+            <property name="ignoreBadInput"/>
+            <property name="name" value="Java"/>
+            <property name="encoding"/>
+            <property name="class" value="org.home.psp.mule.transformers.JSONArrayToOpcInfoArray"/>
+            <property name="mimeType"/>
+            <property name="auxiliary;index" value="20"/>
+        </properties>
+    </global-element>
+    <global-element name="Expression" type="http://www.mulesoft.org/schema/mule/core/expression-transformer" entity-id="Expression#1">
+        <properties>
+            <property name="expression"/>
+            <property name="returnClass"/>
+            <property name="ignoreBadInput"/>
+            <property name="returnSourceIfNull"/>
+            <property name="name" value="ExtractParams"/>
+            <property name="custom-evaluator"/>
+            <property name="encoding"/>
+            <property name="evaluator"/>
+            <property name="mimeType"/>
+            <property name="auxiliary;index" value="21"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/core/return-argument;0">
+                <property name="expression" value="payload.regValue"/>
+                <property name="evaluator" value="groovy"/>
+                <property name="auxiliary;index" value="22"/>
+                <property name="auxiliary;wrapIn" value="22"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/core/return-argument;1">
+                <property name="expression" value="payload.tagName"/>
+                <property name="evaluator" value="groovy"/>
+                <property name="auxiliary;index" value="23"/>
+                <property name="auxiliary;wrapIn" value="23"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/core/return-argument;2">
+                <property name="expression" value="payload.stationId"/>
+                <property name="evaluator" value="groovy"/>
+                <property name="auxiliary;index" value="24"/>
+                <property name="auxiliary;wrapIn" value="24"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="OpcDataSimulator" entity-id="381f522e-136d-4596-a289-95af9ea35899">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="25"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Quartz" type="http://www.mulesoft.org/schema/mule/quartz/endpoint" entity-id="Quartz#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="repeatCount"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="jobName" value="poll-data-mongo-service"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="repeatInterval" value="10000"/>
+                    <property name="address"/>
+                    <property name="startDelay"/>
+                    <property name="encoding"/>
+                    <property name="cronExpression"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="26"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref" value="Quartz-Connector"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/event-generator-job;0">
+                        <property name="groupName" value="TEST"/>
+                        <property name="jobGroupName" value="TEST"/>
+                        <property name="auxiliary;index" value="27"/>
+                        <property name="auxiliary;wrapIn" value="27"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+            <pattern name="psp-service-mongodb" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class"/>
+                    <property name="auxiliary;index" value="28"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/spring-object;0">
+                        <property name="bean" value="mule-service"/>
+                        <property name="auxiliary;index" value="29"/>
+                        <property name="auxiliary;wrapIn" value="29"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="OpcDataSender" entity-id="b792c2c7-64ed-4146-b446-04030fa1c2f6">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="30"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Quartz" type="http://www.mulesoft.org/schema/mule/quartz/endpoint" entity-id="Quartz#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="repeatCount"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="jobName" value="mongodb-query"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="repeatInterval" value="15000"/>
+                    <property name="address"/>
+                    <property name="startDelay"/>
+                    <property name="encoding"/>
+                    <property name="cronExpression"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="31"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/event-generator-job;0">
+                        <property name="groupName" value="mongo-query"/>
+                        <property name="jobGroupName" value="mongo-query"/>
+                        <property name="auxiliary;index" value="32"/>
+                        <property name="auxiliary;wrapIn" value="32"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+            <pattern name="MongoDB-Find-OPCRegisters" type="http://www.mulesoft.org/schema/mule/mongo/mongo-connector" entity-id="Mongo DB#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name=""/>
+                    <property name="limit"/>
+                    <property name="username"/>
+                    <property name="numToSkip"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/mongo/find-objects"/>
+                    <property name="query-ref" value="#[string: {&quot;propagado&quot; :  false}]"/>
+                    <property name="collection" value="opcInfoRegister"/>
+                    <property name="password"/>
+                    <property name="config-ref" value="Mongo_DB"/>
+                    <property name="database"/>
+                    <property name="auxiliary;index" value="33"/>
+                </properties>
+            </pattern>
+            <pattern name="MongoDB-Collection-to-Json" type="http://www.mulesoft.org/schema/mule/mongo/mongo-transformer" entity-id="Mongo DB#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/mongo/mongo-collection-to-json"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="34"/>
+                </properties>
+            </pattern>
+            <pattern name="JsonArrayToOpcInfoRegisterArray" type="org.mule.tooling.ui.modules.core.pattern.globalXformRef" entity-id="Transformer Reference#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="ref" value="Java"/>
+                    <property name="auxiliary;index" value="35"/>
+                </properties>
+            </pattern>
+            <pattern name="Collection Splitter" type="http://www.mulesoft.org/schema/mule/core/collection-splitter" entity-id="Collection Splitter#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="enableCorrelation"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="36"/>
+                </properties>
+            </pattern>
+            <pattern name="Create XML Request" type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" entity-id="Groovy#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="script-ref"/>
+                    <property name="auxiliary;index" value="37"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
+                        <property name="text" value="def writer = new StringWriter() &#xA;        def xml = new groovy.xml.MarkupBuilder(writer) &#xA;        xml.opc() { &#xA;          stationId(payload.stationId) &#xA;          regValue(payload.regValue) &#xA;          tagName(payload.tagName) &#xA;        } &#xA;        result = writer.toString();"/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="auxiliary;index" value="38"/>
+                        <property name="auxiliary;wrapIn" value="38"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property name="text" value="def writer = new StringWriter() &#xA;        def xml = new groovy.xml.MarkupBuilder(writer) &#xA;        xml.opc() { &#xA;          stationId(payload.stationId) &#xA;          regValue(payload.regValue) &#xA;          tagName(payload.tagName) &#xA;        } &#xA;        result = writer.toString();"/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="auxiliary;index" value="38"/>
+                        <property name="auxiliary;wrapIn" value="38"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="9000"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="opc-info/save-opc-item"/>
+                    <property name="encoding" value="UTF-8"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method" value="POST"/>
+                    <property name="user"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType" value="text/xml"/>
+                    <property name="auxiliary;index" value="39"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="Object to String#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="40"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="VM" type="http://www.mulesoft.org/schema/mule/vm/endpoint" entity-id="VM#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="encoding"/>
+                    <property name="path" value="update-opc-endpoint"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="41"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="ExposeOpcServiceRegion" entity-id="4c28f61f-19fd-4e15-aca9-7cafdcfc44f4">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="42"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="http-save-opc-endpoint" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="9000"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="opc-info"/>
+                    <property name="encoding" value="UTF-8"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType" value="text/xml"/>
+                    <property name="auxiliary;index" value="43"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="REST" type="http://www.mulesoft.org/schema/mule/jersey/resources" entity-id="REST#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="auxiliary;index" value="44"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/component;0">
+                        <property name="class" value="org.home.psp.rest.OpcInfoRegisterRestfulService"/>
+                        <property name="auxiliary;index" value="45"/>
+                        <property name="auxiliary;wrapIn" value="45"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="UpdateOpcItemLocalidad" entity-id="ef06133a-54fa-4b9b-8e5d-cf61bd7dcb19">
+        <properties>
+            <property name="processingStrategy" value="synchronous"/>
+            <property name="processingStrategy2" value="synchronous"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="46"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="vm-update-opc-endpoint" type="http://www.mulesoft.org/schema/mule/vm/endpoint" entity-id="VM#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="encoding"/>
+                    <property name="path" value="update-opc-endpoint"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="47"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Java" type="org.mule.tooling.ui.modules.core.pattern.customTransformer" entity-id="Java#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="class" value="org.home.psp.mule.transformers.StringToXmlTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="48"/>
+                </properties>
+            </pattern>
+            <pattern name="Groovy" type="http://www.mulesoft.org/schema/mule/scripting/groovyTransformer" entity-id="Groovy#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="49"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
+                        <property name="text" value="def xmlData = new XmlSlurper().parseText(payload)&#xA;org.home.psp.data.ResponseMessage o = new org.home.psp.data.ResponseMessage()&#xA;o.stationId = xmlData.stationId.text() as Long&#xA;return o"/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="auxiliary;index" value="50"/>
+                        <property name="auxiliary;wrapIn" value="50"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property name="text" value="def xmlData = new XmlSlurper().parseText(payload)&#xA;org.home.psp.data.ResponseMessage o = new org.home.psp.data.ResponseMessage()&#xA;o.stationId = xmlData.stationId.text() as Long&#xA;return o"/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="auxiliary;index" value="50"/>
+                        <property name="auxiliary;wrapIn" value="50"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="Object to JSON#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="sourceClass"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="51"/>
+                </properties>
+            </pattern>
+            <splitter index="52" name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="bussinessEventsLabel"/>
+                    <property name="auxiliary;index" value="52"/>
+                    <property name="tracking:enable-default-events"/>
+                </properties>
+                <pattern name="All" type="org.mule.tooling.ui.modules.core.pattern.all" entity-id="All#2"/>
+                <compartment entity-id="compartment#1"/>
+            </splitter>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
