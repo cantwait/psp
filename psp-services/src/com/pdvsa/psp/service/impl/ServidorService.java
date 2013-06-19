@@ -1,0 +1,175 @@
+package com.pdvsa.psp.service.impl;
+
+import java.util.List;
+
+import javax.jws.WebService;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.pdvsa.psp.dao.IServidorGrupoDAO;
+import com.pdvsa.psp.dao.IServidorOpcDAO;
+import com.pdvsa.psp.dao.IServidorRolDAO;
+import com.pdvsa.psp.dao.ITanqueDAO;
+import com.pdvsa.psp.model.ServidorGrupo;
+import com.pdvsa.psp.model.ServidorOpc;
+import com.pdvsa.psp.model.ServidorRol;
+import com.pdvsa.psp.model.Tanque;
+import com.pdvsa.psp.service.IOpcControllerService;
+import com.pdvsa.psp.service.IServidorService;
+
+@WebService(serviceName = "manageServidorService", endpointInterface = "com.pdvsa.psp.service.IServidorService")
+@Service("servidorService")
+public class ServidorService implements IServidorService{
+	
+	private IOpcControllerService controllerService;
+	private IServidorOpcDAO servidorDAO;
+	private ITanqueDAO tanqueDAO;
+	private IServidorRolDAO servidorRolDAO;
+	private IServidorGrupoDAO servidorGrupoDAO;
+
+	public IServidorGrupoDAO getServidorGrupoDAO() {
+		return servidorGrupoDAO;
+	}
+
+	@Autowired
+	public void setServidorGrupoDAO(IServidorGrupoDAO servidorGrupoDAO) {
+		this.servidorGrupoDAO = servidorGrupoDAO;
+	}
+
+	@Autowired
+	public void setServidorDAO(IServidorOpcDAO servidorDAO) {
+		this.servidorDAO = servidorDAO;
+	}
+
+	public IServidorOpcDAO getServidorDAO() {
+		return servidorDAO;
+	}
+
+	@Override
+	public ServidorOpc getServidorById(Long idServidor) {
+		return servidorDAO.find(idServidor);
+	}
+
+	@Override
+	public ServidorOpc getServidorByNombre(String nombre) {
+		return servidorDAO.findByNombre(nombre);
+	}
+
+	@Override
+	public List<ServidorOpc> getServidoresLikeNombre(String value) {
+		return (StringUtils.isBlank(value)) ? servidorDAO.findAll()
+				: servidorDAO.findLikeNombre(value);
+	}
+
+	@Override
+	public boolean removeServidor(Long idServidor) {
+		ServidorOpc servidor = servidorDAO.find(idServidor);
+		boolean remover = false;
+		if (servidor != null) {
+			remover = servidorDAO.remove(servidor);
+			if(remover){
+				controllerService.removeServer(servidor.getLocalidad().getRegion().getId(), servidor.getId());
+			}
+		}
+		return remover;
+	}
+
+	@Override
+	public ServidorOpc saveServidor(ServidorOpc servidor) {
+		return servidorDAO.save(servidor);
+	}
+
+	@Override
+	public List<ServidorOpc> getServidoresByLocalidad(Long localidad,
+			Boolean activo) {
+		return servidorDAO.findServidoresByLocalidad(localidad, activo);
+	}
+
+	@Override
+	public ServidorOpc saveServidorOpc(ServidorOpc servidor,
+			List<Tanque> tanques, List<ServidorRol> roles,
+			List<ServidorGrupo> grupos) {
+
+		
+
+		if (tanques != null) {
+			if (tanques.size() > 0) {
+				for (Tanque tanque : tanques) {
+					tanque.setServidorOpc(servidor);
+				}
+				servidor.getTanques().addAll(tanques);
+			}
+		}
+
+		if (grupos != null) {
+			if (grupos.size() > 0) {
+				for (ServidorGrupo grupo : grupos) {
+					grupo.setServidorOpc(servidor);
+				}
+				servidor.getServidorGrupos().addAll(grupos);
+			}
+		}
+
+		if (roles != null) {
+			if (roles.size() > 0) {
+				for (ServidorRol rol : roles) {
+					rol.setServidorOpc(servidor);
+				}
+				servidor.getServidorRoles().addAll(roles);
+			}
+		}
+		boolean addOpcServer = false;
+		if(servidor.getId() == null){
+			addOpcServer = true;
+		}
+		
+		
+		servidor = servidorDAO.save(servidor);
+		if(addOpcServer == true){
+			controllerService.addServer(servidor.getLocalidad().getRegion().getId(), servidor.getId());
+		}
+
+
+		return servidor;
+
+	}
+
+	@Autowired
+	public void setTanqueDAO(ITanqueDAO tanqueDAO) {
+		this.tanqueDAO = tanqueDAO;
+	}
+
+	public ITanqueDAO getTanqueDAO() {
+		return tanqueDAO;
+	}
+
+	@Autowired
+	public void setServidorRolDAO(IServidorRolDAO servidorRolDAO) {
+		this.servidorRolDAO = servidorRolDAO;
+	}
+
+	public IServidorRolDAO getServidorRolDAO() {
+		return servidorRolDAO;
+	}
+
+	@Override
+	public List<ServidorGrupo> getServidorGrupoByServidor(Long idServidorGrupo) {
+		return servidorGrupoDAO.findServidorGrupoByServidor(idServidorGrupo);
+	}
+
+	@Override
+	public List<ServidorRol> getServidorRolByServidor(Long idServidorRol) {
+		return servidorRolDAO.findServidorRolByServidor(idServidorRol);
+	}
+
+	public IOpcControllerService getControllerService() {
+		return controllerService;
+	}
+
+	public void setControllerService(IOpcControllerService controllerService) {
+		this.controllerService = controllerService;
+	}
+	
+}

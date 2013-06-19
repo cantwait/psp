@@ -1,0 +1,107 @@
+package com.pdvsa.psp.dao.impl;
+
+import java.util.List;
+import javax.persistence.Query;
+import org.springframework.stereotype.Repository;
+
+import com.googlecode.genericdao.search.Search;
+import com.pdvsa.psp.dao.IServidorOpcDAO;
+import com.pdvsa.psp.model.ServidorOpc;
+import com.pdvsa.psp.model.Tanque;
+import com.pdvsa.psp.model.Usuario;
+
+@Repository
+public class ServidorOpcDAO extends BaseDAO<ServidorOpc, Long> implements IServidorOpcDAO {
+	
+	@Override
+	public ServidorOpc getNewServidor() {
+		return new ServidorOpc();
+	}
+	
+	@Override
+	public ServidorOpc findByHost(String host) {
+		Search s = new Search(); 
+		s.addFilterEqual("host", host);
+		return searchUnique(s);
+	}
+
+	@Override
+	public ServidorOpc findByNombre(String nombre) {
+		Search s = new Search(); 
+		s.addFilterEqual("nombre", nombre);
+		return searchUnique(s);
+	}
+	
+	@Override
+	public List<ServidorOpc> findLikeNombre(String value) {
+		Search s = new Search(); 
+		s.addFilterILike("nombre", value);
+		return search(s);
+	}
+	
+	@Override
+	public List<ServidorOpc> findAll(Boolean activo) {
+		if (activo == null) {
+			return findAll();
+		}
+		Search s = new Search(); 
+		s.addFilterEqual("activo", activo);
+		s.addSortAsc("id");
+		return search(s);
+	}	
+
+	@Override
+	public List<ServidorOpc> findByRegion(Long idRegion, Boolean activo) {
+		Search s = new Search(); 
+		s.addFilterEqual("localidad.region.id", idRegion);
+		if (activo != null) {
+			s.addFilterEqual("activo", activo);
+		}
+		s.addSortAsc("id");
+		return search(s);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Usuario> findUsuarios(Long idServidor, Boolean activo) {
+		String sql = "SELECT d FROM ServidorOpc a JOIN a.servidorRoles b JOIN b.rol.usuarioRoles c JOIN c.usuario d WHERE a.id=?";
+		if (activo != null) {
+			sql = sql.concat(" AND d.activo=?");
+		}		
+		Query query = em().createQuery(sql);
+		query.setParameter(1, idServidor);
+		if (activo != null) {
+			query.setParameter(2, activo);
+		}
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Tanque> findTanques(Long idServidor, Boolean activo) {
+		String sql = "SELECT a FROM Tanque a JOIN a.servidorOpc b WHERE b.id=?";
+		if (activo != null) {
+			sql = sql.concat(" AND a.activo=?");
+		}
+		sql = sql.concat(" ORDER BY a.id");
+		Query query = em().createQuery(sql);
+		query.setParameter(1, idServidor);
+		if (activo != null) {
+			query.setParameter(2, activo);
+		}
+		return query.getResultList();
+	}
+
+	@Override
+	public List<ServidorOpc> findServidoresByLocalidad(Long localidad,
+			Boolean activo) {
+		Search s = new Search();
+		s.addFilterEqual("localidad.id", localidad);
+		if(activo != null){
+			s.addFilterEqual("activo", activo);
+		}
+		return search(s);
+	}
+
+
+}
