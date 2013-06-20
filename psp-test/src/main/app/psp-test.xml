@@ -38,15 +38,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <spring:property name="pspService" ref="pspService"/>
         </spring:bean>
     </spring:beans>
-    <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB">
-        <mongo:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
+    <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB" threadsAllowedToBlockForConnectionMultiplier="50" connectionsPerHost="100" maxWaitTime="2000" socketTimeout="10000">
+        <mongo:connection-pooling-profile initialisationPolicy="INITIALISE_ALL" exhaustedAction="WHEN_EXHAUSTED_WAIT" maxActive="50"/>
+        <reconnect count="5"/>
     </mongo:config>
     <custom-transformer class="org.home.psp.mule.transformers.JSONArrayToOpcInfoArray" name="Java" doc:name="Java"/>
-    <expression-transformer name="ExtractParams" doc:name="Expression">
-        <return-argument evaluator="groovy" expression="payload.regValue"/>
-        <return-argument evaluator="groovy" expression="payload.tagName"/>
-        <return-argument evaluator="groovy" expression="payload.stationId"/>
-    </expression-transformer>
     
  
     <flow name="OpcDataSimulator" doc:name="OpcDataSimulator">
@@ -59,26 +55,33 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow> 
  
     <flow name="OpcDataSender" doc:name="OpcDataSender">
-        <quartz:inbound-endpoint jobName="mongodb-query" repeatInterval="15000" responseTimeout="10000" doc:name="Quartz">
+        <quartz:inbound-endpoint jobName="mongodb-query" repeatInterval="10000" responseTimeout="10000" doc:name="QuartzEnviarData">
             <quartz:event-generator-job groupName="mongo-query" jobGroupName="mongo-query"/>
         </quartz:inbound-endpoint>
-        <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters" query-ref="#[string: {&quot;propagado&quot; :  false}]" >                          
+        <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters" limit="100">                          
                                    
         </mongo:find-objects>
-        <mongo:mongo-collection-to-json doc:name="MongoDB-Collection-to-Json"/>
-        <transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray"/>
-        <collection-splitter doc:name="Collection Splitter"/>
-        <scripting:component doc:name="Create XML Request">
+        <mongo:mongo-collection-to-json doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true"/>
+        <transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray-ED"/>
+        <collection-splitter doc:name="Collection-Splitter-ED" enableCorrelation="NEVER"/>
+        <scripting:transformer doc:name="Groovy-ED">
             <scripting:script engine="Groovy"><![CDATA[def writer = new StringWriter() 
         def xml = new groovy.xml.MarkupBuilder(writer) 
         xml.opc() { 
           stationId(payload.stationId) 
           regValue(payload.regValue) 
-          tagName(payload.tagName) 
+          tagName(payload.tagName)
+		  tagOpc(payload.tagOpc)
+		  quality(payload.quality)
+          hostModbusSlave(payload.hostModbusSlave)
+          portModbusSlave(payload.portModbusSlave)
+          reference(payload.reference)
+          regType(payload.regType)
+          timestamp(payload.timestamp)
         } 
         result = writer.toString();]]></scripting:script>
-        </scripting:component>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9000" path="opc-info/save-opc-item" method="POST" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
+        </scripting:transformer>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9000" path="opc-info/save-opc-item" method="POST" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP-ED"/>
         <object-to-string-transformer doc:name="Object to String"/>
         <vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM"/>
       
@@ -96,16 +99,33 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <custom-transformer class="org.home.psp.mule.transformers.StringToXmlTransformer" doc:name="Java"/>
         <scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[def xmlData = new XmlSlurper().parseText(payload)
-org.home.psp.data.ResponseMessage o = new org.home.psp.data.ResponseMessage()
+org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()
 o.stationId = xmlData.stationId.text() as Long
+o.regValue = xmlData.regValue
+o.tagName = xmlData.tagName
+o.hostModbusSlave = xmlData.hostModbusSlave
+o.portModbusSlave = xmlData.portModbusSlave
+o.timestamp = xmlData.timestamp
+o.tagOpc = xmlData.tagOpc
+o.reference = xmlData.reference
+o.quality = xmlData.quality
+o.regType = xmlData.regType
 return o]]></scripting:script>
         </scripting:transformer>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
-        <all doc:name="All"/>
-<!--         <component doc:name="update-opc-mongo"> -->
-<!--             <spring-object bean="updateOpcService"/> -->
-<!--         </component> -->
-<!--         <mongo:update-objects config-ref="Mongo_DB"   doc:name="Mongo DB" collection="opcitems" multi="false" query-ref="#[string: #[groovy:payload] ,  {$set: {&quot;propagado&quot; : true}]"/> -->
+        <all doc:name="All">
+            <mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" doc:name="Mongo DB"/>
+            <processor-chain>
+                <json:json-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegister" doc:name="JSON to Object"/>
+                <scripting:transformer doc:name="Groovy">
+                    <scripting:script engine="Groovy"><![CDATA[Long stationId = payload.stationId as Long
+return stationId]]></scripting:script>
+                </scripting:transformer>
+                <mongo:remove-objects config-ref="Mongo_DB" collection="opcInfoRegister" query-ref="#[string: {&quot;stationId&quot; : #[payload]}]" doc:name="Mongo DB"/>
+            </processor-chain>
+        </all>
+
+
     </flow>
    
     

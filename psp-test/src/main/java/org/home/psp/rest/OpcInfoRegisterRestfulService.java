@@ -18,9 +18,9 @@ public class OpcInfoRegisterRestfulService {
 	@Path("/save-opc-item")
 	@Consumes("text/xml")
 	@Produces("text/xml")
-	public ResponseMessage saveOpcItem(OpcInfoRegister xml){
+	public OpcInfoRegister saveOpcItem(OpcInfoRegister xml){
 		
-		return new ResponseMessage(xml.getStationId());
+		return xml;
 		
 	}
 

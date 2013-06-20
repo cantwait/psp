@@ -16,6 +16,8 @@ public class OpcInfoRegisterDAO {
 		for (OpcInfoRegister opcInfoRegister : opcs) {
 			
 			mongoTemplate.save(opcInfoRegister);
+			
+			
 		}		
 	}
 	

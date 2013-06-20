@@ -3,8 +3,10 @@ package com.pdvsa.psp.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.pdvsa.psp.model.Item.DATA_TYPE;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import com.pdvsa.psp.model.Item.DATA_TYPE;
+@XmlRootElement(name="opc")
 public class OpcInfoRegisterMongo implements Serializable{
 
 	/**
@@ -17,7 +19,6 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private Integer reference;
 	private String tagOpc;
 	private String tagName;
-	private DATA_TYPE regType;
 	private Date timestamp;
 	private String regValue = "";
 	private Short quality = 0;
@@ -27,30 +28,27 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private String regionNombre;
 	private Long paisId;
 	private String paisNombre;
-	private Boolean propagado;
 	
 	public OpcInfoRegisterMongo() {
 		
 	}
 	
 	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc,
-			String tagName, DATA_TYPE regType, String hostModbusSlave, Integer portModbusSlave) {
+			String tagName, String hostModbusSlave, Integer portModbusSlave) {
 		super();
 		this.stationId = stationId;
 		this.hostModbusSlave = hostModbusSlave;
 		this.portModbusSlave = portModbusSlave;
 		this.reference = reference;
 		this.tagOpc = tagOpc;
-		this.tagName = tagName;
-		this.regType = regType;
+		this.tagName = tagName;		
 	}
 
 	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName,
-			DATA_TYPE regType, Date timestamp, String regValue, Short quality) {
+			Date timestamp, String regValue, Short quality) {
 		this.reference = reference;
 		this.tagOpc = tagOpc;
-		this.tagName = tagName;
-		this.regType = regType;
+		this.tagName = tagName;		
 		this.timestamp = timestamp;
 		this.regValue = regValue;
 		this.quality = quality;
@@ -80,13 +78,6 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.tagName = tagName;
 	}
 	
-	public DATA_TYPE getRegType() {
-		return regType;
-	}
-	
-	public void setRegType(DATA_TYPE regType) {
-		this.regType = regType;
-	}
 	
 	public Date getTimestamp() {
 		return timestamp;
@@ -184,13 +175,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.paisNombre = paisNombre;
 	}
 
-	public Boolean getPropagado() {
-		return propagado;
-	}
-
-	public void setPropagado(Boolean propagado) {
-		this.propagado = propagado;
-	}
+	
 	
 	
 	

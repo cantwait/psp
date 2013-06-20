@@ -27,8 +27,6 @@ public class OpcInfoRegister implements Serializable {
 	private String timestamp;
 	private String regValue = "";
 	private String quality;
-	private boolean propagado = false;
-	
 	
 	
 	public OpcInfoRegister() {
@@ -98,12 +96,7 @@ public class OpcInfoRegister implements Serializable {
 	public void setQuality(String quality) {
 		this.quality = quality;
 	}
-	public boolean isPropagado() {
-		return propagado;
-	}
-	public void setPropagado(boolean propagado) {
-		this.propagado = propagado;
-	}
+	
 	
 	
 	

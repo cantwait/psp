@@ -12,7 +12,7 @@
 
 	<context:annotation-config />
 
-	<mongo:db-factory host="localhost" port="27017" dbname="test"/>
+	<mongo:db-factory host="localhost" port="27017" dbname="test" />
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="mongoDbFactory" />
