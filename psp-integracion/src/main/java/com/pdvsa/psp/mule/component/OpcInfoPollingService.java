@@ -19,9 +19,10 @@ public class OpcInfoPollingService implements Callable{
 		List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
 		
 		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();
-		
+		System.out.println("Tamaño: " + info.size());
 		if(info.size() > 0){
 			for (OpcInfoRegister op : info) {
+				System.out.println("Objecto: " + "StationID " +  op.getStationId() + " " + op.getTagName() + " " + op.getTagOpc() + " " + op.getRegValue());
 				OpcInfoRegisterMongo o = new OpcInfoRegisterMongo();
 				o.setStationId(op.getStationId());
 				o.setHostModbusSlave(op.getHostModbusSlave());

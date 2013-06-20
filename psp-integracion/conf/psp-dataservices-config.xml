@@ -234,6 +234,7 @@
 		<component doc:name="psp-service-opc-info">
 			<spring-object bean="mule-opc-polling-service" />
 		</component>
+		<!-- 
 		<collection-splitter doc:name="Collection-Splitter-ED"
 			enableCorrelation="NEVER" />
 		<json:object-to-json-transformer
@@ -241,8 +242,9 @@
 		<logger message="#[payload]"></logger>
 		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister"
 			doc:name="Mongo DB" />
+			 -->
 	</flow>
-
+<!-- 
 	<flow name="OpcDataSender" doc:name="OpcDataSender">
 		<quartz:inbound-endpoint jobName="mongodb-query"
 			repeatInterval="10000" responseTimeout="10000" doc:name="QuartzEnviarData">
@@ -284,7 +286,8 @@
 
 
 	</flow>
-
+	 -->
+<!-- 
 	<flow name="ExposeOpcServiceRegion" doc:name="ExposeOpcServiceRegion">
 		<http:inbound-endpoint exchange-pattern="request-response"
 			host="localhost" port="9000" doc:name="http-save-opc-endpoint"
@@ -293,7 +296,7 @@
 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
 		</jersey:resources>
 	</flow>
-
+ -->
 
 	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemLocalidad"
 		processingStrategy="synchronous">

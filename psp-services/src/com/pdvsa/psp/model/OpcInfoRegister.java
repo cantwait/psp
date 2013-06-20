@@ -35,6 +35,7 @@ public class OpcInfoRegister implements Serializable {
 
 	public OpcInfoRegister(Long stationId, Integer reference, String tagOpc, String tagName,
 			DATA_TYPE regType, Date timestamp, String regValue, Short quality) {
+		this.stationId = stationId;
 		this.reference = reference;
 		this.tagOpc = tagOpc;
 		this.tagName = tagName;

@@ -120,7 +120,7 @@ public class OpcManager implements IOpcManager, InitializingBean {
 		connInfo.setClsid(svr.getClsid());
 		connInfo.setProgId(svr.getProgid());
 		final OpcConnection opcConn = new OpcConnection(connInfo, svr.getNombre(), svr.getSocketTimeout());
-		logger.info(String.format("Se agregó el servidor: %s a la región nro.: %d.", opcConn.toString(), regionId));
+		logger.info(String.format("Se agrego el servidor: %s a la region nro.: %d.", opcConn.toString(), regionId));
 		OpcServerDef opcSrv = new OpcServerDef(this, svr.getId(), svr.getNombre(), opcConn);
 		opcSrv.setItemCache(svr.getItemCache().booleanValue());
 		opcSrv.setAccessMethod(svr.getAccessMethod());

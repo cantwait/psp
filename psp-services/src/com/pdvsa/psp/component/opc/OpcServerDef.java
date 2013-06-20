@@ -10,6 +10,7 @@ import java.util.Map;
 import org.jinterop.dcom.common.JIException;
 import org.openscada.opc.dcom.da.OPCSERVERSTATUS;
 import org.openscada.opc.dcom.da.impl.OPCGroupStateMgt;
+import org.openscada.opc.lib.common.ConnectionInformation;
 import org.openscada.opc.lib.da.ItemState;
 import org.openscada.opc.lib.da.ServerStateOperation;
 import com.pdvsa.psp.modbus.ModbusSlave;
@@ -535,11 +536,13 @@ public class OpcServerDef extends OpcComponent implements Runnable {
 		OpcInfoRegister opcInfoReg = null;
 		OpcGroupDef grpDef = null;
 		ItemState state = null;
+		
 		synchronized (groupsDef) {
 			for(Map.Entry<Long, OpcGroupDef> entryGroup : groupsDef.entrySet()) {
-				grpDef = entryGroup.getValue(); 
+				grpDef = entryGroup.getValue();
+				
 				for(OpcItemDef itemDef : grpDef.getItemsDef()) {
-					state = itemDef.getItemState();					
+					state = itemDef.getItemState();
 					opcInfoReg = new OpcInfoRegister(getId(),
 							itemDef.getId().intValue(),
 							itemDef.getTagOpc(),							
