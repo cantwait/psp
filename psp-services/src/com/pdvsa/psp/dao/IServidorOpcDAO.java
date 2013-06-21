@@ -1,6 +1,8 @@
 package com.pdvsa.psp.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.genericdao.dao.jpa.GenericDAO;
 import com.pdvsa.psp.model.ServidorOpc;
@@ -26,4 +28,6 @@ public interface IServidorOpcDAO extends GenericDAO<ServidorOpc, Long> {
 	public List<Tanque> findTanques(Long idServidor, Boolean activo);
 	
 	public List<ServidorOpc> findServidoresByLocalidad(Long localidad, Boolean activo);
+	
+	public HashMap<String, Object> findValuesByServerId(Long id);
 }

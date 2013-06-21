@@ -1,6 +1,11 @@
 package com.pdvsa.psp.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.Query;
+
 import org.springframework.stereotype.Repository;
 
 import com.googlecode.genericdao.search.Search;
@@ -38,5 +43,23 @@ public class TanqueDAO extends BaseDAO<Tanque, Long> implements ITanqueDAO {
 			s.addFilterEqual("activo", activo);
 		}
 		return search(s);
+	}
+
+	@Override
+	public HashMap<String, Object> findValuesFromTankName(String namePrefix) {
+		
+		String qryString = "select t.id, t.nombre from cs.tanques t where t.nombre = :nombre";
+		
+		Query qry = em().createNativeQuery(qryString).setParameter("nombre", namePrefix);
+		
+		Object[] o = (Object[]) qry.getSingleResult();
+		
+		System.out.println(o.length);
+		
+		for (Object object : o) {
+			System.out.println("Tipo: " + object.getClass().getName() + " Valor: " + object.toString());
+		}
+		
+		return null;
 	}
 }

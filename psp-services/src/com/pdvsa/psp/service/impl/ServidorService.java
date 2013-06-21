@@ -1,6 +1,8 @@
 package com.pdvsa.psp.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jws.WebService;
 
@@ -170,6 +172,18 @@ public class ServidorService implements IServidorService{
 
 	public void setControllerService(IOpcControllerService controllerService) {
 		this.controllerService = controllerService;
+	}
+
+	@Override
+	public HashMap<String, Object> getValuesFromServerById(Long id) {
+		
+		return servidorDAO.findValuesByServerId(id);
+	}
+
+	@Override
+	public HashMap<String, Object> getValuesFromTankByName(String nombre) {
+		
+		return tanqueDAO.findValuesFromTankName(nombre);
 	}
 	
 }

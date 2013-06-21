@@ -1,6 +1,9 @@
 package com.pdvsa.psp.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -61,5 +64,9 @@ public interface IServidorService {
 	@WebResult(name = "roles")
 	public List<ServidorRol> getServidorRolByServidor(
 			@WebParam(name = "servidorRolId") Long idServidorRol);
+	
+	public HashMap<String, Object> getValuesFromServerById(Long id);
+	
+	public HashMap<String, Object> getValuesFromTankByName(String nombre);
 
 }

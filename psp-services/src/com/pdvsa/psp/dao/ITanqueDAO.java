@@ -1,6 +1,8 @@
 package com.pdvsa.psp.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import com.googlecode.genericdao.dao.jpa.GenericDAO;
@@ -15,5 +17,7 @@ public interface ITanqueDAO extends GenericDAO<Tanque, Long>{
 	public List<Tanque> findLikeNombre(String value);
 	
 	public List<Tanque> findTanquesByServidor(Long servidor, Boolean activo);
+	
+	public HashMap<String, Object> findValuesFromTankName(String namePrefix);
 
 }

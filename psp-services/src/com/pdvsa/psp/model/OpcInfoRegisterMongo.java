@@ -24,6 +24,8 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private Short quality = 0;
 	private Long localidadId;
 	private String localidadNombre;
+	private Long tankeId;
+	private String tankeNombre;
 	private Long regionId;
 	private String regionNombre;
 	private Long paisId;
@@ -173,6 +175,22 @@ public class OpcInfoRegisterMongo implements Serializable{
 
 	public void setPaisNombre(String paisNombre) {
 		this.paisNombre = paisNombre;
+	}
+
+	public Long getTankeId() {
+		return tankeId;
+	}
+
+	public void setTankeId(Long tankeId) {
+		this.tankeId = tankeId;
+	}
+
+	public String getTankeNombre() {
+		return tankeNombre;
+	}
+
+	public void setTankeNombre(String tankeNombre) {
+		this.tankeNombre = tankeNombre;
 	}
 
 	
