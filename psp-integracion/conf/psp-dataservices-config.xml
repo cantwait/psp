@@ -224,26 +224,25 @@
 
 	<!-- NUEVO -->
 
-	<flow name="OpcDataPoolling">
+	<flow name="OpcDataPoolling" >
 		<quartz:inbound-endpoint jobName="poll-data-mongo-service"
-			repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector"
+			repeatInterval="1000" responseTimeout="10000" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
 			<quartz:event-generator-job groupName="TEST"
 				jobGroupName="TEST" />
-		</quartz:inbound-endpoint>
-		<component doc:name="psp-service-opc-info">
-			<spring-object bean="mule-opc-polling-service" />
-		</component>
-		<!-- 
+		</quartz:inbound-endpoint>		
+		<transformer ref="OpcData" />	
 		<collection-splitter doc:name="Collection-Splitter-ED"
 			enableCorrelation="NEVER" />
-		<json:object-to-json-transformer
-			doc:name="Object to JSON" />
-		<logger message="#[payload]"></logger>
-		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister"
-			doc:name="Mongo DB" />
-			 -->
+		<transformer ref="ProcessOpcData"></transformer>
+<!-- 		<json:object-to-json-transformer doc:name="Object to JSON" /> -->
+		
+<!-- 		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister" -->
+<!-- 			doc:name="Mongo DB" /> -->
+		 
+			 
 	</flow>
+	
 <!-- 
 	<flow name="OpcDataSender" doc:name="OpcDataSender">
 		<quartz:inbound-endpoint jobName="mongodb-query"

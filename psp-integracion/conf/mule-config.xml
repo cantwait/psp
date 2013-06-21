@@ -41,9 +41,9 @@
 		<spring:import resource="classpath:spring/spring-base.xml" />
 		<spring:import resource="classpath:spring/spring-opc.xml" />
 		<spring:import resource="classpath:psp-dataservices-config.xml"/>
-		<spring:bean id="mule-opc-polling-service" name="mule-opc-polling-service" class="com.pdvsa.psp.mule.component.OpcInfoPollingService">
-            <spring:property name="opcControllerService" ref="opcControllerService"/>
-        </spring:bean>		
+<!-- 		<spring:bean id="mule-opc-polling-service" name="mule-opc-polling-service" class="com.pdvsa.psp.mule.component.OpcInfoPollingService"> -->
+<!--             <spring:property name="opcControllerService" ref="opcControllerService"/> -->
+<!--         </spring:bean>		 -->
 	</spring:beans>
 	
 	<!-- NUEVO -->
@@ -63,6 +63,14 @@
     </mongo:config>
     
 	 <custom-transformer class="com.pdvsa.psp.mule.transformer.JSONArrayToOpcInfoArray" name="Java" doc:name="Java"/>
+	 
+	 <custom-transformer class="com.pdvsa.psp.mule.component.OpcInfoPollingService" name="OpcData">
+	     <spring:property name="opcControllerService" ref="opcControllerService"></spring:property>
+	 </custom-transformer>
+	 
+	 <custom-transformer class="com.pdvsa.psp.mule.transformer.ProcessOpcInfoTransformer" name="ProcessOpcData">
+	     <spring:property name="servidorService" ref="servidorService"></spring:property>
+	 </custom-transformer>
 	 
 	 <!-- HASTA AQUI NUEVO -->
 	 

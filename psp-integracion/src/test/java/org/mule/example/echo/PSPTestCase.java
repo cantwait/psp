@@ -27,27 +27,27 @@ import org.junit.Test;
  * @author alejandrosequeira
  *
  */
-public class PSPTestCase extends FunctionalTestCase
-{
-
-    private static String MESSAGE = "message";
-
-    @Override
-    protected String getConfigResources()
-    {
-        return "adding-logging-to-a-flow.xml";
-    }
-
-    @Test
-    public void httpGetToFlowUrlEchoesSentMessage() throws Exception
-    {
-        MuleClient client = new MuleClient(muleContext);
-        Map<String, String> props = new HashMap<String, String>();
-        props.put("http.method", "GET");
-        MuleMessage result = client.send("http://localhost:8084/" + MESSAGE, "", props);
-        assertNotNull(result);
-        assertFalse(result.getPayload() instanceof NullPayload);
-        assertEquals("/" + MESSAGE, result.getPayloadAsString());
-    }
-
-}
+//public class PSPTestCase extends FunctionalTestCase
+//{
+//
+//    private static String MESSAGE = "message";
+//
+//    @Override
+//    protected String getConfigResources()
+//    {
+//        return "adding-logging-to-a-flow.xml";
+//    }
+//
+//    @Test
+//    public void httpGetToFlowUrlEchoesSentMessage() throws Exception
+//    {
+//        MuleClient client = new MuleClient(muleContext);
+//        Map<String, String> props = new HashMap<String, String>();
+//        props.put("http.method", "GET");
+//        MuleMessage result = client.send("http://localhost:8084/" + MESSAGE, "", props);
+//        assertNotNull(result);
+//        assertFalse(result.getPayload() instanceof NullPayload);
+//        assertEquals("/" + MESSAGE, result.getPayloadAsString());
+//    }
+//
+//}

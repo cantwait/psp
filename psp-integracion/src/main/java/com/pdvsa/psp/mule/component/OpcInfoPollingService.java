@@ -4,25 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mule.api.MuleEventContext;
+import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.Callable;
+import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.AbstractTransformer;
 
 import com.pdvsa.psp.model.OpcInfoRegister;
 import com.pdvsa.psp.model.OpcInfoRegisterMongo;
 import com.pdvsa.psp.service.impl.OpcControllerService;
 
-public class OpcInfoPollingService implements Callable{
+public class OpcInfoPollingService extends AbstractTransformer{
 	
 	private OpcControllerService opcControllerService;
-	
+
+	public OpcControllerService getOpcControllerService() {
+		return opcControllerService;
+	}
+
+	public void setOpcControllerService(OpcControllerService opcControllerService) {
+		this.opcControllerService = opcControllerService;
+	}
+
 	@Override
-	public Object onCall(MuleEventContext arg0) throws Exception {
-		List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
+	protected Object doTransform(Object src, String enc)
+			throws TransformerException {
+List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
 		
-		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();
-		System.out.println("Tamaño: " + info.size());
+		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();		
 		if(info.size() > 0){
 			for (OpcInfoRegister op : info) {
-				System.out.println("Objecto: " + "StationID " +  op.getStationId() + " " + op.getTagName() + " " + op.getTagOpc() + " " + op.getRegValue());
+//				System.out.println("Objecto: " + "StationID " +  op.getStationId() + " " + op.getTagName() + " " + op.getTagOpc() + " " + op.getRegValue());
 				OpcInfoRegisterMongo o = new OpcInfoRegisterMongo();
 				o.setStationId(op.getStationId());
 				o.setHostModbusSlave(op.getHostModbusSlave());
@@ -38,16 +49,7 @@ public class OpcInfoPollingService implements Callable{
 			}
 		}
 		
-		arg0.getMessage().setPayload(opcs);
-		return arg0;
-	}
-
-	public OpcControllerService getOpcControllerService() {
-		return opcControllerService;
-	}
-
-	public void setOpcControllerService(OpcControllerService opcControllerService) {
-		this.opcControllerService = opcControllerService;
+		return opcs;
 	}
 
 }
