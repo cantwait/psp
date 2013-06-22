@@ -8,6 +8,7 @@ import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractTransformer;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.pdvsa.psp.model.OpcInfoRegisterMongo;
 
@@ -17,7 +18,7 @@ public class JSONArrayToOpcInfoArray extends AbstractTransformer{
 	protected Object doTransform(Object src, String enc)
 			throws TransformerException {
 		
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("MMM dd HH:mm:ss z yyyy").create();
 		
 		
 		 Type type = new TypeToken<List<OpcInfoRegisterMongo>>(){}.getType();

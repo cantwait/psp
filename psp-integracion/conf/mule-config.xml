@@ -41,9 +41,6 @@
 		<spring:import resource="classpath:spring/spring-base.xml" />
 		<spring:import resource="classpath:spring/spring-opc.xml" />
 		<spring:import resource="classpath:psp-dataservices-config.xml"/>
-<!-- 		<spring:bean id="mule-opc-polling-service" name="mule-opc-polling-service" class="com.pdvsa.psp.mule.component.OpcInfoPollingService"> -->
-<!--             <spring:property name="opcControllerService" ref="opcControllerService"/> -->
-<!--         </spring:bean>		 -->
 	</spring:beans>
 	
 	<!-- NUEVO -->
@@ -57,7 +54,7 @@
         <quartz:factory-property key="org.quartz.jobStore.class" value="org.quartz.simpl.RAMJobStore"/>
     </quartz:connector>
     
-	 <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB" threadsAllowedToBlockForConnectionMultiplier="50" connectionsPerHost="100" maxWaitTime="2000" socketTimeout="10000">
+	 <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB" threadsAllowedToBlockForConnectionMultiplier="50" connectionsPerHost="100" maxWaitTime="2000" socketTimeout="10000" username="admin" password="admin">
         <mongo:connection-pooling-profile initialisationPolicy="INITIALISE_ALL" exhaustedAction="WHEN_EXHAUSTED_WAIT" maxActive="50"/>
         <reconnect count="5"/>
     </mongo:config>

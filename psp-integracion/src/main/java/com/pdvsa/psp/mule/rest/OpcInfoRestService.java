@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 
 import com.pdvsa.psp.model.OpcInfoRegisterMongo;
 
+@Path("/")
 public class OpcInfoRestService {
 	
 	@POST

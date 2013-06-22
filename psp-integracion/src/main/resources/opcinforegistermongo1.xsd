@@ -4,16 +4,13 @@
   <xs:complexType name="opcInfoRegisterMongo">
     <xs:sequence>
       <xs:element name="hostModbusSlave" type="xs:string" minOccurs="0"/>
-      <xs:element name="localidadId" type="xs:long" minOccurs="0"/>
       <xs:element name="localidadNombre" type="xs:string" minOccurs="0"/>
-      <xs:element name="paisId" type="xs:long" minOccurs="0"/>
       <xs:element name="paisNombre" type="xs:string" minOccurs="0"/>
       <xs:element name="portModbusSlave" type="xs:int" minOccurs="0"/>
       <xs:element name="propagado" type="xs:boolean" minOccurs="0"/>
       <xs:element name="quality" type="xs:short" minOccurs="0"/>
       <xs:element name="reference" type="xs:int" minOccurs="0"/>      
       <xs:element name="regValue" type="xs:string" minOccurs="0"/>
-      <xs:element name="regionId" type="xs:long" minOccurs="0"/>
       <xs:element name="regionNombre" type="xs:string" minOccurs="0"/>
       <xs:element name="stationId" type="xs:long" minOccurs="0"/>
       <xs:element name="tagName" type="xs:string" minOccurs="0"/>

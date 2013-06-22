@@ -33,7 +33,6 @@ List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
 		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();		
 		if(info.size() > 0){
 			for (OpcInfoRegister op : info) {
-//				System.out.println("Objecto: " + "StationID " +  op.getStationId() + " " + op.getTagName() + " " + op.getTagOpc() + " " + op.getRegValue());
 				OpcInfoRegisterMongo o = new OpcInfoRegisterMongo();
 				o.setStationId(op.getStationId());
 				o.setHostModbusSlave(op.getHostModbusSlave());
@@ -43,8 +42,7 @@ List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
 				o.setTagName(op.getTagName());
 				o.setTagOpc(op.getTagOpc());
 				o.setReference(op.getReference());
-				o.setTimestamp(op.getTimestamp());
-				
+				o.setTimestamp(op.getTimestamp());				
 				opcs.add(o);
 			}
 		}
