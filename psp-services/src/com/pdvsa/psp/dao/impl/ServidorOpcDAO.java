@@ -111,20 +111,23 @@ public class ServidorOpcDAO extends BaseDAO<ServidorOpc, Long> implements IServi
 	@Override
 	public HashMap<String, Object> findValuesByServerId(Long id) {
 		
-		String qry = "select l.id as id_localidad, l.nombre as nombre_localidad, r.id as id_region, r.nombre as nombre_region, p.id as id_pais, p.nombre as nombre_pais, so.id as servidor_opc_id, so.nombre as nombre_servidor_opc from public.paises p  left join public.regiones r on p.id = r.id_pais   left join public.localidades l on r.id = l.id_region   left join cs.servidores_opc so on so.id_localidad = l.id  where so.id = :servidorId";
+		HashMap<String,Object> valores = new HashMap<String,Object>();
+		
+		String qry = "select l.id as id_localidad, l.nombre as nombre_localidad, r.id as id_region, r.nombre as nombre_region, p.id as pais_id, p.nombre as pais_nombre, so.id as servidor_id, so.nombre as servidor_nombre from public.paises p  left join public.regiones r on p.id = r.id_pais   left join public.localidades l on r.id = l.id_region   left join cs.servidores_opc so on so.id_localidad = l.id  where so.id = :servidorId";
 		
 		Query sqlQry = em().createNativeQuery(qry).setParameter("servidorId", id);
 		
 		Object[] o = (Object[]) sqlQry.getSingleResult();
 		
-		System.out.println(o.length);
+		valores.put("localidadId", o[0]);
+		valores.put("localidadNombre", o[1]);
+		valores.put("regionId", o[2]);
+		valores.put("regionNombre", o[3]);
+		valores.put("paisId", o[4]);
+		valores.put("paisNombre", o[5]);
 		
-		for (Object object : o) {
-			System.out.println("Tipo: " + object.getClass().getName() + " Valor: " + object.toString());
-		}
 		
-		
-		return null;
+		return valores;
 	}
 
 

@@ -18,6 +18,11 @@
 			<name>OpenScada</name>
 			<url>http://repo.openscada.org/maven/releases/</url>
 		</repository>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases</name>
+			<url>http://repository.mulesoft.org/releases/</url>
+		</repository>
 	</repositories>
 
 
@@ -205,6 +210,18 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-jersey</artifactId>
+			<version>${mule.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-json</artifactId>
+			<version>${mule.version}</version>
 		</dependency>
 
 

@@ -3,9 +3,15 @@ package com.pdvsa.psp.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.map.annotate.JsonCachable;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.mule.module.json.JsonData;
+
 import com.pdvsa.psp.model.Item.DATA_TYPE;
+import com.pdvsa.psp.serializer.JsonTimeSerializer;
 @XmlRootElement(name="opc")
 public class OpcInfoRegisterMongo implements Serializable{
 
@@ -21,14 +27,10 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private String tagName;
 	private Date timestamp;
 	private String regValue = "";
-	private Short quality = 0;
-	private Long localidadId;
-	private String localidadNombre;
-	private Long tankeId;
-	private String tankeNombre;
-	private Long regionId;
-	private String regionNombre;
-	private Long paisId;
+	private Short quality = 0;	
+	private String localidadNombre;	
+	private String tanqueNombre;	
+	private String regionNombre;	
 	private String paisNombre;
 	
 	public OpcInfoRegisterMongo() {
@@ -80,11 +82,12 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.tagName = tagName;
 	}
 	
-	
+	@JsonSerialize(using= JsonTimeSerializer.class)
 	public Date getTimestamp() {
 		return timestamp;
 	}
 	
+	@JsonSerialize(using= JsonTimeSerializer.class)
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
@@ -129,28 +132,12 @@ public class OpcInfoRegisterMongo implements Serializable{
 		return quality;
 	}
 
-	public Long getLocalidadId() {
-		return localidadId;
-	}
-
-	public void setLocalidadId(Long localidadId) {
-		this.localidadId = localidadId;
-	}
-
 	public String getLocalidadNombre() {
 		return localidadNombre;
 	}
 
 	public void setLocalidadNombre(String localidadNombre) {
 		this.localidadNombre = localidadNombre;
-	}
-
-	public Long getRegionId() {
-		return regionId;
-	}
-
-	public void setRegionId(Long regionId) {
-		this.regionId = regionId;
 	}
 
 	public String getRegionNombre() {
@@ -161,14 +148,6 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.regionNombre = regionNombre;
 	}
 
-	public Long getPaisId() {
-		return paisId;
-	}
-
-	public void setPaisId(Long paisId) {
-		this.paisId = paisId;
-	}
-
 	public String getPaisNombre() {
 		return paisNombre;
 	}
@@ -177,20 +156,12 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.paisNombre = paisNombre;
 	}
 
-	public Long getTankeId() {
-		return tankeId;
+	public String getTanqueNombre() {
+		return tanqueNombre;
 	}
 
-	public void setTankeId(Long tankeId) {
-		this.tankeId = tankeId;
-	}
-
-	public String getTankeNombre() {
-		return tankeNombre;
-	}
-
-	public void setTankeNombre(String tankeNombre) {
-		this.tankeNombre = tankeNombre;
+	public void setTanqueNombre(String tankeNombre) {
+		this.tanqueNombre = tankeNombre;
 	}
 
 	

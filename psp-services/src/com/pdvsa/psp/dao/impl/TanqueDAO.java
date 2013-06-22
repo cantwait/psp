@@ -48,18 +48,18 @@ public class TanqueDAO extends BaseDAO<Tanque, Long> implements ITanqueDAO {
 	@Override
 	public HashMap<String, Object> findValuesFromTankName(String namePrefix) {
 		
+		HashMap<String,Object> valores = new HashMap<String,Object>();
+		
+		
 		String qryString = "select t.id, t.nombre from cs.tanques t where t.nombre = :nombre";
 		
 		Query qry = em().createNativeQuery(qryString).setParameter("nombre", namePrefix);
 		
 		Object[] o = (Object[]) qry.getSingleResult();
 		
-		System.out.println(o.length);
+		valores.put("idTanque", o[0]);
+		valores.put("nombreTanque", o[1]);
 		
-		for (Object object : o) {
-			System.out.println("Tipo: " + object.getClass().getName() + " Valor: " + object.toString());
-		}
-		
-		return null;
+		return valores;
 	}
 }
