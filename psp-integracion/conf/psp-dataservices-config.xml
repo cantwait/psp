@@ -222,11 +222,11 @@
 	</flow>
 
 
-	<!-- NUEVO 
+	<!-- NUEVO -->
 
 	<flow name="OpcDataPoolling" >
 		<quartz:inbound-endpoint jobName="poll-data-mongo-service"
-			repeatInterval="1000" responseTimeout="10000" connector-ref="Quartz-Connector"
+			repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
 			<quartz:event-generator-job groupName="TEST"
 				jobGroupName="TEST" />
@@ -240,53 +240,30 @@
 			doc:name="Mongo DB" element-ref="#[string:#[payload]]"/>	 
 	</flow>
 	
-	-->
 
 	<flow name="OpcDataSender" doc:name="OpcDataSender">
 		<quartz:inbound-endpoint jobName="mongodb-query"
-			repeatInterval="1000" responseTimeout="10000" doc:name="QuartzEnviarData">
+			repeatInterval="60000" responseTimeout="10000" doc:name="QuartzEnviarData">
 			<quartz:event-generator-job groupName="mongo-query"
 				jobGroupName="mongo-query" />
 		</quartz:inbound-endpoint>
 		<mongo:find-objects config-ref="Mongo_DB"
 			collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters"
-			limit="100">
+			limit="50">
 		</mongo:find-objects>		 
 		<mongo:mongo-collection-to-json
 			doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true" />		
 		<transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray-ED" />
 		<collection-splitter doc:name="Collection-Splitter-ED"
 			enableCorrelation="NEVER" />
-		<!-- 		
-		<scripting:transformer doc:name="Groovy-ED">
-		
-			<scripting:script engine="Groovy"><![CDATA[def writer = new StringWriter() 
-        def xml = new groovy.xml.MarkupBuilder(writer) 
-        xml.opc() { 
-          stationId(payload.stationId) 
-          regValue(payload.regValue) 
-          tagName(payload.tagName)
-		  tagOpc(payload.tagOpc)
-		  quality(payload.quality)
-          hostModbusSlave(payload.hostModbusSlave)
-          portModbusSlave(payload.portModbusSlave)
-          reference(payload.reference)          
-          timestamp(new java.text.SimpleDateFormat("MMM dd HH:mm:ss z yyyy").format(payload.timestamp))
-          localidadNombre(payload.localidadNombre)
-          tanqueNombre(payload.tanqueNombre)
-          regionNombre(payload.regionNombre)
-          paisNombre(payload.paisNombre)
-        } 
-        result = writer.toString();]]></scripting:script>
-		</scripting:transformer>
+		<mule-xml:jaxb-object-to-xml-transformer mimeType="text/xml"  jaxbContext-ref="jaxbContext"/>		  
 		<http:outbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="9000" path="opc-info/save-opc-item" method="POST"
-			encoding="UTF-8" mimeType="text/xml" doc:name="HTTP-ED" />
+			host="localhost" port="9000" path="opc-info/save-opc-item" method="POST" doc:name="HTTP-ED" />
 		<object-to-string-transformer doc:name="Object to String" />
+		 
 		<vm:outbound-endpoint exchange-pattern="one-way"
 			path="update-opc-endpoint" doc:name="VM" />
- -->
- 
+    
 	</flow>
 	
 	<flow name="ExposeOpcServiceRegion" doc:name="ExposeOpcServiceRegion">
@@ -303,46 +280,24 @@
 		processingStrategy="synchronous">
 		<vm:inbound-endpoint exchange-pattern="one-way"
 			path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
-		<custom-transformer
-			class="com.pdvsa.psp.mule.transformer.CleanStringXMLTransformer"
-			doc:name="Java" />
-		<scripting:transformer doc:name="Groovy">
-			<scripting:script engine="Groovy"><![CDATA[def xmlData = new XmlSlurper().parseText(payload)
-com.pdvsa.psp.model.OpcInfoRegisterMongo o = new com.pdvsa.psp.model.OpcInfoRegisterMongo()
-o.stationId = xmlData.stationId.text() as Long
-o.regValue = xmlData.regValue
-o.tagName = xmlData.tagName
-o.hostModbusSlave = xmlData.hostModbusSlave
-o.portModbusSlave = xmlData.portModbusSlave.text() as Integer
-o.timestamp = xmlData.timestamp.text() as Date
-o.tagOpc = xmlData.tagOpc
-o.reference = xmlData.reference.text() as Integer
-o.quality = xmlData.quality.text() as Short
-o.localidadNombre = xmlData.localidadNombre
-o.tanqueNombre = xmlData.tanqueNombre
-o.regionNombre = xmlData.regionNombre
-o.paisNombre = xmlData.paisNombre
-
-
-return o]]></scripting:script>
-		</scripting:transformer>
-		<json:object-to-json-transformer
-			doc:name="Object to JSON" />
+		<mule-xml:jaxb-xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"  jaxbContext-ref="jaxbContext"/>				  
+		<json:object-to-json-transformer ignoreBadInput="true" sourceClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"  doc:name="Object to JSON" />
 		<all doc:name="All">
 			<mongo:save-object config-ref="Mongo_DB"
 				collection="opcInfoRegisterHistorico" doc:name="Mongo DB" />
 			<processor-chain>
 				<json:json-to-object-transformer
-					returnClass="com.pdvsa.psp.model.OpcInfoRegisterMongo" doc:name="JSON to Object" />
+					returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" doc:name="JSON to Object" />
 				<scripting:transformer doc:name="Groovy">
 					<scripting:script engine="Groovy"><![CDATA[Long stationId = payload.stationId as Long
-return stationId]]></scripting:script>
+					return stationId]]></scripting:script>
 				</scripting:transformer>
 				<mongo:remove-objects config-ref="Mongo_DB"
 					collection="opcInfoRegister" query-ref="#[string: {&quot;stationId&quot; : #[payload]}]"
 					doc:name="Mongo DB" />
 			</processor-chain>
 		</all>
+		  
 	</flow>
  
 </mule>

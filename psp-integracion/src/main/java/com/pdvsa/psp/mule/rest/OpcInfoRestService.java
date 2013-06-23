@@ -1,11 +1,13 @@
 package com.pdvsa.psp.mule.rest;
 
+import java.text.SimpleDateFormat;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import com.pdvsa.psp.model.OpcInfoRegisterMongo;
+import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
 
 @Path("/")
 public class OpcInfoRestService {
@@ -15,6 +17,15 @@ public class OpcInfoRestService {
 	@Consumes("text/xml")
 	@Produces("text/xml")
 	public OpcInfoRegisterMongo saveOpcItem(OpcInfoRegisterMongo xml){
+		
+		
+//		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm:ss z yyyy");
+//		
+//		System.out.println(xml.getTimestamp());
+//		System.out.println("REST: " + xml.getStationId() + " " + xml.getTimestamp());
+		
+		
+		
 		
 		return xml;
 		

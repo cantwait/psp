@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractTransformer;
 
-import com.pdvsa.psp.model.OpcInfoRegisterMongo;
+import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
 import com.pdvsa.psp.service.IServidorService;
 
 public class ProcessOpcInfoTransformer extends AbstractTransformer {

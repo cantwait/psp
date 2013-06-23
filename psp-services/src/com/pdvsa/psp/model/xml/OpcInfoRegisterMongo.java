@@ -1,8 +1,10 @@
-package com.pdvsa.psp.model;
+package com.pdvsa.psp.model.xml;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,7 +14,11 @@ import org.mule.module.json.JsonData;
 
 import com.pdvsa.psp.model.Item.DATA_TYPE;
 import com.pdvsa.psp.serializer.JsonTimeSerializer;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+
 @XmlRootElement(name="opc")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OpcInfoRegisterMongo implements Serializable{
 
 	/**
@@ -38,14 +44,18 @@ public class OpcInfoRegisterMongo implements Serializable{
 	}
 	
 	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc,
-			String tagName, String hostModbusSlave, Integer portModbusSlave) {
+			String tagName, String hostModbusSlave, Integer portModbusSlave, String localidadNombre, String regionNombre, String paisNombre) {
 		super();
 		this.stationId = stationId;
 		this.hostModbusSlave = hostModbusSlave;
 		this.portModbusSlave = portModbusSlave;
 		this.reference = reference;
 		this.tagOpc = tagOpc;
-		this.tagName = tagName;		
+		this.tagName = tagName;
+		this.localidadNombre = localidadNombre;
+		this.regionNombre = regionNombre;
+		this.paisNombre = paisNombre;
+		
 	}
 
 	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName,
