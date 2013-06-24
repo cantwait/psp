@@ -1,8 +1,10 @@
 package com.pdvsa.psp.mule.transformer;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -19,9 +21,9 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 	@Override
 	protected Object doTransform(Object src, String enc)
 			throws TransformerException {
-		OpcInfoRegisterMongo opc = null;
+		System.out.println(src.getClass().getName());
 		if(src instanceof OpcInfoRegisterMongo){
-			opc = (OpcInfoRegisterMongo) src;
+			OpcInfoRegisterMongo opc = (OpcInfoRegisterMongo) src;
 			
 			HashMap<String, Object> valores = servidorService.getValuesFromServerById(opc.getStationId());			
 			String nombreTanque = StringUtils.left(opc.getTagOpc(), StringUtils.indexOf(opc.getTagOpc(), '.'));
@@ -33,6 +35,20 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 			}
 			return opc;
 			
+		}else if(src instanceof ArrayList){
+			List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
+			for (OpcInfoRegisterMongo opc : opcs) {
+				HashMap<String, Object> valores = servidorService.getValuesFromServerById(opc.getStationId());			
+				String nombreTanque = StringUtils.left(opc.getTagOpc(), StringUtils.indexOf(opc.getTagOpc(), '.'));
+				if(valores != null && valores.values().size() > 0){
+					opc.setTanqueNombre(nombreTanque);
+					opc.setPaisNombre(valores.get("paisNombre").toString());
+					opc.setRegionNombre(valores.get("regionNombre").toString());
+					opc.setLocalidadNombre(valores.get("localidadNombre").toString());
+				}
+				
+				return opcs;
+			}
 		}
 		return src;
 	}

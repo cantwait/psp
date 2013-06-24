@@ -230,14 +230,16 @@
 			doc:name="Quartz">
 			<quartz:event-generator-job groupName="TEST"
 				jobGroupName="TEST" />
-		</quartz:inbound-endpoint>		
-		<transformer ref="OpcData" />	
+		</quartz:inbound-endpoint>	 		
+		<transformer ref="OpcData" />						
+			
 		<collection-splitter doc:name="Collection-Splitter-ED"
 			enableCorrelation="NEVER" />
 		<transformer ref="ProcessOpcData"></transformer>
 		<json:object-to-json-transformer doc:name="Object to JSON" />
 		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister" 
-			doc:name="Mongo DB" element-ref="#[string:#[payload]]"/>	 
+			doc:name="Mongo DB" element-ref="#[string:#[payload]]"/>
+		 
 	</flow>
 	
 
@@ -251,7 +253,7 @@
 			collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters"
 			limit="50">
 		</mongo:find-objects>		 
-		<mongo:mongo-collection-to-json
+		<mongo:mongo-collection-to-json 
 			doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true" />		
 		<transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray-ED" />
 		<collection-splitter doc:name="Collection-Splitter-ED"
@@ -299,5 +301,5 @@
 		</all>
 		  
 	</flow>
- 
+  -->
 </mule>
