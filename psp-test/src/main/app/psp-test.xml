@@ -67,8 +67,8 @@ http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/
         <logger message="#[groovy: payload.toString()]" level="INFO" doc:name="Logger"/>
         <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" query-ref="#[string: {
     timestamp: {
-        $gte: &quot;#[groovy: payload.desde.toString()]&quot;,
-        $lt: &quot;#[groovy: payload.hasta.toString()]&quot;
+        $gte: &quot;#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;,
+        $lt: &quot;#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;
     }}]" doc:name="Mongo DB">
         </mongo:find-objects>
         <mongo:mongo-collection-to-json doc:name="Mongo DB"/>
