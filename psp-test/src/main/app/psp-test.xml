@@ -37,14 +37,43 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <spring:bean id="updateOpcService" name="updateOpcService" class="org.home.psp.service.MuleUpdateOpcInfoService">
             <spring:property name="pspService" ref="pspService"/>
         </spring:bean>
+        <spring:bean name="jaxbContext" class="javax.xml.bind.JAXBContext"
+			factory-method="newInstance">
+			<spring:constructor-arg>
+				<spring:array>
+					<spring:value type="java.lang.Class">org.home.psp.data.OpcInfoRegister</spring:value>
+				</spring:array>
+			</spring:constructor-arg>
+		</spring:bean>
     </spring:beans>
     <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB" threadsAllowedToBlockForConnectionMultiplier="50" connectionsPerHost="100" maxWaitTime="2000" socketTimeout="10000">
         <mongo:connection-pooling-profile initialisationPolicy="INITIALISE_ALL" exhaustedAction="WHEN_EXHAUSTED_WAIT" maxActive="50"/>
         <reconnect count="5"/>
     </mongo:config>
     <custom-transformer class="org.home.psp.mule.transformers.JSONArrayToOpcInfoArray" name="Java" doc:name="Java"/>
+    <flow name="psp-testFlow1" doc:name="psp-testFlow1">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="find-opc-data" doc:name="HTTP"/>
+        <jersey:resources doc:name="REST">
+            <component class="org.home.psp.rest.QueryOpcDataMongo"/>
+        </jersey:resources>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <mulexml:jaxb-xml-to-object-transformer doc:name="XML to Object" jaxbContext-ref="jaxbContext" returnClass="org.home.psp.data.OpcInfoRegister"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <json:json-to-object-transformer doc:name="JSON to Object" returnClass="org.home.psp.data.OpcInfoRegister"/>
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[org.home.psp.data.OpcInfoRegister opc = new org.home.psp.data.OpcInfoRegister()
+
+opc.stationId = payload.stationId.toString() as Long
+
+return payload]]></scripting:script>
+        </scripting:transformer>
+        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+    </flow>
     
- 
+ <!-- 
     <flow name="OpcDataSimulator" doc:name="OpcDataSimulator">
         <quartz:inbound-endpoint jobName="poll-data-mongo-service" repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector" doc:name="Quartz">
             <quartz:event-generator-job groupName="TEST" jobGroupName="TEST"/>
@@ -128,6 +157,6 @@ return stationId]]></scripting:script>
 
 
     </flow>
-   
+    -->
     
 </mule>

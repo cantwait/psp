@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -13,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @XmlRootElement(name="opc")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OpcInfoRegister implements Serializable {
 	
 	private static final long serialVersionUID = -6334608448567929747L;
