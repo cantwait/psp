@@ -222,7 +222,7 @@
 	</flow>
 
 
-	<!-- NUEVO -->
+	<!-- NUEVO 
 
 	<flow name="OpcDataPoolling" >
 		<quartz:inbound-endpoint jobName="poll-data-mongo-service"
@@ -256,6 +256,7 @@
 		<mongo:mongo-collection-to-json 
 			doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true" />		
 		<transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray-ED" />
+		
 		<collection-splitter doc:name="Collection-Splitter-ED"
 			enableCorrelation="NEVER" />
 		<mule-xml:jaxb-object-to-xml-transformer mimeType="text/xml"  jaxbContext-ref="jaxbContext"/>		  
@@ -302,4 +303,6 @@
 		  
 	</flow>
   -->
+  
+  	
 </mule>

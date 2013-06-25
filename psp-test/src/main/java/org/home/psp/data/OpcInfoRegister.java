@@ -1,5 +1,4 @@
 package org.home.psp.data;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Random;
@@ -8,14 +7,27 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-@XmlRootElement(name="opc")
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name="opcInfoRegister")
+//@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "opcInfoRegister", propOrder = {
+	"stationId",
+    "hostModbusSlave",   
+    "portModbusSlave",
+    "quality",
+    "reference",
+    "regType",
+    "regValue",    
+    "tagName",
+    "tagOpc",
+    "timestamp"
+})
 public class OpcInfoRegister implements Serializable {
 	
 	private static final long serialVersionUID = -6334608448567929747L;

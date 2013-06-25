@@ -12,8 +12,6 @@ import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.Callable;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractTransformer;
-import org.soqqo.datagen.RandomDataGenerator;
-import org.soqqo.datagen.RandomUtil;
 
 import com.pdvsa.psp.model.OpcInfoRegister;
 import com.pdvsa.psp.model.Item.DATA_TYPE;
@@ -37,8 +35,8 @@ public class OpcInfoPollingService extends AbstractTransformer{
 			throws TransformerException {
 			List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
 		
-//		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();
-		List<OpcInfoRegister> info = getObjectOpc();
+		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();
+//		List<OpcInfoRegister> info = getObjectOpc();
  		if(info.size() > 0){
 			for (OpcInfoRegister op : info) {				
 				OpcInfoRegisterMongo o = new OpcInfoRegisterMongo();
@@ -86,8 +84,8 @@ public class OpcInfoPollingService extends AbstractTransformer{
 			d3 = sdf.parse(date3);		
 			
 			OpcInfoRegister o1 = new OpcInfoRegister(Long.valueOf(20), Integer.valueOf(50), "t-1002.VU.[9]", "testSimulacion1", DATA_TYPE.R4, d1, "11000.2", Short.valueOf("10"));
-			OpcInfoRegister o2 = new OpcInfoRegister(Long.valueOf(20), Integer.valueOf(10), "t-1002.VU.[10]", "testSimulacion2", DATA_TYPE.R8, d1, "3211000.2", Short.valueOf("50"));
-			OpcInfoRegister o3 = new OpcInfoRegister(Long.valueOf(20), Integer.valueOf(150), "t-1002.VU.[11]", "testSimulacion3", DATA_TYPE.R4, d1, "-122231.223", Short.valueOf("160"));
+			OpcInfoRegister o2 = new OpcInfoRegister(Long.valueOf(20), Integer.valueOf(10), "t-1002.VU.[10]", "testSimulacion2", DATA_TYPE.R8, d2, "3211000.2", Short.valueOf("50"));
+			OpcInfoRegister o3 = new OpcInfoRegister(Long.valueOf(20), Integer.valueOf(150), "t-1002.VU.[11]", "testSimulacion3", DATA_TYPE.R4, d3, "-122231.223", Short.valueOf("160"));
 			
 			oir.add(o1);
 			oir.add(o2);

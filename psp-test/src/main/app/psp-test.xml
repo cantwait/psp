@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+<mule xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
 http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
@@ -10,7 +10,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd">
 
 	
 	
@@ -46,31 +47,58 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 			</spring:constructor-arg>
 		</spring:bean>
     </spring:beans>
-    <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB" threadsAllowedToBlockForConnectionMultiplier="50" connectionsPerHost="100" maxWaitTime="2000" socketTimeout="10000">
+    <mongo:config name="Mongo_DB" host="127.0.0.1" doc:name="Mongo DB" threadsAllowedToBlockForConnectionMultiplier="50" connectionsPerHost="100" maxWaitTime="2000" socketTimeout="10000" password="admin" username="admin">
         <mongo:connection-pooling-profile initialisationPolicy="INITIALISE_ALL" exhaustedAction="WHEN_EXHAUSTED_WAIT" maxActive="50"/>
         <reconnect count="5"/>
     </mongo:config>
     <custom-transformer class="org.home.psp.mule.transformers.JSONArrayToOpcInfoArray" name="Java" doc:name="Java"/>
+    
     <flow name="psp-testFlow1" doc:name="psp-testFlow1">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="find-opc-data" doc:name="HTTP"/>
-        <jersey:resources doc:name="REST">
+        <jersey:resources doc:name="REST" >
             <component class="org.home.psp.rest.QueryOpcDataMongo"/>
         </jersey:resources>
         <object-to-string-transformer doc:name="Object to String"/>
         <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <mulexml:jaxb-xml-to-object-transformer doc:name="XML to Object" jaxbContext-ref="jaxbContext" returnClass="org.home.psp.data.OpcInfoRegister"/>
+        <mulexml:xml-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+            <mulexml:alias name="opcInfoRegisterRequest" class="org.home.psp.data.OpcInfoRegisterRequest"/>
+            <mulexml:converter class="org.home.psp.DateConverterMapper"/>
+        </mulexml:xml-to-object-transformer>
+        <logger message="#[groovy: payload.toString()]" level="INFO" doc:name="Logger"/>
+        <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" query-ref="#[string: {
+    timestamp: {
+        $gte: &quot;#[groovy: payload.desde.toString()]&quot;,
+        $lt: &quot;#[groovy: payload.hasta.toString()]&quot;
+    }}]" doc:name="Mongo DB">
+        </mongo:find-objects>
+        <mongo:mongo-collection-to-json doc:name="Mongo DB"/>
         <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <json:object-to-json-transformer doc:name="Object to JSON"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <json:json-to-object-transformer doc:name="JSON to Object" returnClass="org.home.psp.data.OpcInfoRegister"/>
+        <json:json-to-object-transformer returnClass="java.util.ArrayList" doc:name="JSON to Object"/>
         <scripting:transformer doc:name="Groovy">
-            <scripting:script engine="Groovy"><![CDATA[org.home.psp.data.OpcInfoRegister opc = new org.home.psp.data.OpcInfoRegister()
+            <scripting:script engine="Groovy"><![CDATA[org.home.psp.data.OpcInfoRegisterListResponse opcs = new org.home.psp.data.OpcInfoRegisterListResponse()
 
-opc.stationId = payload.stationId.toString() as Long
+payload.each{ i ->
+  org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()
+  println "Hello ${i}"
+  println "Tipo de Objeto: " + i.getClass().getName()
+  o.stationId = i['stationId']
+  o.hostModbusSlave = i['hostModbusSlave']
+  o.timestamp = i['timestamp']
+  o.portModbusSlave = i['portModbusSlave']
+  o.reference = i['reference']
+  o.quality = i['quality'] 
+  o.regValue = i['regValue']
+  o.tagName = i['tagName']
+  opcs.add(o)
+}
 
-return payload]]></scripting:script>
+return opcs]]></scripting:script>
         </scripting:transformer>
-        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+        <mulexml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+            <mulexml:alias name="lista" class="org.home.psp.data.OpcInfoRegisterListResponse"/>
+            <mulexml:alias name="opcinforegister" class="org.home.psp.data.OpcInfoRegister"/>
+        </mulexml:object-to-xml-transformer>
+<!--         <mulexml:jaxb-object-to-xml-transformer encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML" jaxbContext-ref="jaxbContext"/> -->
     </flow>
     
  <!-- 

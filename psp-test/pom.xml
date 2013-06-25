@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.home.psp</groupId>
@@ -50,7 +51,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore/>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -145,7 +146,7 @@
 				</configuration>
 			</plugin>
 
-			
+
 		</plugins>
 	</build>
 
@@ -232,12 +233,12 @@
 			<version>${mule.version}</version>
 			<scope>provided</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.mulesoft.muleesb.modules</groupId> -->
-<!-- 			<artifactId>mule-module-boot-ee</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.mulesoft.muleesb.modules</groupId> -->
+		<!-- <artifactId>mule-module-boot-ee</artifactId> -->
+		<!-- <version>${mule.version}</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 		<!-- Xml configuration -->
 		<dependency>
 			<groupId>org.mule.modules</groupId>
@@ -245,24 +246,24 @@
 			<version>${mule.version}</version>
 			<scope>provided</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.mulesoft.muleesb</groupId> -->
-<!-- 			<artifactId>mule-core-ee</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.mulesoft.muleesb.modules</groupId> -->
-<!-- 			<artifactId>mule-module-data-mapper</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.mulesoft.muleesb</groupId> -->
+		<!-- <artifactId>mule-core-ee</artifactId> -->
+		<!-- <version>${mule.version}</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.mulesoft.muleesb.modules</groupId> -->
+		<!-- <artifactId>mule-module-data-mapper</artifactId> -->
+		<!-- <version>${mule.version}</version> -->
+		<!-- </dependency> -->
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.mulesoft.muleesb.modules</groupId> -->
-<!-- 			<artifactId>mule-module-spring-config-ee</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.mulesoft.muleesb.modules</groupId> -->
+		<!-- <artifactId>mule-module-spring-config-ee</artifactId> -->
+		<!-- <version>${mule.version}</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 
 		<!-- Mule Transports -->
 		<dependency>
@@ -414,31 +415,37 @@
 			<artifactId>mule-module-mongo</artifactId>
 			<version>3.3</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.mulesoft.muleesb.transports</groupId> -->
-<!-- 			<artifactId>mule-transport-jdbc-ee</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.mulesoft.muleesb.transports</groupId> -->
+		<!-- <artifactId>mule-transport-jdbc-ee</artifactId> -->
+		<!-- <version>${mule.version}</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-module-json</artifactId>
 			<version>${mule.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	<dependency>
-<groupId>org.mule.modules</groupId>
-<artifactId>mule-module-jersey</artifactId>
-<version>${mule.version}</version>
-<scope>provided</scope>
-</dependency>
-<dependency>
-<groupId>org.mule.transports</groupId>
-<artifactId>mule-transport-email</artifactId>
-<version>${mule.version}</version>
-<scope>provided</scope>
-</dependency>
-</dependencies>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-jersey</artifactId>
+			<version>${mule.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.transports</groupId>
+			<artifactId>mule-transport-email</artifactId>
+			<version>${mule.version}</version>
+			<scope>provided</scope>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.mulesoft.muleesb.transports</groupId> -->
+<!-- 			<artifactId>mule-transport-jdbc-ee</artifactId> -->
+<!-- 			<version>${mule.version}</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+	</dependencies>
 
 	<repositories>
 		<repository>

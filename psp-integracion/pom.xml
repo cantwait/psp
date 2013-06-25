@@ -299,13 +299,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.soqqo</groupId>
-			<artifactId>random-data-generator</artifactId>
-			<version>0.01</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.mule.common</groupId>
 			<artifactId>mule-common</artifactId>
 			<version>0.11.0</version>
