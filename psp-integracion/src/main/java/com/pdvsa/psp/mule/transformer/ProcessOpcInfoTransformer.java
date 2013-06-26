@@ -21,7 +21,7 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 	@Override
 	protected Object doTransform(Object src, String enc)
 			throws TransformerException {
-		System.out.println(src.getClass().getName());
+		
 		if(src instanceof OpcInfoRegisterMongo){
 			OpcInfoRegisterMongo opc = (OpcInfoRegisterMongo) src;
 			

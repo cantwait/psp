@@ -59,28 +59,34 @@ http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/
             <component class="org.home.psp.rest.QueryOpcDataMongo"/>
         </jersey:resources>
         <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
         <mulexml:xml-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
             <mulexml:alias name="opcInfoRegisterRequest" class="org.home.psp.data.OpcInfoRegisterRequest"/>
             <mulexml:converter class="org.home.psp.DateConverterMapper"/>
         </mulexml:xml-to-object-transformer>
-        <logger message="#[groovy: payload.toString()]" level="INFO" doc:name="Logger"/>
-        <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" query-ref="#[string: {
+        <choice doc:name="Choice">
+            <when expression="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]">
+                <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" query-ref="#[string: {&quot;stationId&quot; : #[groovy:payload.stationId], timestamp: {$gte: &quot;#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;, $lt: &quot;#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;}}]" doc:name="Find OpcInfo stationId and Dates">
+                    <mongo:fields ref="#[payload]"/>
+                </mongo:find-objects>
+                <mongo:mongo-collection-to-json doc:name="Mongo DB"/>
+            </when>
+            <otherwise>
+                <mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" query-ref="#[string: {
     timestamp: {
         $gte: &quot;#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;,
         $lt: &quot;#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;
-    }}]" doc:name="Mongo DB">
-        </mongo:find-objects>
-        <mongo:mongo-collection-to-json doc:name="Mongo DB"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+    }}]" doc:name="Find OpcInfo StationId"/>
+                <mongo:mongo-collection-to-json doc:name="Mongo DB"/>
+            </otherwise>
+        </choice>
         <json:json-to-object-transformer returnClass="java.util.ArrayList" doc:name="JSON to Object"/>
         <scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[org.home.psp.data.OpcInfoRegisterListResponse opcs = new org.home.psp.data.OpcInfoRegisterListResponse()
 
 payload.each{ i ->
   org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()
-  println "Hello ${i}"
-  println "Tipo de Objeto: " + i.getClass().getName()
+  //println "Hello ${i}"
+  //println "Tipo de Objeto: " + i.getClass().getName()
   o.stationId = i['stationId']
   o.hostModbusSlave = i['hostModbusSlave']
   o.timestamp = i['timestamp']
@@ -98,7 +104,6 @@ return opcs]]></scripting:script>
             <mulexml:alias name="lista" class="org.home.psp.data.OpcInfoRegisterListResponse"/>
             <mulexml:alias name="opcinforegister" class="org.home.psp.data.OpcInfoRegister"/>
         </mulexml:object-to-xml-transformer>
-<!--         <mulexml:jaxb-object-to-xml-transformer encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML" jaxbContext-ref="jaxbContext"/> -->
     </flow>
     
  <!-- 
