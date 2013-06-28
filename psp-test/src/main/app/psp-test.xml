@@ -59,18 +59,25 @@ http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/
             <component class="org.home.psp.rest.QueryOpcDataMongo"/>
         </jersey:resources>
         <object-to-string-transformer doc:name="Object to String"/>
-        <custom-transformer class="org.home.psp.mule.transformers.ValidateOpcRequestTransformer" doc:name="Java"/>        
-        <choice doc:name="Choice">
-            <when expression="#[payload]" >
-                <mulexml:xml-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
-                    <mulexml:alias name="Opc.Request" class="org.home.psp.data.OpcInfoRegisterRequest"/>
-                    <mulexml:converter class="org.home.psp.DateConverterMapper"/>
-                </mulexml:xml-to-object-transformer>
-            </when>
-            <otherwise>
-                <vm:outbound-endpoint exchange-pattern="one-way" path="vm-error" doc:name="VM-ERROR"/>
-            </otherwise>
-        </choice>
+        <scripting:component doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[import java.io.File;
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+
+println "Payload: " + payload
+
+def factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+def schema = factory.newSchema(new StreamSource(new File("C://schemas//opcinforequest.xsd")))
+def validator = schema.newValidator()
+validator.validate(new StreamSource(new StringReader(payload)))]]></scripting:script>
+        </scripting:component>
+        <logger message="HA PASADO POR AQUI A PESAR DE LA EXCEPCION" level="INFO" doc:name="Logger"/>
+<!--         <custom-transformer class="org.home.psp.mule.transformers.ValidateOpcRequestTransformer" doc:name="Java"/> -->
+        <mulexml:xml-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+            <mulexml:alias name="Opc.Request" class="org.home.psp.data.OpcInfoRegisterRequest"/>
+            <mulexml:converter class="org.home.psp.DateConverterMapper"/>
+        </mulexml:xml-to-object-transformer>
         <logger message="#[payload]" level="INFO" doc:name="Logger"/>
         <choice doc:name="Choice">
             <when expression="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]">
@@ -111,24 +118,22 @@ return opcs]]></scripting:script>
         <mulexml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
             <mulexml:alias name="lista" class="org.home.psp.data.OpcInfoRegisterListResponse"/>
             <mulexml:alias name="opcinforegister" class="org.home.psp.data.OpcInfoRegister"/>
-        </mulexml:object-to-xml-transformer> 
-        <choice-exception-strategy doc:name="Choice Exception Strategy">
-            <catch-exception-strategy doc:name="Catch Exception Strategy" >
-                <vm:outbound-endpoint exchange-pattern="one-way" path="vm-error" doc:name="VM-ERROR"/>
-                <scripting:transformer doc:name="Groovy">
-                    <scripting:script engine="Groovy"><![CDATA[import org.home.psp.data.OpcInfoRegisterListResponse;
+        </mulexml:object-to-xml-transformer>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <scripting:transformer doc:name="Groovy">
+                <scripting:script engine="Groovy"><![CDATA[import org.home.psp.data.OpcInfoRegisterListResponse;
 import org.xml.sax.SAXException;
 OpcInfoRegisterListResponse resp = new OpcInfoRegisterListResponse()
-resp.error = payload
+println "EXCEPTION: " + exception
+//resp.error = payload
+resp.error = exception.message
 return resp]]></scripting:script>
-                </scripting:transformer>
-                <logger message="#[payload.error]" level="INFO" doc:name="Logger"/>
-                <mulexml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-                    <mulexml:alias name="lista" class="org.home.psp.data.OpcInfoRegisterListResponse"/>
-                </mulexml:object-to-xml-transformer>
-            	
-            </catch-exception-strategy>
-        </choice-exception-strategy>
+            </scripting:transformer>
+            <logger message="#[payload.error]" level="INFO" doc:name="Logger"/>
+            <mulexml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+                <mulexml:alias name="lista" class="org.home.psp.data.OpcInfoRegisterListResponse"/>
+            </mulexml:object-to-xml-transformer>
+        </catch-exception-strategy>
         
     </flow>
     <flow name="psp-testFlow2" doc:name="psp-testFlow2">
