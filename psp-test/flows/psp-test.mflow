@@ -10,42 +10,36 @@
             <property name="scheduler-ref"/>
             <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;0">
                 <property name="value" value="MuleScheduler1"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="key" value="rg.quartz.scheduler.instanceName"/>
                 <property name="auxiliary;index" value="2"/>
                 <property name="auxiliary;wrapIn" value="2"/>
             </property-collection>
             <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;1">
                 <property name="value" value="org.quartz.simpl.SimpleThreadPool"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="key" value="org.quartz.threadPool.class"/>
                 <property name="auxiliary;index" value="3"/>
                 <property name="auxiliary;wrapIn" value="3"/>
             </property-collection>
             <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;2">
                 <property name="value" value="3"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="key" value="org.quartz.threadPool.threadCount"/>
                 <property name="auxiliary;index" value="4"/>
                 <property name="auxiliary;wrapIn" value="4"/>
             </property-collection>
             <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;3">
                 <property name="value" value="false"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="key" value="org.quartz.scheduler.rmi.proxy"/>
                 <property name="auxiliary;index" value="5"/>
                 <property name="auxiliary;wrapIn" value="5"/>
             </property-collection>
             <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;4">
                 <property name="value" value="false"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="key" value="org.quartz.scheduler.rmi.export"/>
                 <property name="auxiliary;index" value="6"/>
                 <property name="auxiliary;wrapIn" value="6"/>
             </property-collection>
             <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/factory-property;5">
                 <property name="value" value="org.quartz.simpl.RAMJobStore"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="key" value="org.quartz.jobStore.class"/>
                 <property name="auxiliary;index" value="7"/>
                 <property name="auxiliary;wrapIn" value="7"/>
@@ -76,7 +70,6 @@
             <property-collection name="@http://www.springframework.org/schema/beans/property;0">
                 <property name="ref" value="pspService"/>
                 <property name="name" value="pspService"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="auxiliary;index" value="10"/>
                 <property name="auxiliary;wrapIn" value="10"/>
             </property-collection>
@@ -106,7 +99,6 @@
             <property-collection name="@http://www.springframework.org/schema/beans/property;0">
                 <property name="ref" value="opcDataRepo"/>
                 <property name="name" value="opcDataRepo"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="auxiliary;index" value="12"/>
                 <property name="auxiliary;wrapIn" value="12"/>
             </property-collection>
@@ -144,7 +136,6 @@
             <property-collection name="@http://www.springframework.org/schema/beans/property;0">
                 <property name="ref" value="mongoTemplate"/>
                 <property name="name" value="mongoTemplate"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="auxiliary;index" value="15"/>
                 <property name="auxiliary;wrapIn" value="15"/>
             </property-collection>
@@ -174,7 +165,6 @@
             <property-collection name="@http://www.springframework.org/schema/beans/property;0">
                 <property name="ref" value="pspService"/>
                 <property name="name" value="pspService"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="auxiliary;index" value="17"/>
                 <property name="auxiliary;wrapIn" value="17"/>
             </property-collection>
@@ -202,16 +192,13 @@
             <property name="auxiliary;wrapIn" value="8"/>
             <property name="depends-on"/>
             <property-collection name="@http://www.springframework.org/schema/beans/constructor-arg;0">
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="auxiliary;index" value="19"/>
                 <property name="auxiliary;wrapIn" value="19"/>
                 <property-collection name="@http://www.springframework.org/schema/beans/array;1">
-                    <property name="isProcessed$$$$" value="true"/>
                     <property name="auxiliary;index" value="20"/>
                     <property name="auxiliary;wrapIn" value="20"/>
                     <property-collection name="@http://www.springframework.org/schema/beans/value;1">
                         <property name="" value="org.home.psp.data.OpcInfoRegister"/>
-                        <property name="isProcessed$$$$" value="true"/>
                         <property name="type" value="java.lang.Class"/>
                         <property name="auxiliary;index" value="21"/>
                         <property name="auxiliary;wrapIn" value="21"/>
@@ -240,19 +227,17 @@
             <property name="wtimeout"/>
             <property name="slaveOk"/>
             <property name="auxiliary;index" value="22"/>
-            <property-collection name="@http://www.mulesoft.org/schema/mule/core/reconnect;0">
-                <property name="count" value="5"/>
-                <property name="isProcessed$$$$" value="true"/>
-                <property name="auxiliary;index" value="24"/>
-                <property name="auxiliary;wrapIn" value="24"/>
-            </property-collection>
             <property-collection name="@http://www.mulesoft.org/schema/mule/mongo/connection-pooling-profile;0">
                 <property name="maxActive" value="50"/>
                 <property name="exhaustedAction" value="WHEN_EXHAUSTED_WAIT"/>
-                <property name="isProcessed$$$$" value="true"/>
                 <property name="auxiliary;index" value="23"/>
                 <property name="auxiliary;wrapIn" value="23"/>
                 <property name="initialisationPolicy" value="INITIALISE_ALL"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/core/reconnect;0">
+                <property name="count" value="5"/>
+                <property name="auxiliary;index" value="24"/>
+                <property name="auxiliary;wrapIn" value="24"/>
             </property-collection>
         </properties>
     </global-element>
@@ -267,7 +252,7 @@
             <property name="auxiliary;index" value="25"/>
         </properties>
     </global-element>
-    <flow SubFlow="false" name="psp-testFlow1" entity-id="83a4c57a-72b3-4008-8aff-45710e2ce00b">
+    <flow SubFlow="false" name="psp-testFlow1" entity-id="ed22f6f2-6ec6-4ba1-bdea-0fe6a68e9c85">
         <properties>
             <property name="processingStrategy"/>
             <property name="processingStrategy2"/>
@@ -312,7 +297,6 @@
                     <property name="auxiliary;index" value="28"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/core/component;0">
                         <property name="class" value="org.home.psp.rest.QueryOpcDataMongo"/>
-                        <property name="isProcessed$$$$" value="true"/>
                         <property name="auxiliary;index" value="29"/>
                         <property name="auxiliary;wrapIn" value="29"/>
                     </property-collection>
@@ -328,86 +312,121 @@
                     <property name="auxiliary;index" value="30"/>
                 </properties>
             </pattern>
-            <pattern name="XML to Object" type="http://www.mulesoft.org/schema/mule/xml/xml-to-object-transformer" entity-id="XML to Object#1">
+            <pattern name="Java" type="org.mule.tooling.ui.modules.core.pattern.customTransformer" entity-id="Java#2">
                 <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
-                    <property name="returnClass" value="org.home.psp.data.OpcInfoRegisterRequest"/>
+                    <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
-                    <property name="driverClass"/>
-                    <property name="encoding" value="UTF-8"/>
-                    <property name="mimeType" value="text/xml"/>
+                    <property name="encoding"/>
+                    <property name="class" value="org.home.psp.mule.transformers.ValidateOpcRequestTransformer"/>
+                    <property name="mimeType"/>
                     <property name="auxiliary;index" value="31"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;0">
-                        <property name="name" value="opcInfoRegisterRequest"/>
-                        <property name="class" value="org.home.psp.data.OpcInfoRegisterRequest"/>
-                        <property name="isProcessed$$$$" value="true"/>
-                        <property name="auxiliary;index" value="32"/>
-                        <property name="auxiliary;wrapIn" value="32"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/converter;0">
-                        <property name="class" value="org.home.psp.DateConverterMapper"/>
-                        <property name="isProcessed$$$$" value="true"/>
-                        <property name="auxiliary;index" value="33"/>
-                        <property name="auxiliary;wrapIn" value="33"/>
-                    </property-collection>
                 </properties>
             </pattern>
-            <splitter index="34" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#1">
+            <splitter index="32" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#1">
                 <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
-                    <property name=";INDEX" value="34"/>
-                    <property-collection name="8ec1bb2b-b665-4904-b432-4c393adc0955">
+                    <property-collection name="6120a5fd-1d7a-40cd-a81d-8ea2d81113c9">
+                        <property name="choice.otherwise" value="true"/>
+                        <property-collection name="choice.attributes"/>
+                    </property-collection>
+                    <property-collection name="987ce481-418d-45d9-a0fb-1c266b9f5cde">
+                        <property name="choice.expression" value="#[payload]"/>
+                        <property-collection name="choice.attributes">
+                            <property name="expression" value="#[payload]"/>
+                        </property-collection>
+                    </property-collection>
+                </properties>
+                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#2"/>
+                <compartment entity-id="compartment#1">
+                    <lane hadOnlyOneElement="false" index="34" isChoiceOtherwiseLane="false" entity-id="987ce481-418d-45d9-a0fb-1c266b9f5cde">
+                        <pattern name="XML to Object" type="http://www.mulesoft.org/schema/mule/xml/xml-to-object-transformer" entity-id="XML to Object#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="returnClass" value="org.home.psp.data.OpcInfoRegisterRequest"/>
+<property name="ignoreBadInput"/>
+<property name="driverClass"/>
+<property name="encoding" value="UTF-8"/>
+<property name="mimeType" value="text/xml"/>
+<property name="auxiliary;index" value="34"/>
+<property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;0">
+    <property name="name" value="Opc.Request"/>
+    <property name="class" value="org.home.psp.data.OpcInfoRegisterRequest"/>
+    <property name="auxiliary;index" value="35"/>
+    <property name="auxiliary;wrapIn" value="35"/>
+</property-collection>
+<property-collection name="@http://www.mulesoft.org/schema/mule/xml/converter;0">
+    <property name="class" value="org.home.psp.DateConverterMapper"/>
+    <property name="auxiliary;index" value="36"/>
+    <property name="auxiliary;wrapIn" value="36"/>
+</property-collection>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="38" isChoiceOtherwiseLane="true" entity-id="6120a5fd-1d7a-40cd-a81d-8ea2d81113c9">
+                        <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="VM-ERROR" type="http://www.mulesoft.org/schema/mule/vm/endpoint" entity-id="VM#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="ref"/>
+<property name="transformer-refs"/>
+<property name="address"/>
+<property name="businessEventsLabel"/>
+<property name="encoding"/>
+<property name="path" value="vm-error"/>
+<property name="responseTransformer-refs"/>
+<property name="disableTransportTransformer"/>
+<property name="mimeType"/>
+<property name="responseTimeout"/>
+<property name="tracking:enable-default-events"/>
+<property name="auxiliary;index" value="38"/>
+<property name="exchange-pattern" value="one-way"/>
+<property name="connector-ref"/>
+                            </properties>
+                        </endpoint>
+                    </lane>
+                </compartment>
+            </splitter>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message" value="#[payload]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="39"/>
+                </properties>
+            </pattern>
+            <splitter index="40" name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property-collection name="470136c1-c68c-4682-998b-22b374229f07">
+                        <property name="choice.otherwise" value="true"/>
+                        <property-collection name="choice.attributes"/>
+                    </property-collection>
+                    <property-collection name="f4110a39-2100-40a0-a12d-91c578a411cf">
                         <property name="choice.expression" value="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]"/>
                         <property-collection name="choice.attributes">
                             <property name="expression" value="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]"/>
                         </property-collection>
                     </property-collection>
-                    <property-collection name="9aa08ddc-d456-42a3-b829-0eadee1883e1">
-                        <property name="choice.otherwise" value="true"/>
-                        <property-collection name="choice.attributes"/>
-                    </property-collection>
                 </properties>
-                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#2">
-                    <properties>
-                        <property name=";INDEX" value="34"/>
-                        <property-collection name="8ec1bb2b-b665-4904-b432-4c393adc0955">
-                            <property name="choice.expression" value="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]"/>
-                            <property-collection name="choice.attributes">
-<property name="expression" value="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]"/>
-                            </property-collection>
-                        </property-collection>
-                        <property-collection name="9aa08ddc-d456-42a3-b829-0eadee1883e1">
-                            <property name="choice.otherwise" value="true"/>
-                            <property-collection name="choice.attributes"/>
-                        </property-collection>
-                    </properties>
-                </pattern>
-                <compartment entity-id="compartment#1">
-                    <lane hadOnlyOneElement="false" index="36" isChoiceOtherwiseLane="false" entity-id="8ec1bb2b-b665-4904-b432-4c393adc0955">
+                <pattern name="Choice" type="org.mule.tooling.ui.modules.core.pattern.cbr" entity-id="Choice#4"/>
+                <compartment entity-id="compartment#2">
+                    <lane hadOnlyOneElement="false" index="42" isChoiceOtherwiseLane="false" entity-id="f4110a39-2100-40a0-a12d-91c578a411cf">
                         <pattern name="Find OpcInfo stationId and Dates" type="http://www.mulesoft.org/schema/mule/mongo/mongo-connector" entity-id="Mongo DB#2">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
-<property name="" value=""/>
-<property name="limit" value=""/>
-<property name="auxiliary;erased;numToSkip" value="true"/>
+<property name=""/>
+<property name="limit"/>
+<property name="username"/>
+<property name="numToSkip"/>
 <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/mongo/find-objects"/>
 <property name="query-ref" value="#[string: {&quot;stationId&quot; : #[groovy:payload.stationId], timestamp: {$gte: &quot;#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;, $lt: &quot;#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]&quot;}}]"/>
 <property name="collection" value="opcInfoRegisterHistorico"/>
-<property name="password" value=""/>
-<property name="database" value=""/>
-<property name="ref" value="#[payload]"/>
-<property name="auxiliary;erased;limit" value="true"/>
-<property name="username" value=""/>
-<property name="updated"/>
-<property name="numToSkip" value=""/>
+<property name="password"/>
 <property name="config-ref" value="Mongo_DB"/>
-<property name="auxiliary;index" value="36"/>
-<property-collection name="@http://www.mulesoft.org/schema/mule/mongo/find-objects-fieldss;1">
-    <property name="ref" value="#[payload]"/>
-    <property name="isProcessed$$$$" value="true"/>
-</property-collection>
+<property name="database"/>
+<property name="auxiliary;index" value="42"/>
                             </properties>
-                            <description></description>
                         </pattern>
                         <pattern name="Mongo DB" type="http://www.mulesoft.org/schema/mule/mongo/mongo-transformer" entity-id="Mongo DB#3">
                             <graphicalData x="0" y="0" width="0" height="0"/>
@@ -417,11 +436,11 @@
 <property name="encoding"/>
 <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/mongo/mongo-collection-to-json"/>
 <property name="mimeType"/>
-<property name="auxiliary;index" value="37"/>
+<property name="auxiliary;index" value="43"/>
                             </properties>
                         </pattern>
                     </lane>
-                    <lane hadOnlyOneElement="false" index="39" isChoiceOtherwiseLane="true" entity-id="9aa08ddc-d456-42a3-b829-0eadee1883e1">
+                    <lane hadOnlyOneElement="false" index="45" isChoiceOtherwiseLane="true" entity-id="470136c1-c68c-4682-998b-22b374229f07">
                         <pattern name="Find OpcInfo StationId" type="http://www.mulesoft.org/schema/mule/mongo/mongo-connector" entity-id="Mongo DB#4">
                             <graphicalData x="0" y="0" width="0" height="0"/>
                             <properties>
@@ -435,7 +454,7 @@
 <property name="password"/>
 <property name="config-ref" value="Mongo_DB"/>
 <property name="database"/>
-<property name="auxiliary;index" value="39"/>
+<property name="auxiliary;index" value="45"/>
                             </properties>
                         </pattern>
                         <pattern name="Mongo DB" type="http://www.mulesoft.org/schema/mule/mongo/mongo-transformer" entity-id="Mongo DB#5">
@@ -446,7 +465,7 @@
 <property name="encoding"/>
 <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/mongo/mongo-collection-to-json"/>
 <property name="mimeType"/>
-<property name="auxiliary;index" value="40"/>
+<property name="auxiliary;index" value="46"/>
                             </properties>
                         </pattern>
                     </lane>
@@ -460,7 +479,7 @@
                     <property name="encoding"/>
                     <property name="mapper-ref"/>
                     <property name="mimeType"/>
-                    <property name="auxiliary;index" value="41"/>
+                    <property name="auxiliary;index" value="47"/>
                 </properties>
             </pattern>
             <pattern name="Groovy" type="http://www.mulesoft.org/schema/mule/scripting/groovyTransformer" entity-id="Groovy#1">
@@ -470,20 +489,18 @@
                     <property name="ignoreBadInput"/>
                     <property name="encoding"/>
                     <property name="mimeType"/>
-                    <property name="auxiliary;index" value="42"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
-                        <property name="text" value="org.home.psp.data.OpcInfoRegisterListResponse opcs = new org.home.psp.data.OpcInfoRegisterListResponse()&#xA;&#xA;payload.each{ i -&gt;&#xA;  org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()&#xA;  //println &quot;Hello ${i}&quot;&#xA;  //println &quot;Tipo de Objeto: &quot; + i.getClass().getName()&#xA;  o.stationId = i['stationId']&#xA;  o.hostModbusSlave = i['hostModbusSlave']&#xA;  o.timestamp = i['timestamp']&#xA;  o.portModbusSlave = i['portModbusSlave']&#xA;  o.reference = i['reference']&#xA;  o.quality = i['quality'] &#xA;  o.regValue = i['regValue']&#xA;  o.tagName = i['tagName']&#xA;  opcs.add(o)&#xA;}&#xA;&#xA;return opcs"/>
-                        <property name="engine" value="Groovy"/>
-                        <property name="isProcessed$$$$" value="true"/>
-                        <property name="auxiliary;index" value="43"/>
-                        <property name="auxiliary;wrapIn" value="43"/>
-                    </property-collection>
+                    <property name="auxiliary;index" value="48"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
                         <property name="text" value="org.home.psp.data.OpcInfoRegisterListResponse opcs = new org.home.psp.data.OpcInfoRegisterListResponse()&#xA;&#xA;payload.each{ i -&gt;&#xA;  org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()&#xA;  //println &quot;Hello ${i}&quot;&#xA;  //println &quot;Tipo de Objeto: &quot; + i.getClass().getName()&#xA;  o.stationId = i['stationId']&#xA;  o.hostModbusSlave = i['hostModbusSlave']&#xA;  o.timestamp = i['timestamp']&#xA;  o.portModbusSlave = i['portModbusSlave']&#xA;  o.reference = i['reference']&#xA;  o.quality = i['quality'] &#xA;  o.regValue = i['regValue']&#xA;  o.tagName = i['tagName']&#xA;  opcs.add(o)&#xA;}&#xA;&#xA;return opcs"/>
                         <property name="engine" value="Groovy"/>
-                        <property name="isProcessed$$$$" value="true"/>
-                        <property name="auxiliary;index" value="43"/>
-                        <property name="auxiliary;wrapIn" value="43"/>
+                        <property name="auxiliary;index" value="49"/>
+                        <property name="auxiliary;wrapIn" value="49"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property name="text" value="org.home.psp.data.OpcInfoRegisterListResponse opcs = new org.home.psp.data.OpcInfoRegisterListResponse()&#xA;&#xA;payload.each{ i -&gt;&#xA;  org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()&#xA;  //println &quot;Hello ${i}&quot;&#xA;  //println &quot;Tipo de Objeto: &quot; + i.getClass().getName()&#xA;  o.stationId = i['stationId']&#xA;  o.hostModbusSlave = i['hostModbusSlave']&#xA;  o.timestamp = i['timestamp']&#xA;  o.portModbusSlave = i['portModbusSlave']&#xA;  o.reference = i['reference']&#xA;  o.quality = i['quality'] &#xA;  o.regValue = i['regValue']&#xA;  o.tagName = i['tagName']&#xA;  opcs.add(o)&#xA;}&#xA;&#xA;return opcs"/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="auxiliary;index" value="49"/>
+                        <property name="auxiliary;wrapIn" value="49"/>
                     </property-collection>
                 </properties>
             </pattern>
@@ -496,20 +513,182 @@
                     <property name="encoding" value="UTF-8"/>
                     <property name="acceptMuleMessage"/>
                     <property name="mimeType" value="text/xml"/>
-                    <property name="auxiliary;index" value="44"/>
+                    <property name="auxiliary;index" value="50"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;0">
                         <property name="name" value="lista"/>
                         <property name="class" value="org.home.psp.data.OpcInfoRegisterListResponse"/>
-                        <property name="isProcessed$$$$" value="true"/>
-                        <property name="auxiliary;index" value="45"/>
-                        <property name="auxiliary;wrapIn" value="45"/>
+                        <property name="auxiliary;index" value="51"/>
+                        <property name="auxiliary;wrapIn" value="51"/>
                     </property-collection>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;1">
                         <property name="name" value="opcinforegister"/>
                         <property name="class" value="org.home.psp.data.OpcInfoRegister"/>
-                        <property name="isProcessed$$$$" value="true"/>
-                        <property name="auxiliary;index" value="46"/>
-                        <property name="auxiliary;wrapIn" value="46"/>
+                        <property name="auxiliary;index" value="52"/>
+                        <property name="auxiliary;wrapIn" value="52"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <scope name="Choice Exception Strategy" type="http://www.mulesoft.org/schema/mule/core/choice-exception-strategy" entity-id="Choice Exception Strategy#1">
+                <properties>
+                    <property name="auxiliary;index" value="53"/>
+                </properties>
+                <compartment entity-id="compartment#3">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+                        <scope name="Catch Exception Strategy" type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" entity-id="Catch Exception Strategy#1">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="labelConfigureConditionalExecutionUsingExpression"/>
+<property name="when"/>
+<property name="enableNotifications"/>
+<property name="auxiliary;index" value="54"/>
+                            </properties>
+                            <compartment entity-id="compartment#4">
+<lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+    <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="VM-ERROR" type="http://www.mulesoft.org/schema/mule/vm/endpoint" entity-id="VM#2">
+        <graphicalData x="0" y="0" width="0" height="0"/>
+        <properties>
+            <property name="ref"/>
+            <property name="transformer-refs"/>
+            <property name="address"/>
+            <property name="businessEventsLabel"/>
+            <property name="encoding"/>
+            <property name="path" value="vm-error"/>
+            <property name="responseTransformer-refs"/>
+            <property name="disableTransportTransformer"/>
+            <property name="mimeType"/>
+            <property name="responseTimeout"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="55"/>
+            <property name="exchange-pattern" value="one-way"/>
+            <property name="connector-ref"/>
+        </properties>
+    </endpoint>
+    <pattern name="Groovy" type="http://www.mulesoft.org/schema/mule/scripting/groovyTransformer" entity-id="Groovy#2">
+        <graphicalData x="0" y="0" width="0" height="0"/>
+        <properties>
+            <property name="returnClass"/>
+            <property name="ignoreBadInput"/>
+            <property name="encoding"/>
+            <property name="mimeType"/>
+            <property name="auxiliary;index" value="56"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
+                <property name="text" value="import org.home.psp.data.OpcInfoRegisterListResponse;&#xA;import org.xml.sax.SAXException;&#xA;OpcInfoRegisterListResponse resp = new OpcInfoRegisterListResponse()&#xA;resp.error = payload&#xA;return resp"/>
+                <property name="engine" value="Groovy"/>
+                <property name="auxiliary;index" value="57"/>
+                <property name="auxiliary;wrapIn" value="57"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                <property name="text" value="import org.home.psp.data.OpcInfoRegisterListResponse;&#xA;import org.xml.sax.SAXException;&#xA;OpcInfoRegisterListResponse resp = new OpcInfoRegisterListResponse()&#xA;resp.error = payload&#xA;return resp"/>
+                <property name="engine" value="Groovy"/>
+                <property name="auxiliary;index" value="57"/>
+                <property name="auxiliary;wrapIn" value="57"/>
+            </property-collection>
+        </properties>
+    </pattern>
+    <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#2">
+        <graphicalData x="0" y="0" width="0" height="0"/>
+        <properties>
+            <property name="message" value="#[payload.error]"/>
+            <property name="category"/>
+            <property name="level" value="INFO"/>
+            <property name="auxiliary;index" value="58"/>
+        </properties>
+    </pattern>
+    <pattern name="Object to XML" type="org.mule.tooling.ui.modules.core.pattern.objectToXmlTransformer" entity-id="Object to XML#2">
+        <graphicalData x="0" y="0" width="0" height="0"/>
+        <properties>
+            <property name="returnClass"/>
+            <property name="ignoreBadInput"/>
+            <property name="driverClass"/>
+            <property name="encoding" value="UTF-8"/>
+            <property name="acceptMuleMessage"/>
+            <property name="mimeType" value="text/xml"/>
+            <property name="auxiliary;index" value="59"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;0">
+                <property name="name" value="lista"/>
+                <property name="class" value="org.home.psp.data.OpcInfoRegisterListResponse"/>
+                <property name="auxiliary;index" value="60"/>
+                <property name="auxiliary;wrapIn" value="60"/>
+            </property-collection>
+        </properties>
+    </pattern>
+</lane>
+                            </compartment>
+                        </scope>
+                    </lane>
+                </compartment>
+            </scope>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="psp-testFlow2" entity-id="e8fda7ab-7966-4b7e-8b4f-4415f1956ce7">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="61"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="8081"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="schemas"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="62"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Groovy" type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" entity-id="Groovy#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="script-ref"/>
+                    <property name="auxiliary;index" value="63"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script-for-properties;0">
+                        <property name="text" value="&#xA;                &#xA;                &#xA;            "/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="inner-text" value="import org.apache.commons.io.FileUtils;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;import org.apache.commons.io.FilenameUtils;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;Payload: &quot; + payload&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;Basepath: &quot; +basePath&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;requestFile = payload&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;fileName = FilenameUtils.getName(requestFile)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;FileName: &quot; + fileName&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;file = new File(basePath,fileName)&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;Existe Si/No: &quot; + file.exists()&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (file.exists()) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;existe&quot;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;fileContent = FileUtils.readFileToString(file)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println fileContent&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;return fileContent&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;return &quot;&quot;&#xA;&#x9;&#x9;&#x9;&#x9;}"/>
+                        <property name="auxiliary;index" value="64"/>
+                        <property name="auxiliary;wrapIn" value="64"/>
+                        <property-collection name="@http://www.mulesoft.org/schema/mule/core/property;1">
+                            <property name="value" value="C:/schemas"/>
+                            <property name="key" value="basePath"/>
+                            <property name="auxiliary;index" value="65"/>
+                            <property name="auxiliary;wrapIn" value="65"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property name="text" value="&#xA;                &#xA;                &#xA;            "/>
+                        <property name="engine" value="Groovy"/>
+                        <property name="inner-text" value="import org.apache.commons.io.FileUtils;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;import org.apache.commons.io.FilenameUtils;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;Payload: &quot; + payload&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;Basepath: &quot; +basePath&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;requestFile = payload&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;fileName = FilenameUtils.getName(requestFile)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;FileName: &quot; + fileName&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;file = new File(basePath,fileName)&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;Existe Si/No: &quot; + file.exists()&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (file.exists()) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println &quot;existe&quot;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;fileContent = FileUtils.readFileToString(file)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;println fileContent&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;return fileContent&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;return &quot;&quot;&#xA;&#x9;&#x9;&#x9;&#x9;}"/>
+                        <property name="auxiliary;index" value="64"/>
+                        <property name="auxiliary;wrapIn" value="64"/>
+                        <property-collection name="@http://www.mulesoft.org/schema/mule/core/property;1">
+                            <property name="value" value="C:/schemas"/>
+                            <property name="key" value="basePath"/>
+                            <property name="auxiliary;index" value="65"/>
+                            <property name="auxiliary;wrapIn" value="65"/>
+                        </property-collection>
                     </property-collection>
                 </properties>
             </pattern>

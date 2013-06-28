@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Opc.Request" type="opcInfoRegisterRequest"/>
+  <xs:complexType name="opcInfoRegisterRequest">
+    <xs:sequence>
+      <xs:element name="stationId" type="xs:long" minOccurs="0"/>
+      <xs:element name="desde" type="xs:dateTime"/>
+      <xs:element name="hasta" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

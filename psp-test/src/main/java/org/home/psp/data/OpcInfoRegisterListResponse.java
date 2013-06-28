@@ -5,7 +5,8 @@ import java.util.List;
 
 public class OpcInfoRegisterListResponse {
 	
-	public List<OpcInfoRegister> infos = new ArrayList<OpcInfoRegister>();
+	private String error;
+	private List<OpcInfoRegister> infos = new ArrayList<OpcInfoRegister>();
 	
 	public OpcInfoRegisterListResponse(){}
 	
@@ -24,6 +25,16 @@ public class OpcInfoRegisterListResponse {
 	public void add(OpcInfoRegister opc){
 		this.infos.add(opc);
 	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+	
+	
 	
 	
 
