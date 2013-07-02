@@ -83,8 +83,8 @@ public class Grupo implements Serializable, BizEntity {
 		this.version = version;
 	}
 
-	@OneToMany(mappedBy = "grupo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "grupo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 //	@OptimisticLock(excluded = true)
 	@XmlTransient
 	public Set<GrupoItem> getGrupoItems() {

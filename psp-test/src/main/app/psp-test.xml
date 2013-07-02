@@ -59,19 +59,6 @@ http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/
             <component class="org.home.psp.rest.QueryOpcDataMongo"/>
         </jersey:resources>
         <object-to-string-transformer doc:name="Object to String"/>
-        <scripting:component doc:name="Groovy">
-            <scripting:script engine="Groovy"><![CDATA[import java.io.File;
-import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
-
-println "Payload: " + payload
-
-def factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-def schema = factory.newSchema(new StreamSource(new File("C://schemas//opcinforequest.xsd")))
-def validator = schema.newValidator()
-validator.validate(new StreamSource(new StringReader(payload)))]]></scripting:script>
-        </scripting:component>
         <logger message="HA PASADO POR AQUI A PESAR DE LA EXCEPCION" level="INFO" doc:name="Logger"/>
 <!--         <custom-transformer class="org.home.psp.mule.transformers.ValidateOpcRequestTransformer" doc:name="Java"/> -->
         <mulexml:xml-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
@@ -99,9 +86,7 @@ validator.validate(new StreamSource(new StringReader(payload)))]]></scripting:sc
             <scripting:script engine="Groovy"><![CDATA[org.home.psp.data.OpcInfoRegisterListResponse opcs = new org.home.psp.data.OpcInfoRegisterListResponse()
 
 payload.each{ i ->
-  org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister()
-  //println "Hello ${i}"
-  //println "Tipo de Objeto: " + i.getClass().getName()
+  org.home.psp.data.OpcInfoRegister o = new org.home.psp.data.OpcInfoRegister() 
   o.stationId = i['stationId']
   o.hostModbusSlave = i['hostModbusSlave']
   o.timestamp = i['timestamp']
@@ -142,18 +127,12 @@ return resp]]></scripting:script>
             <scripting:script engine="Groovy">
                 <property key="basePath" value="C:/schemas"/>
                 <scripting:text><![CDATA[import org.apache.commons.io.FileUtils;
-					import org.apache.commons.io.FilenameUtils;	
-					println "Payload: " + payload
-					println "Basepath: " +basePath				
+					import org.apache.commons.io.FilenameUtils;						
 					requestFile = payload
-					fileName = FilenameUtils.getName(requestFile)
-					println "FileName: " + fileName
-					file = new File(basePath,fileName)			
-					println "Existe Si/No: " + file.exists()
-					if (file.exists()) {
-					println "existe"
-					fileContent = FileUtils.readFileToString(file)
-					println fileContent
+					fileName = FilenameUtils.getName(requestFile)					
+					file = new File(basePath,fileName)					
+					if (file.exists()) {					
+					fileContent = FileUtils.readFileToString(file)				
 					return fileContent
 					} else {
 					return ""

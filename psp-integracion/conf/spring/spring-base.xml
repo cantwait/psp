@@ -75,7 +75,7 @@
 
 	<aop:config>
 		<aop:pointcut id="serviceMethods"
-			expression="execution(* com.pdvsa.psp.service.*.impl.*.*(..))" />
+			expression="execution(* com.pdvsa.psp.service.impl.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
 	</aop:config>
 

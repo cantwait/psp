@@ -55,7 +55,7 @@
 			<artifactId>org.openscada.jinterop.core</artifactId>
 			<version>1.1.0.v20130529</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.openscada.jinterop</groupId>
 			<artifactId>org.openscada.jinterop.deps</artifactId>
@@ -75,8 +75,8 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>          
-        		</exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -143,24 +143,61 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.hibernate.java-persistence</groupId>
-			<artifactId>jpa-api</artifactId>
-			<version>2.0-cr-1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.6.4.Final</version>
+			<version>4.2.0.Final</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>antlr</artifactId>
-					<groupId>antlr</groupId>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>dom4j</groupId>
+					<artifactId>dom4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate.javax.persistence</groupId>
+					<artifactId>hibernate-jpa-2.0-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.1.Final</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.hibernate.java-persistence</groupId> <artifactId>jpa-api</artifactId> 
+			<version>2.0-cr-1</version> <type>jar</type> <scope>compile</scope> </dependency> 
+			<dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-entitymanager</artifactId> 
+			<version>3.6.4.Final</version> <exclusions> <exclusion> <artifactId>antlr</artifactId> 
+			<groupId>antlr</groupId> </exclusion> </exclusions> </dependency> -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -211,13 +248,13 @@
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-module-jersey</artifactId>
 			<version>${mule.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-module-json</artifactId>
