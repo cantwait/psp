@@ -16,17 +16,18 @@ import org.mule.transformer.AbstractTransformer;
 import com.pdvsa.psp.model.OpcInfoRegister;
 import com.pdvsa.psp.model.Item.DATA_TYPE;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
+import com.pdvsa.psp.service.IOpcControllerService;
 import com.pdvsa.psp.service.impl.OpcControllerService;
 
 public class OpcInfoPollingService extends AbstractTransformer{
 	
-	private OpcControllerService opcControllerService;
+	private IOpcControllerService opcControllerService;
 
-	public OpcControllerService getOpcControllerService() {
+	public IOpcControllerService getOpcControllerService() {
 		return opcControllerService;
 	}
 
-	public void setOpcControllerService(OpcControllerService opcControllerService) {
+	public void setOpcControllerService(IOpcControllerService opcControllerService) {
 		this.opcControllerService = opcControllerService;
 	}
 

@@ -223,7 +223,7 @@
 			<version>${mule.version}</version>
 		</dependency>
 
-		
+
 
 		<dependency>
 			<groupId>org.mule.modules</groupId>
@@ -261,7 +261,7 @@
 			<version>${mule.version}</version>
 		</dependency>
 
-		
+
 
 		<dependency>
 			<groupId>org.mule.tests</groupId>
@@ -291,13 +291,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 			<version>2.11.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mule.common</groupId>
 			<artifactId>mule-common</artifactId>
@@ -315,6 +315,9 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		
+
 	</dependencies>
 
 </project>

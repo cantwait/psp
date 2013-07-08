@@ -44,4 +44,8 @@ public interface IItemService {
 	@WebResult(name="items")
 	public List<Item> saveItems(List<Item> items);
 	
+	@WebMethod
+	@WebResult(name="items")
+	public List<Item> findUntransferredItems();
+	
 }

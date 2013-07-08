@@ -2,12 +2,16 @@ package com.pdvsa.psp.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.IItemDAO;
 import com.pdvsa.psp.dao.IServidorGrupoDAO;
 import com.pdvsa.psp.dao.IServidorOpcDAO;
@@ -134,6 +138,13 @@ public class ItemService implements IItemService{
 			}
 		}
 		return lista;
+	}
+
+	@Override
+	public List<Item> findUntransferredItems() {
+		Search s = new Search();
+		s.addFilterEqual("transferred", Boolean.FALSE);		
+		return itemDAO.search(s);
 	}		
 
 }

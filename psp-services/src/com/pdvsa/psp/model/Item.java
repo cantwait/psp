@@ -46,6 +46,7 @@ public class Item implements Serializable, BizEntity {
 	private Integer version = 0;
 	private Set<GrupoItem> grupoItems = new HashSet<GrupoItem>(0);
 	private UnidadMedida unidadMedida;
+	private Boolean transferred = Boolean.FALSE;
 
     public Item() {
     }
@@ -101,7 +102,7 @@ public class Item implements Serializable, BizEntity {
 	}
 	
 	
-	@Column(nullable=false, length=50)
+	@Column(nullable=false, length=50, unique=true)
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -209,6 +210,20 @@ public class Item implements Serializable, BizEntity {
 		return false;
 	}
 	
+	
+	
+	public Boolean getTransferred() {
+		return transferred;
+	}
+
+
+
+	public void setTransferred(Boolean transferred) {
+		this.transferred = transferred;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return nombre;
