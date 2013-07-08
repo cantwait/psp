@@ -46,7 +46,7 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 
 	};
 
-	// @Override
+	@Override
 	public void afterCompose() {
 		ConventionWires.wireVariables(this, this);
 		// auto forward

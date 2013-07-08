@@ -23,7 +23,7 @@ public class GenericDialog extends GenericWindow implements AfterCompose {
 
 	private Button btnAceptar, btnCancelar;
 
-	// @Override
+	@Override
 	public void afterCompose() {
 		ConventionWires.wireVariables(this, this);
 		ConventionWires.addForwards(this, this);
@@ -89,7 +89,7 @@ public class GenericDialog extends GenericWindow implements AfterCompose {
 
 			if (checkData()) {
 				setReturnData();
-				confirmData();
+				confirmData();				
 				setAttribute("MODAL_VALUE", ActionType.ACEPTAR);
 				detach();
 			} else {
