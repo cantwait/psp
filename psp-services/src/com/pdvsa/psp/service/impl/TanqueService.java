@@ -1,6 +1,10 @@
 package com.pdvsa.psp.service.impl;
 
 import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +61,11 @@ public class TanqueService implements ITanqueService {
 	@Override
 	public List<Tanque> getTanquesByServidor(Long servidor, Boolean activo) {
 		return tanqueDAO.findTanquesByServidor(servidor, activo);
+	}
+
+	@Override	
+	public List<Tanque> getTanquesByServidor(@WebParam(name = "idServidor") Long servidor) {		
+		return getTanquesByServidor(servidor, Boolean.TRUE);
 	}
 
 

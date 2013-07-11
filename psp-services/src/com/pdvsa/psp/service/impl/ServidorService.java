@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.WebMethod;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.IServidorGrupoDAO;
 import com.pdvsa.psp.dao.IServidorOpcDAO;
 import com.pdvsa.psp.dao.IServidorRolDAO;
@@ -184,6 +187,15 @@ public class ServidorService implements IServidorService{
 	public HashMap<String, Object> getValuesFromTankByName(String nombre) {
 		
 		return tanqueDAO.findValuesFromTankName(nombre);
+	}
+
+	@Override
+	@WebMethod
+	@WebResult(name = "servidores")
+	public List<ServidorOpc> findUntransferredServers() {
+		Search s = new Search();
+		s.addFilterEqual("transferred", Boolean.FALSE);
+		return servidorDAO.search(s);
 	}
 	
 }

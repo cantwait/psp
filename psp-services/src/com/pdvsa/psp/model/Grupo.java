@@ -2,6 +2,7 @@ package com.pdvsa.psp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Cascade;
@@ -11,7 +12,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "grupos", schema = "cs")
+@XmlRootElement(name="grupo")
 public class Grupo implements Serializable, BizEntity {
+	
 	private static final long serialVersionUID = 6940668694319266933L;
 	private Long id = Long.MIN_VALUE;
 	private Boolean activo = true;
@@ -21,6 +24,8 @@ public class Grupo implements Serializable, BizEntity {
 	private Integer version = 0;
 	private Set<GrupoItem> grupoItems = new HashSet<GrupoItem>(0);
 	private Set<ServidorGrupo> servidorGrupos = new HashSet<ServidorGrupo>(0);
+	
+	private Boolean transferred = Boolean.FALSE;
 
 	public Grupo() {
 	}
@@ -118,6 +123,16 @@ public class Grupo implements Serializable, BizEntity {
 
 	public boolean equals(Grupo obj) {
 		return getId() == obj.getId();
+	}
+	
+	
+
+	public Boolean isTransferred() {
+		return transferred;
+	}
+
+	public void setTransferred(Boolean transferred) {
+		this.transferred = transferred;
 	}
 
 	@Override

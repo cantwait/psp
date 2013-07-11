@@ -2,9 +2,11 @@ package com.pdvsa.psp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @org.hibernate.annotations.Immutable
 @Table(name="grupo_items", schema="cs")
+//@XmlRootElement(name="grupoItem")
 public class GrupoItem implements Serializable, BizEntity {
 	private static final long serialVersionUID = -4063504639495846881L;
 	private Long id = Long.MIN_VALUE;

@@ -52,6 +52,8 @@ public class ServidorOpc implements Serializable, BizEntity {
 	private Set<Tanque> tanques = new HashSet<Tanque>(0);
 	private Set<ServidorGrupo> servidorGrupos = new HashSet<ServidorGrupo>(0);
 	private Set<ServidorRol> servidorRoles = new HashSet<ServidorRol>(0);
+	
+	private Boolean transferred = Boolean.FALSE;
 
 	public ServidorOpc() {
 	}
@@ -188,8 +190,7 @@ public class ServidorOpc implements Serializable, BizEntity {
 		this.localidad = localidad;
 	}
 
-	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 //	@OptimisticLock(excluded = true)
 	@XmlTransient
 	public Set<Tanque> getTanques() {
@@ -200,8 +201,7 @@ public class ServidorOpc implements Serializable, BizEntity {
 		this.tanques = tanques;
 	}
 
-	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	//@OptimisticLock(excluded = true)
 	@XmlTransient
 	public Set<ServidorGrupo> getServidorGrupos() {
@@ -212,8 +212,7 @@ public class ServidorOpc implements Serializable, BizEntity {
 		this.servidorGrupos = servidorGrupos;
 	}
 
-	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 //	@OptimisticLock(excluded = true)
 	@XmlTransient
 	public Set<ServidorRol> getServidorRoles() {
@@ -312,6 +311,16 @@ public class ServidorOpc implements Serializable, BizEntity {
 			return equals(objEntity);
 		}
 		return false;
+	}
+	
+	
+
+	public Boolean getTransferred() {
+		return transferred;
+	}
+
+	public void setTransferred(Boolean transferred) {
+		this.transferred = transferred;
 	}
 
 	@Override

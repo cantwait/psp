@@ -68,5 +68,9 @@ public interface IServidorService {
 	public HashMap<String, Object> getValuesFromServerById(Long id);
 	
 	public HashMap<String, Object> getValuesFromTankByName(String nombre);
+	
+	@WebMethod
+	@WebResult(name="servidores")
+	public List<ServidorOpc> findUntransferredServers();
 
 }

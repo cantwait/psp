@@ -2,6 +2,7 @@ package com.pdvsa.psp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Cascade;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="items", schema="cs")
+@XmlRootElement(name="opcItem")
 public class Item implements Serializable, BizEntity {
 	
 	public enum DATA_TYPE {
@@ -83,7 +85,7 @@ public class Item implements Serializable, BizEntity {
 	
 	
 	@Column(nullable=false)
-	public Boolean getActivo() {
+	public Boolean isActivo() {
 		return this.activo;
 	}
 

@@ -1,10 +1,15 @@
 package com.pdvsa.psp.service.impl;
 
 import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.IGrupoDAO;
 import com.pdvsa.psp.dao.IGrupoItemDAO;
 import com.pdvsa.psp.dao.IServidorGrupoDAO;
@@ -110,5 +115,12 @@ public class GrupoService implements IGrupoService {
 	@Override
 	public List<GrupoItem> getGrupoItemByGrupo(Long idGrupo) {
 		return (idGrupo == null) ? grupoitemDAO.findAll() : grupoitemDAO.findGrupoItemByGrupo(idGrupo);
+	}
+
+	@Override
+	public List<Grupo> findUntransferredGroups() {
+		Search s = new Search();
+		s.addFilterEqual("transferred", Boolean.FALSE);
+		return grupoDAO.search(s);
 	}
 }

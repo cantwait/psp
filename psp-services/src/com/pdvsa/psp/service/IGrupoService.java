@@ -57,5 +57,9 @@ public interface IGrupoService {
 	@WebMethod
 	@WebResult(name="grupos-items")
 	public List<GrupoItem> getGrupoItemByGrupo(@WebParam(name="idGrupo")Long idGrupo);
+	
+	@WebMethod
+	@WebResult(name="grupo-items")
+	public List<Grupo> findUntransferredGroups();
 
 }
