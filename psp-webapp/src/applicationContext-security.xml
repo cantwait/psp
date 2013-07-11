@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd
-              http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+              http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 
 	<!-- 
 	<context:annotation-config />	
 	<context:component-scan base-package="com.obelisco.modelo.servicios.seguridad" />
 	 -->
-	<aop:config proxy-target-class="true"/>
+	<aop:config proxy-target-class="true" />
 
 	<bean id="autenticarUsuario"
 		class="com.obelisco.modelo.servicios.seguridad.AutenticarUsuario">
 		<property name="userService" ref="userService" />
-	</bean>	
-	
-	<security:authentication-provider
-		user-service-ref="autenticarUsuario">
-		<security:password-encoder hash="plaintext">
-		</security:password-encoder>
-	</security:authentication-provider>
+	</bean>
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="autenticarUsuario">
+			<security:password-encoder hash="plaintext">
+			</security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+
 
 	<security:http auto-config="true">
 		<security:logout invalidate-session="true"
 			logout-success-url="/zkLogin.zul" />
-		<security:intercept-url pattern="/index.zul" access="ROLE_ADMIN" />
-		<security:form-login default-target-url="/index.zul" always-use-default-target="true" 
-			login-page="/zkLogin.zul" authentication-failure-url="/zkLogin.zul?login_error=1" />
-		<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-		<!--		<security:concurrent-session-control-->
-		<!--			max-sessions="1" exception-if-maximum-exceeded="true" />-->
+		<security:intercept-url pattern="/index.zul"
+			access="ROLE_ADMIN" />
+		<security:form-login default-target-url="/index.zul"
+			always-use-default-target="true" login-page="/zkLogin.zul"
+			authentication-failure-url="/zkLogin.zul?login_error=1" />
+		<security:intercept-url pattern="/**"
+			access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<!-- <security:concurrent-session-control -->
+		<!-- max-sessions="1" exception-if-maximum-exceeded="true" /> -->
 	</security:http>
 
 
