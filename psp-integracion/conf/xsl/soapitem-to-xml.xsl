@@ -1,6 +1,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns2="http://service.psp.pdvsa.com/" exclude-result-prefixes="soap ns2">
 	<xsl:output method="xml" indent="yes"/>
 	<xsl:template match="/">
+		<opcItemsRequest>
 		<opcItems>
 		<xsl:for-each select="/soap:Envelope/soap:Body/ns2:findUntransferredItemsResponse/items">
 			<opcItem>
@@ -29,5 +30,6 @@
 			</opcItem>
 		</xsl:for-each>
 		</opcItems>
+		</opcItemsRequest>
 	</xsl:template>
 </xsl:stylesheet>

@@ -39,15 +39,7 @@
 	<spring:beans>
 		<spring:import resource="classpath:spring/spring-base.xml" />
 		<spring:import resource="classpath:spring/spring-opc.xml" />
-		<spring:import resource="classpath:psp-dataservices-config.xml" />
-		<spring:bean name="jaxbContext" class="javax.xml.bind.JAXBContext"
-			factory-method="newInstance">
-			<spring:constructor-arg>
-				<spring:array>
-					<spring:value type="java.lang.Class">com.pdvsa.psp.model.xml.OpcInfoRegisterMongo</spring:value>
-				</spring:array>
-			</spring:constructor-arg>
-		</spring:bean>
+		<spring:import resource="classpath:psp-dataservices-config.xml" />			
 	</spring:beans>
 
 	<!-- NUEVO -->

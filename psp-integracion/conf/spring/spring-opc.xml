@@ -81,4 +81,19 @@
 	</bean>
 	-->
 	
+	<bean name="jaxbContext" class="javax.xml.bind.JAXBContext"
+			factory-method="newInstance">
+		<constructor-arg>
+		    <list>
+		        <value type="java.lang.Class">com.pdvsa.psp.model.xml.OpcInfoRegisterMongo</value>
+		    </list>			
+		</constructor-arg>
+	</bean>
+	
+	<bean name="opcReplicationRestService" class="com.pdvsa.psp.mule.rest.OpcInfoReplicationRestService">
+		 <property name="itemService" ref="itemService"/>
+		 <property name="unidadService" ref="unidadService"/>
+		 <property name="grupoService" ref="grupoService" />
+	</bean>	
+	
 </beans>
