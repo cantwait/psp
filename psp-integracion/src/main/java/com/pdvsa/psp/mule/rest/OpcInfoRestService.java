@@ -16,17 +16,7 @@ public class OpcInfoRestService {
 	@Path("/save-opc-item")
 	@Consumes("text/xml")
 	@Produces("text/xml")
-	public OpcInfoRegisterMongo saveOpcItem(OpcInfoRegisterMongo xml){
-		
-		
-//		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm:ss z yyyy");
-//		
-//		System.out.println(xml.getTimestamp());
-//		System.out.println("REST: " + xml.getStationId() + " " + xml.getTimestamp());
-		
-		
-		
-		
+	public OpcInfoRegisterMongo saveOpcItem(OpcInfoRegisterMongo xml){		
 		return xml;
 		
 	}

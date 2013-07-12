@@ -94,6 +94,7 @@
 		 <property name="itemService" ref="itemService"/>
 		 <property name="unidadService" ref="unidadService"/>
 		 <property name="grupoService" ref="grupoService" />
+		 <property name="servidorService" ref="servidorService" />
 	</bean>	
 	
 </beans>

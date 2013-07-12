@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps"
+	xmlns:pop3="http://www.mulesoft.org/schema/mule/pop3" xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp"
+	xmlns:pop3s="http://www.mulesoft.org/schema/mule/pop3s" xmlns:imap="http://www.mulesoft.org/schema/mule/imap"
+	xmlns:imaps="http://www.mulesoft.org/schema/mule/imaps" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:https="http://www.mulesoft.org/schema/mule/https"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:management="http://www.mulesoft.org/schema/mule/management"
+	xmlns:ognl="http://www.mulesoft.org/schema/mule/ognl" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:mule-xml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey"
+	xsi:schemaLocation="
+          http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+          http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
+          http://www.mulesoft.org/schema/mule/pop3 http://www.mulesoft.org/schema/mule/pop3/3.1/mule-pop3.xsd
+          http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/3.3/mule-smtp.xsd
+          http://www.mulesoft.org/schema/mule/pop3s http://www.mulesoft.org/schema/mule/pop3s/current/mule-pop3s.xsd
+          http://www.mulesoft.org/schema/mule/imap http://www.mulesoft.org/schema/mule/imap/current/mule-imap.xsd
+          http://www.mulesoft.org/schema/mule/imaps http://www.mulesoft.org/schema/mule/imaps/current/mule-imaps.xsd
+          http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/3.2/mule-email.xsd
+          http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.1/mule-file.xsd
+          http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+          http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+          http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/3.2/mule-jdbc.xsd
+          http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+          http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+          http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.3/mule-scripting.xsd
+          http://www.mulesoft.org/schema/mule/management http://www.mulesoft.org/schema/mule/management/3.2/mule-management.xsd
+          http://www.mulesoft.org/schema/mule/ognl http://www.mulesoft.org/schema/mule/ognl/current/mule-ognl.xsd
+          http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
+          http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+          http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.1/mule-vm.xsd
+          http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+          http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
+          http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
+
+
+	<flow name="OpcDataPoolling">
+		<quartz:inbound-endpoint jobName="poll-data-mongo-service"
+			repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector"
+			doc:name="Quartz">
+			<quartz:event-generator-job groupName="TEST"
+				jobGroupName="TEST" />
+		</quartz:inbound-endpoint>
+		<transformer ref="OpcData" />
+		<collection-splitter doc:name="Collection-Splitter-ED"
+			enableCorrelation="NEVER" />
+		<transformer ref="ProcessOpcData"></transformer>
+		<json:object-to-json-transformer
+			doc:name="Object 
+		to JSON" />
+		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister"
+			doc:name="Mongo DB" element-ref="#[string:#[payload]]" />
+	</flow>
+	
+	<flow name="OpcDataSender" doc:name="OpcDataSender">
+		<quartz:inbound-endpoint jobName="mongodb-query"
+			repeatInterval="60000" responseTimeout="10000" doc:name="QuartzEnviarData">
+			<quartz:event-generator-job groupName="mongo-query"
+				jobGroupName="mongo-query" />
+		</quartz:inbound-endpoint>
+		<mongo:find-objects config-ref="Mongo_DB"
+			collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters"
+			limit="50">
+		</mongo:find-objects>
+		<mongo:mongo-collection-to-json
+			doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true" />
+		<transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray-ED" />
+		<collection-splitter doc:name="Collection-Splitter-ED"
+			enableCorrelation="NEVER" />
+		<mule-xml:jaxb-object-to-xml-transformer
+			mimeType="text/xml" jaxbContext-ref="jaxbContext" />
+		<http:outbound-endpoint exchange-pattern="request-response"
+			host="localhost" port="9000" path="opc-info/save-opc-item" method="POST"
+			doc:name="HTTP-ED" />
+		<object-to-string-transformer doc:name="Object to String" />
+		<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
+	</flow>
+	
+	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemLocalidad"
+		processingStrategy="synchronous">
+		<vm:inbound-endpoint exchange-pattern="one-way"
+			path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
+		<mule-xml:jaxb-xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"
+			jaxbContext-ref="jaxbContext" />
+		<json:object-to-json-transformer
+			ignoreBadInput="true" sourceClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"
+			doc:name="Object to JSON" />
+		<all doc:name="All">
+			<mongo:save-object config-ref="Mongo_DB"
+				collection="opcInfoRegisterHistorico" doc:name="Mongo DB" />
+			<processor-chain>
+				<json:json-to-object-transformer
+					returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"
+					doc:name="JSON to Object" />
+				<scripting:transformer doc:name="Groovy">
+					<scripting:script engine="Groovy"><![CDATA[
+					    Long stationId = payload.stationId as Long return
+					    stationId
+					    ]]></scripting:script>
+				</scripting:transformer>
+				<mongo:remove-objects config-ref="Mongo_DB"
+					collection="opcInfoRegister" query-ref="#[string: {&quot;stationId&quot; : #[payload]}]"
+					doc:name="Mongo DB" />
+			</processor-chain>
+		</all>
+	</flow>	
+	
+	
+	<flow name="ConsultarDatosOpcFlow" doc:name="ConsultarDatosOpcFlow">
+		<description>Flow
+			que Consulta Datos Opc en registro Historicos guardados en mongo, se
+			presenta
+			en dos modalidades,filtra por fecha desde-hasta y tambien por stationId
+		</description>
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="localhost" port="9000" path="opc-info" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="Opc.Request" class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
+			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
+		</mule-xml:xml-to-object-transformer>
+		<choice doc:name="Choice">
+			<when
+				expression="#[groovy: payload.stationId &gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]">
+				<mongo:find-objects config-ref="Mongo_DB"
+					collection="opcInfoRegisterHistorico"
+					query-ref="#[string: {&quot;stationId&quot; : #[groovy:payload.stationId],	timestamp: {$gte: '#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]',	$lt: '#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]'}}]"
+					doc:name="Find OpcInfo stationId and Dates" />
+				<mongo:mongo-collection-to-json
+					doc:name="Mongo DB" />
+			</when>
+			<otherwise>
+				<mongo:find-objects config-ref="Mongo_DB"
+					collection="opcInfoRegisterHistorico"
+					query-ref="#[string: { timestamp: { $gte: '#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]',	$lt: '#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]'}}]"
+					doc:name="Find OpcInfo StationId" />
+				<mongo:mongo-collection-to-json
+					doc:name="Mongo DB" />
+			</otherwise>
+		</choice>
+		<json:json-to-object-transformer
+			returnClass="java.util.ArrayList" doc:name="JSON to Object" />
+		<scripting:transformer doc:name="Groovy">
+			<scripting:script engine="Groovy"> <![CDATA[
+			    import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
+			    import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
+					    def	opcs = new OpcInfoRegisterListResponse() payload.each(){ i -> 
+								String fecha = i['timestamp'] 
+								def strDate = new Date().parse("yyyy-MM-dd",fecha) 
+								def o = new OpcInfoRegisterMongo()		 
+								o.stationId = i['stationId'] as Long
+								o.hostModbusSlave = i['hostModbusSlave'] 
+								o.timestamp = strDate
+								o.portModbusSlave = i['portModbusSlave']
+								o.reference	= i['reference']
+								o.quality = i['quality']
+								o.regValue = i['regValue']
+								o.tagName = i['tagName']
+								o.localidadNombre = i['localidadNombre'] 
+								o.paisNombre = i['paisNombre'] 
+								o.regionNombre = i['regionNombre'] 
+								o.tanqueNombre = i['tanqueNombre'] 
+								opcs.add(o) 
+						} 
+						return opcs
+						]]>
+			</scripting:script>
+		</scripting:transformer>
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="Opc.Response"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
+			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		</mule-xml:object-to-xml-transformer>
+	</flow>	 
+	 
+	<flow name="ItemReplicationFlow">
+		<quartz:inbound-endpoint jobName="opc-polling-item-job"
+			connector-ref="Quartz-Connector" repeatInterval="10000"
+			responseTimeout="10000" doc:name="QuartzPollItemOpc">
+			<quartz:event-generator-job groupName="poll-item-group"
+				jobGroupName="poll-item-group" />
+		</quartz:inbound-endpoint>		
+		<http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="GET" doc:name="/psp/services/itemopc"
+			path="psp/services/itemopc" >
+			<cxf:jaxws-client doc:name="findItemsSoap" operation="findUntransferredItems"
+			serviceClass="com.pdvsa.psp.service.IItemService" />
+		</http:outbound-endpoint>
+		<foreach >		    		    
+		    <mule-xml:object-to-xml-transformer mimeType="text/xml" encoding="UTF-8">
+		        <mule-xml:alias name="opcItem" class="com.pdvsa.psp.model.Item"/>
+		    </mule-xml:object-to-xml-transformer>		    
+		    <http:outbound-endpoint exchange-pattern="request-response" contentType="text/xml" host="${rest.region.host}" port="${rest.region.port}" path="${rest.item.path}" method="POST"	doc:name="HTTP-ED" />
+		    <object-to-string-transformer doc:name="Object to String" />
+		    <vm:outbound-endpoint exchange-pattern="one-way" path="update-item-endpoint" doc:name="VM" />
+		</foreach>				
+	</flow>
+	
+	<flow name="updateItemReplication">
+	    <vm:inbound-endpoint exchange-pattern="one-way"	path="update-item-endpoint" doc:name="vm-update-item-endpoint" />
+	    <mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.Item">
+	        <mule-xml:alias name="opcItem" class="com.pdvsa.psp.model.Item"/>
+	    </mule-xml:xml-to-object-transformer>
+	    <set-payload value="#[payload.id]" doc:name="id item" />
+	    <http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="POST" doc:name="/psp/services/itemopc"
+			path="psp/services/itemopc" >
+			<cxf:jaxws-client doc:name="updateItemStatus" operation="updateItemStatus"
+			serviceClass="com.pdvsa.psp.service.IItemService" />
+		</http:outbound-endpoint>
+	</flow>
+	
+	<flow name="GroupReplicationFlow">
+	    <quartz:inbound-endpoint jobName="opc-polling-group-job"
+			connector-ref="Quartz-Connector" repeatInterval="20000" 
+			responseTimeout="10000" doc:name="QuartzPollGroupOpc">
+			<quartz:event-generator-job groupName="poll-grupo" 
+				jobGroupName="poll-grupo" />
+		</quartz:inbound-endpoint>		
+		<http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="GET" doc:name="/psp/services/grupo"
+			path="psp/services/grupo" >
+			<cxf:jaxws-client doc:name="findGroupsSoap" operation="findUntransferredGroups"
+			serviceClass="com.pdvsa.psp.service.IGrupoService" />
+		</http:outbound-endpoint>
+		<foreach >
+		    <enricher source="#[payload]" target="#[flowVars['groupItems']]">
+		        <flow-ref name="lookupItemsPerGroup" doc:name="lookupItemsPerGroup" />
+		    </enricher>
+		    <scripting:transformer doc:name="Groovy">
+			<scripting:script engine="Groovy"> <![CDATA[
+			    import com.pdvsa.psp.model.xml.GrupoTransferencia;
+			    import com.pdvsa.psp.model.Item;
+			    import com.pdvsa.psp.model.GrupoItem;			    
+			    
+			    itemsOpc = flowVars['groupItems'];
+			    grupoItems = new ArrayList();
+			    
+			    for (Item item : itemsOpc) {
+						grupoItem = new GrupoItem();
+						grupoItem.item = item;					
+						grupoItems.add(grupoItem);
+				}	
+				
+				def grupoTransferencia = new GrupoTransferencia(payload, grupoItems);		    
+			   
+				return grupoTransferencia;			    
+			      
+			]]>
+			</scripting:script>
+			</scripting:transformer>	    
+			<mule-xml:object-to-xml-transformer mimeType="text/xml" encoding="UTF-8">
+		  		<mule-xml:alias name="grupoOpcTransfer" class="com.pdvsa.psp.model.xml.GrupoTransferencia"/>
+		  		<mule-xml:alias name="grupo" class="com.pdvsa.psp.model.Grupo"/>
+		  		<mule-xml:alias  name="grupoItem" class="com.pdvsa.psp.model.GrupoItem"/>
+			</mule-xml:object-to-xml-transformer>			  			    
+			<http:outbound-endpoint exchange-pattern="request-response" contentType="text/xml" host="${rest.region.host}" port="${rest.region.port}" path="${rest.group.path}" method="POST" doc:name="HTTP-ED" />
+			<object-to-string-transformer doc:name="Object to String" />
+			<vm:outbound-endpoint exchange-pattern="one-way" path="update-group-endpoint" doc:name="vm-update-group-endpoint"/>
+		 </foreach>	    
+	</flow>
+	
+	<flow name="updateGroupReplication">
+	    <vm:inbound-endpoint exchange-pattern="one-way"	path="update-group-endpoint" doc:name="vm-update-group-endpoint" />
+	    <mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.GrupoTransferencia">
+	        <mule-xml:alias name="grupoOpcTransfer" class="com.pdvsa.psp.model.xml.GrupoTransferencia"/>
+		    <mule-xml:alias name="grupo" class="com.pdvsa.psp.model.Grupo"/>
+		  	<mule-xml:alias  name="grupoItem" class="com.pdvsa.psp.model.GrupoItem"/>
+	    </mule-xml:xml-to-object-transformer>
+	    <set-payload value="#[payload.id]" doc:name="id grupo"/>
+	    <http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="POST" doc:name="/psp/services/tanque"
+			path="psp/services/tanque" >
+			<cxf:jaxws-client doc:name="updateTanqueStatus" operation="updateTanqueStatus"
+			serviceClass="com.pdvsa.psp.service.ITanqueService" />
+		</http:outbound-endpoint>
+	</flow>
+	
+	
+	<flow name="ServidorOpcReplicationFlow">
+	     <quartz:inbound-endpoint jobName="opc-polling-servidor-job"
+			connector-ref="Quartz-Connector" repeatInterval="20000" 
+			responseTimeout="10000" doc:name="QuartzPollServidorOpc">
+			<quartz:event-generator-job groupName="poll-servidor" 
+				jobGroupName="poll-servidor" />
+		</quartz:inbound-endpoint>		
+		<http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="GET" doc:name="/psp/services/servidoropc"
+			path="psp/services/servidoropc" >
+			<cxf:jaxws-client doc:name="findUntransferredServers" operation="findUntransferredServers"
+			serviceClass="com.pdvsa.psp.service.IServidorService" />
+		</http:outbound-endpoint>
+		<foreach >
+		    <enricher source="#[payload]" target="#[flowVars['tanques']]">
+		        <flow-ref name="lookupTanksServer" doc:name="lookupTanksServer" />
+		    </enricher>
+		    <enricher source="#[payload]" target="#[flowVars['servidorGrupos']]">
+		        <flow-ref name="lookupServerGroups" doc:name="lookupServerGroups" />
+		    </enricher>
+		    <scripting:transformer doc:name="Groovy">
+			<scripting:script engine="Groovy"> <![CDATA[
+			    import com.pdvsa.psp.model.xml.ServidorTransferencia;
+			    import com.pdvsa.psp.model.ServidorGrupo;
+			    import com.pdvsa.psp.model.Tanque;			    
+			    
+			    tanquesOpc = flowVars['tanques'];
+			    servidorGrupos = flowVars['servidorGrupos'];
+			    
+			    def servidorTransferencia = new ServidorTransferencia();		  
+			    
+			    
+			    if(tanquesOpc.size() > 0){
+			    	servidorTransferencia.getTanques().addAll(tanquesOpc);			    	
+			    }
+			    
+			    
+			    if(servidorGrupos.size() > 0){
+			    	servidorTransferencia.getServidorGrupos().addAll(servidorGrupos);
+			    }	   
+			   
+				return servidorTransferencia;			    
+			      
+			]]>
+			</scripting:script>
+			</scripting:transformer>	    
+			<mule-xml:object-to-xml-transformer mimeType="text/xml" encoding="UTF-8">
+		  		<mule-xml:alias name="servidorTransferencia" class="com.pdvsa.psp.model.xml.ServidorTransferencia"/>
+		  		<mule-xml:alias name="tanque" class="com.pdvsa.psp.model.Tanque"/>
+		  		<mule-xml:alias name="localidad" class="com.pdvsa.psp.model.Localidad"/>
+		  		<mule-xml:alias name="servidorGrupo" class="com.pdvsa.psp.model.ServidorGrupo"/>
+		  		<mule-xml:alias name="grupo" class="com.pdvsa.psp.model.Grupo"/>
+			</mule-xml:object-to-xml-transformer>	  			    
+			<http:outbound-endpoint exchange-pattern="request-response" contentType="text/xml" host="${rest.region.host}" port="${rest.region.port}" path="${rest.server.path}" method="POST" doc:name="HTTP-ED" />
+			<object-to-string-transformer doc:name="Object to String" />
+			<vm:outbound-endpoint exchange-pattern="one-way" path="update-servidor-endpoint" doc:name="vm-update-servidor-endpoint"/>
+		 </foreach>	
+	</flow>
+	
+	<flow name="updateServidorReplication">
+	    <vm:inbound-endpoint exchange-pattern="one-way"	path="update-servidor-endpoint" doc:name="vm-update-servidor-endpoint" />
+	    <mule-xml:xml-to-object-transformer mimeType="text/xml" encoding="UTF-8">
+		  	<mule-xml:alias name="servidorTransferencia" class="com.pdvsa.psp.model.xml.ServidorTransferencia"/>
+		  	<mule-xml:alias name="tanque" class="com.pdvsa.psp.model.Tanque"/>
+		  	<mule-xml:alias name="localidad" class="com.pdvsa.psp.model.Localidad"/>
+		  	<mule-xml:alias name="servidorGrupo" class="com.pdvsa.psp.model.ServidorGrupo"/>
+		  	<mule-xml:alias name="grupo" class="com.pdvsa.psp.model.Grupo"/>
+		</mule-xml:xml-to-object-transformer>
+	    <set-payload value="#[payload.id]" doc:name="id servidor"/>
+	    <http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="POST" doc:name="/psp/services/servidoropc"
+			path="psp/services/servidoropc" >
+			<cxf:jaxws-client doc:name="updateServidorStatus" operation="updateServidorStatus"
+			serviceClass="com.pdvsa.psp.service.IServidorService" />
+		</http:outbound-endpoint>
+	</flow>
+	
+	<sub-flow name="lookupServerGroups">
+	    <set-payload value="#[payload.id]" doc:name="id servidor"/>
+	    <http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="POST" doc:name="/psp/services/servidoropc"
+			path="psp/services/servidoropc" >
+			<cxf:jaxws-client doc:name="getServidorGrupoByServidor" operation="getServidorGrupoByServidor"
+			serviceClass="com.pdvsa.psp.service.IServidorService" />
+		</http:outbound-endpoint>
+	</sub-flow>
+	
+	<sub-flow name="lookupTanksServer">
+	    <set-payload value="#[payload.id]" doc:name="id servidor"/>
+	    <http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="POST" doc:name="/psp/services/tanque"
+			path="psp/services/tanque" >
+			<cxf:jaxws-client doc:name="getTanquesByServidor" operation="getTanquesByServidor"
+			serviceClass="com.pdvsa.psp.service.ITanqueService" />
+		</http:outbound-endpoint>
+	</sub-flow>	
+	
+	<sub-flow name="lookupItemsPerGroup">
+	    <set-payload value="#[payload.id]" doc:name="id grupo" />
+	    <http:outbound-endpoint exchange-pattern="request-response" 
+			host="localhost" port="8801" method="POST" doc:name="/psp/services/itemopc"
+			path="psp/services/itemopc" >
+			<cxf:jaxws-client doc:name="getItemsByGrupo" operation="getItemsByGrupo"
+			serviceClass="com.pdvsa.psp.service.IItemService" />
+		</http:outbound-endpoint>
+	</sub-flow>
+	
+</mule>
