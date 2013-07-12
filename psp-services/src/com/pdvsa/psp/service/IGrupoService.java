@@ -61,5 +61,13 @@ public interface IGrupoService {
 	@WebMethod
 	@WebResult(name="grupo-items")
 	public List<Grupo> findUntransferredGroups();
+	
+	@WebMethod
+	@WebResult(name="grupo")
+	public Grupo updateGrupoStatus(Grupo grupo);
+	
+	@WebMethod
+	@WebResult(name="grupo")
+	public Grupo deleteLogically(Grupo grupo);
 
 }

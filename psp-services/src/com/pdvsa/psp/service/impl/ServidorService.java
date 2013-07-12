@@ -83,6 +83,7 @@ public class ServidorService implements IServidorService{
 
 	@Override
 	public ServidorOpc saveServidor(ServidorOpc servidor) {
+		servidor.setTransferred(Boolean.FALSE);
 		return servidorDAO.save(servidor);
 	}
 
@@ -190,12 +191,22 @@ public class ServidorService implements IServidorService{
 	}
 
 	@Override
-	@WebMethod
-	@WebResult(name = "servidores")
 	public List<ServidorOpc> findUntransferredServers() {
 		Search s = new Search();
 		s.addFilterEqual("transferred", Boolean.FALSE);
 		return servidorDAO.search(s);
+	}
+
+	@Override	
+	public ServidorOpc updateServidorStatus(ServidorOpc servidor) {
+		servidor.setTransferred(Boolean.TRUE);
+		return servidorDAO.save(servidor);
+	}
+
+	@Override	
+	public ServidorOpc deleteLogically(ServidorOpc servidor) {
+		servidor.setActivo(Boolean.FALSE);
+		return saveServidor(servidor);
 	}
 	
 }

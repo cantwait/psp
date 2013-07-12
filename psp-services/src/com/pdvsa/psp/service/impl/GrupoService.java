@@ -61,6 +61,7 @@ public class GrupoService implements IGrupoService {
 
 	@Override
 	public Grupo saveGrupo(Grupo grupo) {
+		grupo.setTransferred(Boolean.FALSE);
 		return grupoDAO.save(grupo);
 	}
 
@@ -122,5 +123,17 @@ public class GrupoService implements IGrupoService {
 		Search s = new Search();
 		s.addFilterEqual("transferred", Boolean.FALSE);
 		return grupoDAO.search(s);
+	}
+
+	@Override	
+	public Grupo updateGrupoStatus(Grupo grupo) {
+		grupo.setTransferred(Boolean.TRUE);
+		return grupoDAO.save(grupo);
+	}
+
+	@Override	
+	public Grupo deleteLogically(Grupo grupo) {
+		grupo.setActivo(Boolean.FALSE);
+		return saveGrupo(grupo);
 	}
 }

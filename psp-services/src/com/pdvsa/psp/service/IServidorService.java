@@ -72,5 +72,13 @@ public interface IServidorService {
 	@WebMethod
 	@WebResult(name="servidores")
 	public List<ServidorOpc> findUntransferredServers();
+	
+	@WebMethod
+	@WebResult(name="servidor")
+	public ServidorOpc updateServidorStatus(ServidorOpc servidor);
+	
+	@WebMethod
+	@WebResult(name="servidor")
+	public ServidorOpc deleteLogically(ServidorOpc servidor);
 
 }

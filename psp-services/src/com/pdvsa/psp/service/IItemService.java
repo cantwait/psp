@@ -48,4 +48,12 @@ public interface IItemService {
 	@WebResult(name="items")
 	public List<Item> findUntransferredItems();
 	
+	@WebMethod
+	@WebResult(name="item")
+	public Item updateItemStatus(Item item);
+	
+	@WebMethod
+	@WebResult(name="item")
+	public Item deleteLogically(Item item);
+	
 }

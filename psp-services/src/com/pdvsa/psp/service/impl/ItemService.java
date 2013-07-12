@@ -89,7 +89,8 @@ public class ItemService implements IItemService{
 	}
 
 	@Override	
-	public Item saveItem(Item item) {		
+	public Item saveItem(Item item) {
+		item.setTransferred(Boolean.FALSE);
 		return itemDAO.save(item);
 	}
 	
@@ -145,6 +146,18 @@ public class ItemService implements IItemService{
 		Search s = new Search();
 		s.addFilterEqual("transferred", Boolean.FALSE);		
 		return itemDAO.search(s);
+	}
+
+	@Override	
+	public Item updateItemStatus(Item item) {
+		item.setTransferred(Boolean.TRUE);
+		return itemDAO.save(item);
+	}
+
+	@Override	
+	public Item deleteLogically(Item item) {
+		item.setActivo(Boolean.FALSE);
+		return saveItem(item);
 	}		
 
 }
