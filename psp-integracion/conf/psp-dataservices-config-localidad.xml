@@ -44,70 +44,46 @@
 		<quartz:inbound-endpoint jobName="poll-data-mongo-service"
 			repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
-			<quartz:event-generator-job groupName="TEST"
-				jobGroupName="TEST" />
+			<quartz:event-generator-job groupName="opc-data-poll" jobGroupName="opc-data-poll" />
 		</quartz:inbound-endpoint>
 		<transformer ref="OpcData" />
-		<collection-splitter doc:name="Collection-Splitter-ED"
-			enableCorrelation="NEVER" />
-		<transformer ref="ProcessOpcData"></transformer>
-		<json:object-to-json-transformer
-			doc:name="Object 
-		to JSON" />
-		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister"
-			doc:name="Mongo DB" element-ref="#[string:#[payload]]" />
+		<collection-splitter doc:name="Collection-Splitter-ED"	enableCorrelation="NEVER" />
+		<transformer ref="ProcessOpcData"/>
+		<json:object-to-json-transformer doc:name="Object to JSON" />
+		<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegister" doc:name="Mongo DB" element-ref="#[string:#[payload]]" />
 	</flow>
 	
 	<flow name="OpcDataSender" doc:name="OpcDataSender">
 		<quartz:inbound-endpoint jobName="mongodb-query"
 			repeatInterval="60000" responseTimeout="10000" doc:name="QuartzEnviarData">
-			<quartz:event-generator-job groupName="mongo-query"
-				jobGroupName="mongo-query" />
+			<quartz:event-generator-job groupName="mongo-query"	jobGroupName="mongo-query" />
 		</quartz:inbound-endpoint>
-		<mongo:find-objects config-ref="Mongo_DB"
-			collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters"
-			limit="50">
-		</mongo:find-objects>
-		<mongo:mongo-collection-to-json
-			doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true" />
+		<mongo:find-objects config-ref="Mongo_DB" collection="opcInfoRegister" doc:name="MongoDB-Find-OPCRegisters"	limit="1000"/>
+		<mongo:mongo-collection-to-json	doc:name="MongoDB-Collection-to-Json-ED" ignoreBadInput="true" />
 		<transformer ref="Java" doc:name="JsonArrayToOpcInfoRegisterArray-ED" />
-		<collection-splitter doc:name="Collection-Splitter-ED"
-			enableCorrelation="NEVER" />
-		<mule-xml:jaxb-object-to-xml-transformer
-			mimeType="text/xml" jaxbContext-ref="jaxbContext" />
-		<http:outbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="9000" path="opc-info/save-opc-item" method="POST"
-			doc:name="HTTP-ED" />
+		<collection-splitter doc:name="Collection-Splitter-ED" enableCorrelation="NEVER" />
+		<mule-xml:jaxb-object-to-xml-transformer mimeType="text/xml" jaxbContext-ref="jaxbContext" />
+		<http:outbound-endpoint exchange-pattern="request-response"	host="localhost" port="9000" path="opc-info/save-opc-item" method="POST" doc:name="HTTP-ED" />
 		<object-to-string-transformer doc:name="Object to String" />
 		<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
 	</flow>
 	
 	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemLocalidad"
 		processingStrategy="synchronous">
-		<vm:inbound-endpoint exchange-pattern="one-way"
-			path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
-		<mule-xml:jaxb-xml-to-object-transformer
-			returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"
-			jaxbContext-ref="jaxbContext" />
-		<json:object-to-json-transformer
-			ignoreBadInput="true" sourceClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"
-			doc:name="Object to JSON" />
+		<vm:inbound-endpoint exchange-pattern="one-way"	path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
+		<mule-xml:jaxb-xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"	jaxbContext-ref="jaxbContext" />
+		<json:object-to-json-transformer ignoreBadInput="true" sourceClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" doc:name="Object to JSON" />
 		<all doc:name="All">
-			<mongo:save-object config-ref="Mongo_DB"
-				collection="opcInfoRegisterHistorico" doc:name="Mongo DB" />
+			<mongo:save-object config-ref="Mongo_DB" collection="opcInfoRegisterHistorico" doc:name="Mongo DB" />
 			<processor-chain>
-				<json:json-to-object-transformer
-					returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"
-					doc:name="JSON to Object" />
+				<json:json-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"	doc:name="JSON to Object" />
 				<scripting:transformer doc:name="Groovy">
 					<scripting:script engine="Groovy"><![CDATA[
 					    Long stationId = payload.stationId as Long return
 					    stationId
 					    ]]></scripting:script>
 				</scripting:transformer>
-				<mongo:remove-objects config-ref="Mongo_DB"
-					collection="opcInfoRegister" query-ref="#[string: {&quot;stationId&quot; : #[payload]}]"
-					doc:name="Mongo DB" />
+				<mongo:remove-objects config-ref="Mongo_DB"	collection="opcInfoRegister" query-ref="#[string: {&quot;stationId&quot; : #[payload]}]" doc:name="Mongo DB" />
 			</processor-chain>
 		</all>
 	</flow>	
