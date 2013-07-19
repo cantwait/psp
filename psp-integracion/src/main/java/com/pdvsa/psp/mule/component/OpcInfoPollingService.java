@@ -3,21 +3,17 @@ package com.pdvsa.psp.mule.component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.mule.api.MuleEventContext;
-import org.mule.api.MuleMessage;
-import org.mule.api.lifecycle.Callable;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractTransformer;
 
-import com.pdvsa.psp.model.OpcInfoRegister;
 import com.pdvsa.psp.model.Item.DATA_TYPE;
+import com.pdvsa.psp.model.OpcInfoRegister;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
+import com.pdvsa.psp.model.xml.OpcItemsTransfer;
 import com.pdvsa.psp.service.IOpcControllerService;
-import com.pdvsa.psp.service.impl.OpcControllerService;
 
 public class OpcInfoPollingService extends AbstractTransformer{
 	
@@ -34,8 +30,7 @@ public class OpcInfoPollingService extends AbstractTransformer{
 	@Override
 	protected Object doTransform(Object src, String enc)
 			throws TransformerException {
-			List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
-		
+			OpcItemsTransfer items = new OpcItemsTransfer();
 		List<OpcInfoRegister> info = opcControllerService.getAllRegisters();
 //		List<OpcInfoRegister> info = getObjectOpc();
  		if(info.size() > 0){
@@ -50,11 +45,11 @@ public class OpcInfoPollingService extends AbstractTransformer{
 				o.setTagOpc(op.getTagOpc());
 				o.setReference(op.getReference());
 				o.setTimestamp(op.getTimestamp());				
-				opcs.add(o);
+				items.getOpcItems().add(o);
 			}
 		}
 		
-		return opcs;
+		return items;
 	}
 	
 	

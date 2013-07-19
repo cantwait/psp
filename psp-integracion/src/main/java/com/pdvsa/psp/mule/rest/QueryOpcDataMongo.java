@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 
 
@@ -21,6 +22,13 @@ public class QueryOpcDataMongo {
 		
 		return xml;
 		
+	}
+	
+	@Path("/find-last-record")
+	@Produces(MediaType.TEXT_XML)
+	@Consumes(MediaType.TEXT_XML)
+	public OpcInfoRegisterRequest findLastItem(OpcInfoRegisterRequest request){
+		return request;
 	}
 
 }

@@ -219,9 +219,84 @@
 		<component>
 			<spring-object bean="opcControllerService" />
 		</component>
+	</flow>	
+<!--	
+	 <flow name="OpcLocalidadDataPooling">
+        <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
+			repeatInterval="10000" repeatCount="-1" connector-ref="Quartz-Connector"
+			doc:name="Quartz">
+			<quartz:event-generator-job />
+		</quartz:inbound-endpoint>
+		<transformer ref="OpcData" />
+		<foreach collection="#[payload.opcItems]">
+		    <transformer ref="ProcessOpcData"/>
+		</foreach>		
+		<mule-xml:object-to-xml-transformer>
+		    <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
+		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
+		</mule-xml:object-to-xml-transformer>
+		<http:outbound-endpoint responseTimeout="30000" exchange-pattern="request-response" contentType="text/xml" encoding="UTF-8" host="localhost" port="9000" path="opc-info/transfer-opc-item" method="POST"	doc:name="HTTP-ED" />
+		<object-to-string-transformer doc:name="Object to String" />	    
+		<logger level="INFO" message="#[payload]"/>
+    </flow>
+    
+	 <flow name="ExposeOpcInfoRegionService" doc:name="ExposeOpcServiceRegion">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="localhost" port="9000" doc:name="http-save-opc-endpoint"
+			encoding="UTF-8" path="opc-info" mimeType="text/xml" />
+		<jersey:resources doc:name="REST">
+			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
+		   <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
+		   <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />				    
+		</mule-xml:xml-to-object-transformer>		
+		<component>
+	    	<spring-object bean="mongoInsertComponent"/>
+		</component> 
+		<mule-xml:object-to-xml-transformer>
+		    <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
+		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
+		</mule-xml:object-to-xml-transformer>
+	</flow>
+	
+	
+	 <flow name="ConsultarDatosOpcFlow" doc:name="ConsultarDatosOpcFlow">
+		<description>Flow
+			que Consulta Datos Opc en registro Historicos guardados en mongo, se
+			presenta
+			en dos modalidades,filtra por fecha desde-hasta y tambien por stationId
+		</description>
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="localhost" port="8810" path="query-vars" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest"
+			encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="Opc.Request"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
+			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
+		</mule-xml:xml-to-object-transformer>
+		<component>
+	    	<spring-object bean="mongoFindComponent"/>
+		</component>		
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="Opc.Response"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
+			<mule-xml:alias name="Opc.Item"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		</mule-xml:object-to-xml-transformer>
 	</flow>
 
-<!-- 
+ 
 	<flow name="OpcDataPoolling">
 		<quartz:inbound-endpoint jobName="poll-data-mongo-service"
 			repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector"
@@ -315,85 +390,8 @@
 	
 	
 	
-	<flow name="ConsultarDatosOpcFlow" doc:name="ConsultarDatosOpcFlow">
-		<description>Flow
-			que Consulta Datos Opc en registro Historicos guardados en mongo, se
-			presenta
-			en dos modalidades,filtra por fecha desde-hasta y tambien por stationId
-		</description>
-		<http:inbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="9000" path="opc-info" doc:name="HTTP" />
-		<jersey:resources doc:name="REST">
-			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
-		</jersey:resources>
-		<object-to-string-transformer doc:name="Object to String" />
-		<mule-xml:xml-to-object-transformer
-			returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest"
-			encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
-			<mule-xml:alias name="Opc.Request"
-				class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
-			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
-		</mule-xml:xml-to-object-transformer>
-		<choice doc:name="Choice">
-			<when
-				expression="#[groovy: payload.stationId 
-		&gt; 0 &amp;&amp; payload.desde != null &amp;&amp; payload.hasta != null]">
-				<mongo:find-objects config-ref="Mongo_DB"
-					collection="opcInfoRegisterHistorico"
-					query-ref="#[string: {&quot;stationId&quot; : #[groovy:payload.stationId], 
-		timestamp: {$gte: '#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]', 
-		$lt: '#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]'}}]"
-					doc:name="Find OpcInfo stationId and Dates" />
-				<mongo:mongo-collection-to-json
-					doc:name="Mongo DB" />
-			</when>
-			<otherwise>
-				<mongo:find-objects config-ref="Mongo_DB"
-					collection="opcInfoRegisterHistorico"
-					query-ref="#[string: { timestamp: { 
-		$gte: '#[groovy: payload.desde.format(&quot;yyyy-MM-dd&quot;).toString()]', 
-		$lt: '#[groovy: payload.hasta.format(&quot;yyyy-MM-dd&quot;).toString()]' 
-		}}]"
-					doc:name="Find OpcInfo StationId" />
-				<mongo:mongo-collection-to-json
-					doc:name="Mongo DB" />
-			</otherwise>
-		</choice>
-		<json:json-to-object-transformer
-			returnClass="java.util.ArrayList" doc:name="JSON to Object" />
-		<scripting:transformer doc:name="Groovy">
-			<scripting:script engine="Groovy"> <![CDATA[
-	    com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse	opcs = new com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse() payload.each(){ i -> 
-		String fecha = i['timestamp'] 
-		def strDate = new Date().parse("yyyy-MM-dd",fecha) 
-		com.pdvsa.psp.model.xml.OpcInfoRegisterMongo o = new com.pdvsa.psp.model.xml.OpcInfoRegisterMongo()		 
-		o.stationId = i['stationId'] as Long
-		o.hostModbusSlave = i['hostModbusSlave'] 
-		o.timestamp = strDate
-		o.portModbusSlave = i['portModbusSlave']
-		o.reference	= i['reference']
-		o.quality = i['quality']
-		o.regValue = i['regValue']
-		o.tagName = i['tagName']
-		o.localidadNombre = i['localidadNombre'] 
-		o.paisNombre = i['paisNombre'] 
-		o.regionNombre = i['regionNombre'] 
-		o.tanqueNombre = i['tanqueNombre'] 
-		opcs.add(o) 
-		} 
-		return opcs
-		]]>
-			</scripting:script>
-		</scripting:transformer>
-		<mule-xml:object-to-xml-transformer
-			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-			<mule-xml:alias name="Opc.Response"
-				class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
-			<mule-xml:alias name="Opc.Item"
-				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
-		</mule-xml:object-to-xml-transformer>
-	</flow>
-	-->
+	
+	
 	<flow name="ReplicationOpcRestFlow" doc:name="ReplicationOpcRestFlow">
 		<http:inbound-endpoint exchange-pattern="request-response"
 			host="localhost" port="9000" doc:name="http-synchronize-vars-endpoint"
@@ -572,27 +570,6 @@
 	</sub-flow>
 	
 	
-	 <!--
-	<flow name="ExposeOpcVariablePaisService" doc:name="ExposeOpcVariableRegionService">
-		<http:inbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="9000" doc:name="http-synchronize-vars-endpoint"
-			encoding="UTF-8" path="variables-info" mimeType="text/xml" />
-		<jersey:resources doc:name="REST">
-			<component>
-			    <spring-object bean="opcReplicationRestService" />			    
-			</component>
-		</jersey:resources>
-	</flow>
-	
-	
-	<flow name="ExposeOpcInfoPaisService" doc:name="ExposeOpcInfoPaisService">
-		<http:inbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="9000" doc:name="http-save-opc-endpoint"
-			encoding="UTF-8" path="opc-info" mimeType="text/xml" />
-		<jersey:resources doc:name="REST">
-			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
-		</jersey:resources>
-	</flow>
 	
 	 -->
 	
