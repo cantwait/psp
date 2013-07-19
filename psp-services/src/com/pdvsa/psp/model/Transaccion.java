@@ -21,8 +21,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
@@ -46,6 +48,10 @@ public class Transaccion implements Serializable{
 	private String estado;
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipoTransaccion;
+	@OneToMany(mappedBy="transaccion", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+	@XmlTransient
+	private Set<TransaccionOperacion> transaccionOperaciones = new HashSet<TransaccionOperacion>();
+	
 	
 //	@Sort(type = SortType.COMPARATOR, comparator = OperacionComparator.class)
 //	@ManyToMany(cascade={CascadeType.REFRESH},fetch = FetchType.EAGER)
@@ -102,6 +108,25 @@ public class Transaccion implements Serializable{
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+	
+	
+
+	public TipoTransaccion getTipoTransaccion() {
+		return tipoTransaccion;
+	}
+
+	public void setTipoTransaccion(TipoTransaccion tipoTransaccion) {
+		this.tipoTransaccion = tipoTransaccion;
+	}
+
+	public Set<TransaccionOperacion> getTransaccionOperaciones() {
+		return transaccionOperaciones;
+	}
+
+	public void setTransaccionOperaciones(
+			Set<TransaccionOperacion> transaccionOperaciones) {
+		this.transaccionOperaciones = transaccionOperaciones;
 	}
 
 	@Override

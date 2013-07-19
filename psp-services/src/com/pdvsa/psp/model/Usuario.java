@@ -33,6 +33,9 @@ public class Usuario implements Serializable, BizEntity {
 	private String numeroTelefonico;
 	private Integer version = 0;
 	private Set<UsuarioRol> usuarioRoles = new HashSet<UsuarioRol>(0);
+	@OneToMany(mappedBy="usuario", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+	@XmlTransient
+	private Set<OperacionUsuario> operacionUsuarios = new HashSet<OperacionUsuario>();
 
 	public Usuario() {
 	}
@@ -140,9 +143,7 @@ public class Usuario implements Serializable, BizEntity {
 		this.version = version;
 	}
 
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	// @OptimisticLock(excluded = true)
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	@XmlTransient
 	public Set<UsuarioRol> getUsuarioRoles() {
 		return this.usuarioRoles;
@@ -150,6 +151,16 @@ public class Usuario implements Serializable, BizEntity {
 
 	public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
 		this.usuarioRoles = usuarioRoles;
+	}
+	
+	
+
+	public Set<OperacionUsuario> getOperacionUsuarios() {
+		return operacionUsuarios;
+	}
+
+	public void setOperacionUsuarios(Set<OperacionUsuario> operacionUsuarios) {
+		this.operacionUsuarios = operacionUsuarios;
 	}
 
 	@Transient
