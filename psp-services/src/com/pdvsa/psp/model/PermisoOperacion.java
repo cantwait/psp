@@ -24,10 +24,10 @@ public class PermisoOperacion implements Serializable{
 	@Column(unique=true, nullable=false)
 	private Long id;
 	@ManyToOne
-	@JoinColumn(name="id_permiso")
+	@JoinColumn(name="permiso")
 	private Permiso permiso;
 	@ManyToOne
-	@JoinColumn(name="id_operacion")
+	@JoinColumn(name="operacion")
 	private Operacion operacion;
 	
 	public PermisoOperacion(){}

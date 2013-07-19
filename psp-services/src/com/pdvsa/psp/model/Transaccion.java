@@ -1,7 +1,9 @@
 package com.pdvsa.psp.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -9,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,6 +44,8 @@ public class Transaccion implements Serializable{
 	private String descripcion;
 	@Column(name = "estado", length = 1)
 	private String estado;
+	@Enumerated(EnumType.STRING)
+	private TipoTransaccion tipoTransaccion;
 	
 //	@Sort(type = SortType.COMPARATOR, comparator = OperacionComparator.class)
 //	@ManyToMany(cascade={CascadeType.REFRESH},fetch = FetchType.EAGER)
@@ -48,6 +54,21 @@ public class Transaccion implements Serializable{
 //	@ManyToMany(cascade={CascadeType.REFRESH},fetch = FetchType.EAGER)
 //	@JoinTable(name = "permisotransaccion", joinColumns = @JoinColumn(name = "transaccion"), inverseJoinColumns = @JoinColumn(name = "grupo"))
 //	private Set<Grupo> grupos = new HashSet<Grupo>();
+	
+	enum TipoTransaccion {
+		ROOT, FOLDER, TRANSACTION
+	}
+	
+	
+	public List<TipoTransaccion> getTiposTransaccion(){
+		List<TipoTransaccion> tipos = new ArrayList<TipoTransaccion>();
+		
+		for (TipoTransaccion tipoTransaccion : TipoTransaccion.values()) {
+			tipos.add(tipoTransaccion);
+		}
+		
+		return tipos;
+	}
 	
 	public Transaccion(){}
 
