@@ -15,15 +15,15 @@ public class OpcInfoRegisterRequest {
 	private Date hasta;
 	
 	public OpcInfoRegisterRequest(){}
-
+		
 	public Date getDesde() {
 		return desde;
 	}
-
+		
 	public void setDesde(Date desde) {
 		this.desde = desde;
-	}
-
+	}	
+	
 	public Date getHasta() {
 		return hasta;
 	}

@@ -64,7 +64,7 @@ public class TanqueService implements ITanqueService {
 	}
 
 	@Override	
-	public List<Tanque> getTanquesByServidor(@WebParam(name = "idServidor") Long servidor) {		
+	public List<Tanque> getTanquesByServidorActivo(Long servidor) {		
 		return getTanquesByServidor(servidor, Boolean.TRUE);
 	}
 

@@ -36,11 +36,11 @@ public interface ITanqueService {
 	@WebResult(name = "tanques")
 	public List<Tanque> getTanquesByServidor(
 			@WebParam(name = "idservidor") Long servidor,
-			@WebParam(name = "activo") Boolean activo);
+			@WebParam(name = "activo") Boolean activo);	
 	
 	@WebMethod
 	@WebResult(name="tanques")
-	public List<Tanque> getTanquesByServidor(@WebParam(name="idServidor")Long servidor);
+	List<Tanque> getTanquesByServidorActivo(Long servidor);
 	
 
 }

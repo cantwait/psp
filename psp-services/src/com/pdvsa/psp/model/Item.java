@@ -164,8 +164,7 @@ public class Item implements Serializable, BizEntity {
 		this.version = version;
 	}
 
-	@OneToMany(mappedBy="item", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy="item", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	@XmlTransient
 	public Set<GrupoItem> getGrupoItems() {
 		return this.grupoItems;

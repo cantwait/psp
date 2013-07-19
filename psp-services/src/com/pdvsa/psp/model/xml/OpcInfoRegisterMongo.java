@@ -3,28 +3,23 @@ package com.pdvsa.psp.model.xml;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.codehaus.jackson.map.annotate.JsonCachable;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.mule.module.json.JsonData;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.pdvsa.psp.model.Item.DATA_TYPE;
 import com.pdvsa.psp.serializer.JsonTimeSerializer;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 
-@XmlRootElement(name="opc")
-@XmlAccessorType(XmlAccessType.FIELD)
+//@XmlRootElement(name="opc")
+//@XmlAccessorType(XmlAccessType.FIELD)
+@Document
 public class OpcInfoRegisterMongo implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6080212548241392706L;
+	@Indexed
 	private Long stationId;
 	private String hostModbusSlave;
 	private Integer portModbusSlave;	
@@ -97,7 +92,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 		return timestamp;
 	}
 	
-	@JsonSerialize(using= JsonTimeSerializer.class)
+
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
