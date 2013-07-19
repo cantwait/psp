@@ -1,88 +1,77 @@
 package com.obelisco.vista.zk.components;
 
-import org.zkoss.zk.ui.Component;
+import java.util.Collection;
+
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.ConventionWires;
+import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Tree;
 
-import com.obelisco.vista.zk.command.ObjectCommand;
 import com.obelisco.vista.zk.controls.Menubar;
-import com.obelisco.vista.zk.controls.OperacionHelper;
 import com.obelisco.vista.zk.controls.OperationType;
 import com.obelisco.vista.zk.controls.Toolbar;
 import com.pdvsa.psp.model.Operacion;
+import com.pdvsa.psp.model.Transaccion;
 
-public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 
-	private static final long serialVersionUID = -4183262275941731823L;
-	protected Tree tree;
+public class GenericWindowList extends GenericWindow implements AfterCompose{
+	
+	protected Listbox lstbox;
 	protected Toolbar tool;
 	protected Menubar mnu;
-	protected Component workArea;
-	protected boolean executeCustomView = false;
+	private Transaccion transaccion;
+	private Object entity;
+	private Collection entityList;
+	private String reportName;
 
-	public GenericTreeWindow() {
+	public GenericWindowList() {		
 		super();
 		this.addEventListener("onCreate", createListener);
 	}
 
 	protected EventListener createListener = new EventListener() {
-
+		
 		public void onEvent(Event event) throws Exception {
-
+//			if (transaccion != null) {
+//				tool.createFunctions(transaccion.getOperaciones());
+//				mnu.createFunctions(transaccion.getOperaciones());
+//			}
 		}
-
 	};
 
 	@Override
 	public void afterCompose() {
 		ConventionWires.wireVariables(this, this);
-		// auto forward
 		ConventionWires.addForwards(this, this);
 	}
 
-	protected void viewObject(Object object) {
-		try {
+	public void refreshControls() {
 
-			if (!executeCustomView) {
-				ObjectCommand command = new ObjectCommand();
-				command.setObjeto(object);
-				command.execute(workArea);
-			} else {
-				doShowEntity(object);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		AnnotateDataBinder binderLocal = (AnnotateDataBinder) getAttribute("binder", true);
+		if (binderLocal != null) {
+			binderLocal.loadAll();
 		}
 
-	}
-
-	public void onSelectNode$tree(Event event) {
-		if (event instanceof ForwardEvent) {
-			ForwardEvent forwardEvent = (ForwardEvent) event;
-			Object o = forwardEvent.getOrigin().getData();
-			if (o != null) {
-				viewObject(o);
-			}
+		AnnotateDataBinder binder = (AnnotateDataBinder) getPage().getAttribute("binder");
+		if (binder != null) {
+			binder.loadAll();
 		}
+
 	}
 
 	public void onSelectFunction$tool(Event event) throws InterruptedException {
 		Operacion operacion = null;
-
 		if (event instanceof ForwardEvent) {
 			ForwardEvent forwardEvent = (ForwardEvent) event;
-
 			operacion = (Operacion) forwardEvent.getOrigin().getData();
-
+			
 		}
 
 		executeOperation(operacion);
-
 	}
 
 	public void onSelectFunction$mnu(Event event) throws InterruptedException {
@@ -91,67 +80,54 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 
 		if (event instanceof ForwardEvent) {
 			ForwardEvent forwardEvent = (ForwardEvent) event;
-
 			operacion = (Operacion) forwardEvent.getOrigin().getData();
-
 		}
 
 		executeOperation(operacion);
-
 	}
 
 	protected Object getCurrentEntity() {
-		Object selected = null;
-		if (tree.getSelectedItem() != null) {
-			selected = tree.getSelectedItem().getValue();
-		}
-		return selected;
+		return entity;
 
 	}
 
-	protected void doCustomAction(Object entity, Operacion operacion) throws InterruptedException {
+	protected void doCustomAction(Object entity, Operacion operacion) {
 
-		try {
+		
 
 			String nombreMetodo = "doCustomAction";
 
 			Object[] args = new Object[] { entity, operacion };
 			Class[] types = new Class[] { Object.class, operacion.getClass() };
-
+			
+			
+			
 			executeZKFunction(nombreMetodo, types, args);
 
-		} catch (Exception e) {
-			showMessage(e.getMessage());
-		}
+		
+		
+		
 
 	}
 
-	protected boolean canDeleteEntity() throws InterruptedException {
-
+	protected boolean canDeleteEntity() {
 		boolean isDelete = false;
+		int answer = Integer.valueOf(Messagebox.NO);
+		answer = Messagebox
+				.show("Desea Eliminar los Elementos Seleccionados?",
+						"Eliminar", Messagebox.YES | Messagebox.NO,
+						Messagebox.QUESTION);
+		switch (answer) {
+		case Messagebox.YES:
+			isDelete = true;
+			break;
 
-		isDelete = Messagebox.show(
-				"Desea Eliminar los Elementos Seleccionados?", "Eliminar",
-				Messagebox.YES + Messagebox.NO, Messagebox.QUESTION) == Messagebox.YES;
+		case Messagebox.NO:
+			isDelete = false;
+			break;
+		}
 
 		return isDelete;
-
-	}
-
-	protected void doShowEntity(Object entity) throws InterruptedException {
-
-		try {
-
-			String nombreMetodo = "doShowEntity";
-
-			Object[] args = new Object[] { entity };
-			Class[] types = new Class[] { Object.class };
-
-			executeZKFunction(nombreMetodo, types, args);
-
-		} catch (Exception e) {
-			showMessage(e.getMessage());
-		}
 	}
 
 	protected void doEditEntity(Object entity) throws InterruptedException {
@@ -170,20 +146,38 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 		}
 	}
 
-	protected void doNewEntity(Object parent) throws InterruptedException {
+	protected void doNewEntity() throws InterruptedException {
 
 		try {
 
 			String nombreMetodo = "doNewEntity";
 
-			Object[] args = new Object[] { parent };
-			Class[] types = new Class[] { Object.class };
+			Object[] args = new Object[] {};
+			Class[] types = new Class[] {};
 
 			executeZKFunction(nombreMetodo, types, args);
 
 		} catch (Exception e) {
 			showMessage(e.getMessage());
 		}
+
+	}
+	
+	protected void doCustomActionOperation(Operacion operacion) throws InterruptedException{
+		try{
+			String nombreMetodo = "doCustomOperation";
+			Object[] args = new Object[] { operacion };
+			Class[] types = new Class[] {operacion.getClass()};
+
+			executeZKFunction(nombreMetodo, types, args);
+			
+		}catch (Exception e) {
+			showMessage(e.getMessage());
+		}
+	}
+
+	protected void resetCurrentEntity() {
+		setEntity(null);
 	}
 
 	protected void doDeleteEntity(Object entity) throws InterruptedException {
@@ -201,51 +195,71 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 			showMessage(e.getMessage());
 		}
 
+		// loadData();
 	}
 
 	protected void executeOperation(Operacion operacion) throws InterruptedException {
-		OperationType type = OperacionHelper.getType(operacion);
+		OperationType type = com.obelisco.vista.zk.controls.OperacionHelper.getType(operacion);
 
 		if (type == OperationType.MODIFICAR) {
-
 			if (getCurrentEntity() != null) {
 				doEditEntity(getCurrentEntity());
 			}
-
 		} else if (type == OperationType.INCLUIR) {
-
-			doNewEntity(getCurrentEntity());
-
+			doNewEntity();
 		} else if (type == OperationType.ELIMINAR) {
-
 			if (getCurrentEntity() != null) {
 
 				if (canDeleteEntity()) {
-
 					doDeleteEntity(getCurrentEntity());
-
 				}
-
 			}
-
 		} else if (type == OperationType.IMPRIMIR) {
-			showMessage("Funcionalidad NO Implementada");
-		} else if (type == OperationType.DEFINIDA_USUARIO) {
-
-			if (getCurrentEntity() != null) {
+			doPrint();
+		} else if (type == OperationType.DEFINIDA_USUARIO) {			
+			if (getCurrentEntity() != null) {				
 				doCustomAction(getCurrentEntity(), operacion);
 			}
-
+		}else if(type == OperationType.CSV){
+			doCustomActionOperation(operacion);
 		}
 
 	}
 
-	public boolean isExecuteCustomView() {
-		return executeCustomView;
+	public void doPrint() {
+		// ShowFormat.execute(reportName, getEntityList());
 	}
 
-	public void setExecuteCustomView(boolean executeCustomView) {
-		this.executeCustomView = executeCustomView;
+	public Transaccion getTransaccion() {
+		return transaccion;
+	}
+
+	public void setTransaccion(Transaccion transaccion) {
+		this.transaccion = transaccion;
+	}
+
+	public Object getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Object entity) {
+		this.entity = entity;
+	}
+
+	public Collection getEntityList() {
+		return entityList;
+	}
+
+	public void setEntityList(Collection entityList) {
+		this.entityList = entityList;
+	}
+
+	public String getReportName() {
+		return reportName;
+	}
+
+	public void setReportName(String reportName) {
+		this.reportName = reportName;
 	}
 
 }

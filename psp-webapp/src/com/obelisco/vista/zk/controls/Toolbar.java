@@ -3,21 +3,22 @@ package com.obelisco.vista.zk.controls;
 import java.util.Collection;
 import java.util.List;
 
-import org.zkoss.zk.ui.Components;
+
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zul.Imagemap;
 
-import com.obelisco.modelo.data.seguridad.Operacion;
+import com.pdvsa.psp.model.Operacion;
 
 
 
 public class Toolbar extends org.zkoss.zul.Toolbar implements AfterCompose{
 
-	//@Override
+	private static final long serialVersionUID = -3867908381773042135L;
+
+	@Override
 	public void afterCompose() {
 		// TODO Auto-generated method stub
 		
@@ -56,18 +57,13 @@ public class Toolbar extends org.zkoss.zul.Toolbar implements AfterCompose{
 			
 		}
 		
-	}
-
-	
-	
-	
+	}	
 	
 	private void generarEvento(Operacion operacion) {
 		
 		Events.postEvent("onSelectFunction", this, operacion);
 		
-	}
-	
+	}	
 	
 	private EventListener funcionesListener = new EventListener() {
 

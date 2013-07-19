@@ -1,26 +1,17 @@
 package com.obelisco.vista.zk.components;
 
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Panel;
 
-import com.obelisco.exception.ObeliscoException;
-import com.obelisco.modelo.data.seguridad.Operacion;
 import com.obelisco.vista.zk.controls.ActionType;
-import com.obelisco.vista.zk.controls.Menubar;
-import com.obelisco.vista.zk.controls.OperacionHelper;
-import com.obelisco.vista.zk.controls.Toolbar;
-import com.obelisco.vista.zk.controls.OperationType;
 
 public class GenericDialog extends GenericWindow implements AfterCompose {
 
+	
+	private static final long serialVersionUID = 7915506007298613508L;
 	private Button btnAceptar, btnCancelar;
 
 	@Override

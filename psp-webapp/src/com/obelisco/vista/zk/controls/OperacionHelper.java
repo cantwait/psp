@@ -7,14 +7,13 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.obelisco.modelo.data.seguridad.Archivo;
-import com.obelisco.modelo.data.seguridad.Operacion;
+import com.pdvsa.psp.model.Operacion;
 
 public class OperacionHelper {
 
-	private static ResourceBundle funcionesBundle = ResourceBundle
-			.getBundle("com.obelisco.vista.zk.controls.Funciones");
+	private static ResourceBundle funcionesBundle = ResourceBundle.getBundle("com.obelisco.vista.zk.controls.Funciones");
 
-	public static com.obelisco.modelo.data.seguridad.Operacion getOperacion(
+	public static Operacion getOperacion(
 			OperationType tipo) {
 
 		Operacion o = new Operacion();
@@ -25,7 +24,6 @@ public class OperacionHelper {
 		String srcImagen = funcionesBundle
 				.getString(tipo.toString() + ".icono");
 		a.setNombre(srcImagen);
-		o.setIcono(a);
 
 		if (tipo == OperationType.INCLUIR) {
 			o.setCodigo("I");

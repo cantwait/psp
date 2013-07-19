@@ -1,24 +1,15 @@
 package com.obelisco.vista.zk.command;
 
-import java.util.HashMap;
-import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zkplus.spring.SpringUtil;
-import org.zkoss.zul.Panel;
-import org.zkoss.zul.Window;
 
-import com.obelisco.modelo.data.seguridad.Operacion;
 import com.obelisco.vista.zk.controls.OperacionHelper;
-import com.obelisco.vista.zk.controls.OperacionToolbarbutton;
 import com.obelisco.vista.zk.controls.OperationType;
+import com.pdvsa.psp.model.Operacion;
 
 public class ObjectCommand extends StoredComponentCommand {
 
 	private Object objeto;
-	private Operacion operacion = OperacionHelper
-			.getOperacion(OperationType.BUSCAR);
+	private Operacion operacion = OperacionHelper.getOperacion(OperationType.BUSCAR);
 	private Short numero = 0;
 
 	protected static String BASE_PATH = "/WEB-INF/obelisco/modules/system/objects";
