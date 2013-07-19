@@ -20,25 +20,14 @@ public class Toolbar extends org.zkoss.zul.Toolbar implements AfterCompose{
 
 	@Override
 	public void afterCompose() {
-		// TODO Auto-generated method stub
-		
-
 		ConventionWires.wireVariables(this, this);
-
-		// NO need to register onXxx event listeners
-
-		// auto forward
 		ConventionWires.addForwards(this, this);
-
-		createDefaultFunctions();
-
-		
+		createDefaultFunctions();		
 	}
 	
 
 
 	protected void createDefaultFunctions() {
-		// TODO Auto-generated method stub
 		List<Operacion> operacionesDefecto = OperacionHelper.getOperacionesDefecto();
 		createFunctions(operacionesDefecto);
 		

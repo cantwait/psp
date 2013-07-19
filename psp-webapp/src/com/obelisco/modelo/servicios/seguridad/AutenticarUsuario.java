@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,6 +40,17 @@ public class AutenticarUsuario implements UserDetailsService{
 		User acegiUser = new User(user.getLogin(), user.getPassword(), auths);
 		return acegiUser;
 	}
+	
+	public Usuario getCurrentUser(){
+		Authentication a = SecurityContextHolder.getContext().getAuthentication();
+		User currentUser = (User) a.getPrincipal();
+		Usuario usuarioObelisco = getUserService().getUserByLoginName(currentUser.getUsername());
+		if (usuarioObelisco != null) {
+			return usuarioObelisco;
+		}
+		return null;
+	}
+	
 
 	public IUserService getUserService() {
 		return userService;
