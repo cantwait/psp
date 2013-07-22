@@ -1,0 +1,16 @@
+<?page title="PDVSA - PSP" contentType="text/html;charset=UTF-8"?>
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zk">
+
+	<borderlayout height="100%">
+		<north border="0">
+			<window self="@{insert(barra)}"></window>
+		</north>
+		<center autoscroll="true" self="@{insert(areatrabajo)}">
+		</center>
+		<south self="@{insert(piepagina)}" border="none" height="22px"
+                splittable="false"></south>
+	</borderlayout>
+
+</zk>

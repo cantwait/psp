@@ -1,33 +1,19 @@
 package com.obelisco.vista.zk.components;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zkplus.spring.SpringUtil;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Panel;
-
-import com.obelisco.modelo.data.seguridad.Operacion;
-import com.obelisco.vista.zk.controls.ActionType;
-import com.obelisco.vista.zk.controls.Menubar;
-import com.obelisco.vista.zk.controls.OperacionHelper;
-import com.obelisco.vista.zk.controls.Toolbar;
-import com.obelisco.vista.zk.controls.OperationType;
 
 public class SimpleCatalogDialog extends GenericDialog implements AfterCompose {
+
+	private static final long serialVersionUID = 4449760107034338758L;
 
 	@Override
 	public boolean checkData() throws InterruptedException {

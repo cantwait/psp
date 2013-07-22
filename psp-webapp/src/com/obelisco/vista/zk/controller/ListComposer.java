@@ -1,25 +1,21 @@
 package com.obelisco.vista.zk.controller;
 
-import org.springframework.transaction.interceptor.TransactionProxyFactoryBean;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.util.GenericAutowireComposer;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Listbox;
 
-import com.obelisco.modelo.data.seguridad.Operacion;
 import com.obelisco.vista.zk.command.ShowCommand;
 import com.obelisco.vista.zk.components.GenericList;
-import com.obelisco.vista.zk.controls.Menubar;
-import com.obelisco.vista.zk.controls.OperacionHelper;
-import com.obelisco.vista.zk.controls.Toolbar;
+import com.pdvsa.psp.model.Operacion;
 
-public class ListComposer extends GenericForwardComposer {
+public class ListComposer extends GenericForwardComposer<GenericList> {
 
-	private Menubar mnu;
-	
-	private Toolbar tool;
-	
-	private Listbox lstbox;
+	private static final long serialVersionUID = 5088714388728110730L;
+
+//	private Menubar mnu;
+//	
+//	private Toolbar tool;
+//	
+//	private Listbox lstbox;
 
 	public void onSelectFunction$mnu(Event event) {
 
