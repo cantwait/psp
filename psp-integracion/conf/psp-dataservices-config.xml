@@ -220,6 +220,18 @@
 			<spring-object bean="opcControllerService" />
 		</component>
 	</flow>	
+	
+	<flow name="ManageSecurityService">
+		<description>
+			Servicio Que permite Via CXF-SOAP la administracion del modulo de seguridad: Operaciones y Transacciones
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/security" exchange-pattern="request-response">
+			<cxf:jaxws-service  serviceClass="com.pdvsa.psp.service.ISecurityService"/>
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="securityService"/>
+		</component>
+	</flow>
 <!--	
 	 <flow name="OpcLocalidadDataPooling">
         <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
