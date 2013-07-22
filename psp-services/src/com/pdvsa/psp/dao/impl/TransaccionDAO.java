@@ -1,5 +1,7 @@
 package com.pdvsa.psp.dao.impl;
 
+import java.util.List;
+
 import com.pdvsa.psp.dao.ITransaccionDAO;
 import com.pdvsa.psp.model.Transaccion;
 

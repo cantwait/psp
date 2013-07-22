@@ -13,15 +13,19 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="operacion_usuario", schema="public")
-public class OperacionUsuario implements Serializable{
+@org.hibernate.annotations.Immutable
+@Table(name="transaccion_operacion", schema="public")
+public class TransaccionOperacionUsuario implements Serializable{
 
-	private static final long serialVersionUID = 7676210493427536116L;
+	private static final long serialVersionUID = 1L;
 	@Id
-	@SequenceGenerator(name="OPERACION_USUARIO_ID_GENERATOR", sequenceName="PUBLIC.OPERACION_USUARIO_ID_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="OPERACION_USUARIO_ID_GENERATOR")
+	@SequenceGenerator(name="TRANSACCION_OPERACION_ID_GENERATOR", sequenceName="PUBLIC.TRANSACCION_OPERACION_ID_SEQ", allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TRANSACCION_OPERACION_ID_GENERATOR")
 	@Column(unique=true, nullable=false)
 	private Long id;
+	@ManyToOne
+	@JoinColumn(name="transaccion")
+	private Transaccion transaccion;
 	@ManyToOne
 	@JoinColumn(name="operacion")
 	private Operacion operacion;
@@ -29,9 +33,10 @@ public class OperacionUsuario implements Serializable{
 	@JoinColumn(name="usuario")
 	private Usuario usuario;
 	
-	public OperacionUsuario(){}
+	public TransaccionOperacionUsuario(){}
 	
-	public OperacionUsuario(Operacion operacion, Usuario usuario){
+	public TransaccionOperacionUsuario(Transaccion transaccion, Operacion operacion, Usuario usuario){
+		this.transaccion = transaccion;
 		this.operacion = operacion;
 		this.usuario = usuario;
 	}
@@ -44,6 +49,14 @@ public class OperacionUsuario implements Serializable{
 		this.id = id;
 	}
 
+	public Transaccion getTransaccion() {
+		return transaccion;
+	}
+
+	public void setTransaccion(Transaccion transaccion) {
+		this.transaccion = transaccion;
+	}
+
 	public Operacion getOperacion() {
 		return operacion;
 	}
@@ -52,13 +65,6 @@ public class OperacionUsuario implements Serializable{
 		this.operacion = operacion;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 
 	@Override
 	public int hashCode() {
@@ -76,7 +82,7 @@ public class OperacionUsuario implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OperacionUsuario other = (OperacionUsuario) obj;
+		TransaccionOperacionUsuario other = (TransaccionOperacionUsuario) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -84,6 +90,7 @@ public class OperacionUsuario implements Serializable{
 			return false;
 		return true;
 	}
+	
 	
 	
 

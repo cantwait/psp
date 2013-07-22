@@ -50,7 +50,18 @@ public class Transaccion implements Serializable{
 	private TipoTransaccion tipoTransaccion;
 	@OneToMany(mappedBy="transaccion", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	@XmlTransient
-	private Set<TransaccionOperacion> transaccionOperaciones = new HashSet<TransaccionOperacion>();
+	private Set<TransaccionOperacionUsuario> transaccionOperaciones = new HashSet<TransaccionOperacionUsuario>();
+	private String archivoZul;
+	@ManyToOne
+	@JoinColumn(name="padre")
+	private Transaccion padre;
+	
+	@OneToMany(mappedBy="padre", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@XmlTransient
+	private Set<Transaccion> hijos = new HashSet<Transaccion>();
+	
+	@XmlTransient
+	private Set<Transaccion> aux = new HashSet<Transaccion>();
 	
 	
 //	@Sort(type = SortType.COMPARATOR, comparator = OperacionComparator.class)
@@ -61,7 +72,7 @@ public class Transaccion implements Serializable{
 //	@JoinTable(name = "permisotransaccion", joinColumns = @JoinColumn(name = "transaccion"), inverseJoinColumns = @JoinColumn(name = "grupo"))
 //	private Set<Grupo> grupos = new HashSet<Grupo>();
 	
-	enum TipoTransaccion {
+	public enum TipoTransaccion {
 		ROOT, FOLDER, TRANSACTION
 	}
 	
@@ -120,13 +131,39 @@ public class Transaccion implements Serializable{
 		this.tipoTransaccion = tipoTransaccion;
 	}
 
-	public Set<TransaccionOperacion> getTransaccionOperaciones() {
+	public Set<TransaccionOperacionUsuario> getTransaccionOperaciones() {
 		return transaccionOperaciones;
 	}
 
 	public void setTransaccionOperaciones(
-			Set<TransaccionOperacion> transaccionOperaciones) {
+			Set<TransaccionOperacionUsuario> transaccionOperaciones) {
 		this.transaccionOperaciones = transaccionOperaciones;
+	}
+	
+	
+
+	public String getArchivoZul() {
+		return archivoZul;
+	}
+
+	public void setArchivoZul(String archivoZul) {
+		this.archivoZul = archivoZul;
+	}
+
+	public Transaccion getPadre() {
+		return padre;
+	}
+
+	public void setPadre(Transaccion padre) {
+		this.padre = padre;
+	}
+
+	public Set<Transaccion> getHijos() {
+		return hijos;
+	}
+
+	public void setHijos(Set<Transaccion> hijos) {
+		this.hijos = hijos;
 	}
 
 	@Override
@@ -135,6 +172,16 @@ public class Transaccion implements Serializable{
 		int result = 1;
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
+	}
+	
+	
+
+	public Set<Transaccion> getAux() {
+		return aux;
+	}
+
+	public void setAux(Set<Transaccion> aux) {
+		this.aux = aux;
 	}
 
 	@Override
