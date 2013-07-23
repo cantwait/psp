@@ -38,7 +38,22 @@
           http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
           http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
-          
+    
+    
+    <catch-exception-strategy name="Catch_Exception_Strategy_DEFAUT" enableNotifications="false">
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[
+                if(exception instanceof java.net.ConnectException){
+				println "Mensaje Exception: " + exception.cause.message;
+
+				}else if(exception instanceof org.mule.api.transport.DispatchException){
+	
+					println "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+	
+				}
+				]]></scripting:script>
+        </scripting:transformer>
+    </catch-exception-strategy>
     
     <flow name="OpcLocalidadDataPooling">
         <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
@@ -57,6 +72,7 @@
 		</mule-xml:object-to-xml-transformer>
 		<http:outbound-endpoint responseTimeout="30000" exchange-pattern="request-response" contentType="text/xml" encoding="UTF-8" host="${rest.region.host}" port="${rest.region.port}" path="opc-info/transfer-opc-item" method="POST"	doc:name="HTTP-ED" />
 		<logger level="INFO" message="Se han enviado Exitosamente la cantidad de: #[payload.opcItems.size()] items"/>
+		<exception-strategy ref="Default Catch Exception Strategy" doc:name="Default Catch Exception Strategy"/>
     </flow>
 	
 	 
@@ -74,7 +90,8 @@
 		    <http:outbound-endpoint exchange-pattern="request-response" contentType="text/xml" host="${rest.region.host}" port="${rest.region.port}" path="${rest.item.path}" method="POST"	doc:name="HTTP-ED" />
 		    <object-to-string-transformer doc:name="Object to String" />
 		    <vm:outbound-endpoint exchange-pattern="one-way" path="update-item-endpoint" doc:name="VM" />
-		</foreach>				
+		</foreach>
+		<exception-strategy ref="Default Catch Exception Strategy" doc:name="Default Catch Exception Strategy"/>				
 	</flow>
 	
 	<flow name="updateItemReplication">
@@ -130,6 +147,7 @@
 			<object-to-string-transformer doc:name="Object to String" />
 			<vm:outbound-endpoint exchange-pattern="one-way" path="update-group-endpoint" doc:name="vm-update-group-endpoint"/>
 		 </foreach>	    
+		 <exception-strategy ref="Default Catch Exception Strategy" doc:name="Default Catch Exception Strategy"/>
 	</flow>
 	
 	<flow name="updateGroupReplication">
@@ -199,6 +217,7 @@
 			<object-to-string-transformer doc:name="Object to String" />
 			<vm:outbound-endpoint exchange-pattern="one-way" path="update-servidor-endpoint" doc:name="vm-update-servidor-endpoint"/>
 		 </foreach>	
+		 <exception-strategy ref="Default Catch Exception Strategy" doc:name="Default Catch Exception Strategy"/>
 	</flow>
 	
 	<flow name="updateServidorReplication">
