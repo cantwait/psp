@@ -65,10 +65,9 @@ public class SecurityService implements ISecurityService{
 	}
 
 	@Override
-	public List<TransaccionOperacionUsuario> getOperacionesByUsersTransactions(
-			Transaccion transaccion, Usuario usuario) {
+	public List<Operacion> getOperacionesByUsersTransactions(Integer transaccionId, Long usuarioId) {
 		
-		return transaccionOperacionUsuarioDAO.getOperacionesByTransaccionAndUsuario(transaccion, usuario);
+		return transaccionOperacionUsuarioDAO.getOperacionesByTransaccionAndUsuario(transaccionId, usuarioId);
 	}
 
 	@Override
@@ -87,9 +86,9 @@ public class SecurityService implements ISecurityService{
 	}
 
 	@Override
-	public List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(Transaccion transaccion) {
+	public List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(Long transaccionId) {
 		Search s = new Search();
-		s.addFilterEqual("transaccion", transaccion);
+		s.addFilterEqual("transaccion.codigo", transaccionId);
 		return transaccionOperacionUsuarioDAO.search(s);
 	}
 
@@ -98,22 +97,24 @@ public class SecurityService implements ISecurityService{
 	@WebResult(name = "raiz")
 	public Transaccion getRootTransaction() {
 		Search s = new Search();
-		s.addFilterEqual("tipoTransaccion", TipoTransaccion.ROOT);
-		
-		Transaccion raiz = transaccionDAO.searchUnique(s);
-		refreshTree(raiz);
+		s.addFilterEqual("tipoTransaccion", TipoTransaccion.ROOT);		
+		Transaccion raiz = transaccionDAO.searchUnique(s);		
 		return raiz;
-	}
+	}	
 	
-	private void refreshTree(Transaccion t){
+
+	@Override	
+	public List<Transaccion> getTransactionLikeNombre(String nombre) {
 		
-		if(t != null){
-			List<Transaccion> hijos = getChildremByFather(t);
-			for (Transaccion transaccion : hijos) {
-				refreshTree(t);
-				t.getAux().add(transaccion);
-			}
-		}
+		Search s = new Search();
+		s.addFilterILike("nombre", nombre);		
+		return transaccionDAO.search(s);
+	}
+
+	@Override	
+	public List<Operacion> getAllOperaciones() {
+		
+		return operacionDAO.findAll();
 	}
 
 }

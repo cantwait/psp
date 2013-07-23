@@ -23,7 +23,6 @@ public class Operacion implements Serializable{
 	private String nombre;
 	private Integer orden = new Integer(0);
 	@OneToMany(mappedBy="operacion", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	@XmlTransient
 	private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario = new HashSet<TransaccionOperacionUsuario>();
 	
 	public Operacion(){}
@@ -55,8 +54,17 @@ public class Operacion implements Serializable{
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}	
+
+	@XmlTransient
+	public Set<TransaccionOperacionUsuario> getTransaccionOperacionUsuario() {
+		return transaccionOperacionUsuario;
 	}
-	
+
+	public void setTransaccionOperacionUsuario(
+			Set<TransaccionOperacionUsuario> transaccionOperacionUsuario) {
+		this.transaccionOperacionUsuario = transaccionOperacionUsuario;
+	}
 
 	@Override
 	public int hashCode() {

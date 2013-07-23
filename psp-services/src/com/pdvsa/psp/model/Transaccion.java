@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.Sort;
@@ -49,7 +50,6 @@ public class Transaccion implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipoTransaccion;
 	@OneToMany(mappedBy="transaccion", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
-	@XmlTransient
 	private Set<TransaccionOperacionUsuario> transaccionOperaciones = new HashSet<TransaccionOperacionUsuario>();
 	private String archivoZul;
 	@ManyToOne
@@ -57,10 +57,9 @@ public class Transaccion implements Serializable{
 	private Transaccion padre;
 	
 	@OneToMany(mappedBy="padre", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@XmlTransient
 	private Set<Transaccion> hijos = new HashSet<Transaccion>();
 	
-	@XmlTransient
+	@Transient
 	private Set<Transaccion> aux = new HashSet<Transaccion>();
 	
 	
@@ -131,6 +130,7 @@ public class Transaccion implements Serializable{
 		this.tipoTransaccion = tipoTransaccion;
 	}
 
+	@XmlTransient
 	public Set<TransaccionOperacionUsuario> getTransaccionOperaciones() {
 		return transaccionOperaciones;
 	}
@@ -158,6 +158,7 @@ public class Transaccion implements Serializable{
 		this.padre = padre;
 	}
 
+	@XmlTransient
 	public Set<Transaccion> getHijos() {
 		return hijos;
 	}

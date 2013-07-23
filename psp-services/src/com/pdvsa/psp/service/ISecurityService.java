@@ -3,6 +3,7 @@ package com.pdvsa.psp.service;
 import java.util.List;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
@@ -16,31 +17,37 @@ public interface ISecurityService {
 	
 	@WebMethod
 	@WebResult(name = "transaccion")
-	Transaccion saveTransaccion(Transaccion t);
+	Transaccion saveTransaccion(@WebParam(name="transaccion")Transaccion t);
 	@WebMethod
 	@WebResult(name="transaccion")
-	Transaccion saveTransaccionOperacionUsuario(Transaccion t, List<TransaccionOperacionUsuario> operacionUsuarios);
+	Transaccion saveTransaccionOperacionUsuario(@WebParam(name="transaccion")Transaccion t, @WebParam(name="operacionusuarios")List<TransaccionOperacionUsuario> operacionUsuarios);
 	@WebMethod
 	@WebResult(name="resultado")
-	Boolean removeTransaccion(Transaccion t);
+	Boolean removeTransaccion(@WebParam(name="transaccion")Transaccion t);
 	
 	@WebMethod
 	@WebResult(name="operacion")
-	Operacion saveOperacion(Operacion o);
+	Operacion saveOperacion(@WebParam(name="operacion")Operacion o);
 	@WebMethod
 	@WebResult(name="resultado")
-	Boolean removeOperacion(Operacion o);
+	Boolean removeOperacion(@WebParam(name="operacion")Operacion o);
 	@WebMethod
 	@WebResult(name="operaciones")
-	List<TransaccionOperacionUsuario> getOperacionesByUsersTransactions(Transaccion transaccion, Usuario usuario);
+	List<Operacion> getOperacionesByUsersTransactions(@WebParam(name="transaccionId")Integer transaccionId, @WebParam(name="usuarioId")Long usuarioId);
 	@WebMethod
 	@WebResult(name="transaccion-operacion-usuario")
-	List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(Transaccion transaccion);
+	List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(@WebParam(name="transaccionId")Long transaccionId);
 	@WebMethod
 	@WebResult(name="transacciones")
 	List<Transaccion> getChildremByFather(Transaccion father);
 	@WebMethod
 	@WebResult(name="raiz")
 	Transaccion getRootTransaction();
+	@WebMethod
+	@WebResult(name="transacciones")
+	List<Transaccion> getTransactionLikeNombre(@WebParam(name="nombre")String nombre);
+	@WebMethod
+	@WebResult(name="operaciones")
+	List<Operacion> getAllOperaciones();
 
 }

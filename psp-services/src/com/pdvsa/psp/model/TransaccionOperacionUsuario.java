@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @org.hibernate.annotations.Immutable
-@Table(name="transaccion_operacion", schema="public")
+@Table(name="transaccion_operacion_usuario", schema="public")
 public class TransaccionOperacionUsuario implements Serializable{
 
 	private static final long serialVersionUID = 1L;

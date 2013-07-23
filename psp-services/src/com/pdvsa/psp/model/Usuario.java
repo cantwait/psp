@@ -41,7 +41,6 @@ public class Usuario implements Serializable, BizEntity {
 	private String numeroTelefonico;
 	private Integer version = 0;
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
-	@XmlTransient
 	private Set<UsuarioRol> usuarioRoles = new HashSet<UsuarioRol>(0);
 	@OneToMany(mappedBy="usuario", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@XmlTransient
@@ -150,16 +149,26 @@ public class Usuario implements Serializable, BizEntity {
 		this.version = version;
 	}
 
-	
+
+	@XmlTransient
 	public Set<UsuarioRol> getUsuarioRoles() {
 		return this.usuarioRoles;
 	}
 
 	public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
 		this.usuarioRoles = usuarioRoles;
+	}	
+
+	@XmlTransient	
+	public Set<TransaccionOperacionUsuario> getTransaccionOperacionUsuario() {
+		return transaccionOperacionUsuario;
 	}
-	
-		
+
+	public void setTransaccionOperacionUsuario(
+			Set<TransaccionOperacionUsuario> transaccionOperacionUsuario) {
+		this.transaccionOperacionUsuario = transaccionOperacionUsuario;
+	}
+
 	@Transient
 	public boolean isNew() {
 		return (getId() == Long.MIN_VALUE);
