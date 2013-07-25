@@ -1,5 +1,10 @@
 package com.obelisco.vista.zk.components;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -9,12 +14,16 @@ import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tree;
 
+import com.obelisco.modelo.servicios.seguridad.AutenticarUsuario;
 import com.obelisco.vista.zk.command.ObjectCommand;
 import com.obelisco.vista.zk.controls.Menubar;
 import com.obelisco.vista.zk.controls.OperacionHelper;
 import com.obelisco.vista.zk.controls.OperationType;
 import com.obelisco.vista.zk.controls.Toolbar;
 import com.pdvsa.psp.model.Operacion;
+import com.pdvsa.psp.model.Transaccion;
+import com.pdvsa.psp.model.Usuario;
+import com.pdvsa.psp.service.ISecurityService;
 
 public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 
@@ -24,6 +33,9 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 	protected Menubar mnu;
 	protected Component workArea;
 	protected boolean executeCustomView = false;
+	private Transaccion transaccion;
+	private ISecurityService securityService;
+	private AutenticarUsuario autenticarUsuario;
 
 	public GenericTreeWindow() {
 		super();
@@ -33,7 +45,31 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 	protected EventListener createListener = new EventListener() {
 
 		public void onEvent(Event event) throws Exception {
+			
+			if (transaccion != null) {
+				List<Operacion> operaciones = new ArrayList<Operacion>();
+				Usuario currentUser = autenticarUsuario.getCurrentUser();
+				if(currentUser != null){
+					List<Operacion> ops = securityService.getOperacionesByUsersTransactions(transaccion.getCodigo(), currentUser.getId());
+					if(ops != null && ops.size() > 0){
+						operaciones.addAll(ops);
+					}
+				}
+				
+				Collections.sort(operaciones, new Comparator<Operacion>(){
 
+					@Override
+					public int compare(Operacion o1, Operacion o2) {
+						int i1 = ((Operacion) o1).getOrden().intValue();
+						int i2 = ((Operacion) o2).getOrden().intValue();
+
+						return Math.abs(i1) - Math.abs(i2);
+					}
+					
+				});
+				tool.createFunctions(operaciones);
+			}
+			
 		}
 
 	};
@@ -49,10 +85,12 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 		try {
 
 			if (!executeCustomView) {
+				
 				ObjectCommand command = new ObjectCommand();
 				command.setObjeto(object);
 				command.execute(workArea);
 			} else {
+				
 				doShowEntity(object);
 			}
 		} catch (Exception e) {
@@ -85,20 +123,7 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 
 	}
 
-	public void onSelectFunction$mnu(Event event) throws InterruptedException {
 
-		Operacion operacion = null;
-
-		if (event instanceof ForwardEvent) {
-			ForwardEvent forwardEvent = (ForwardEvent) event;
-
-			operacion = (Operacion) forwardEvent.getOrigin().getData();
-
-		}
-
-		executeOperation(operacion);
-
-	}
 
 	protected Object getCurrentEntity() {
 		Object selected = null;
@@ -247,5 +272,31 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 	public void setExecuteCustomView(boolean executeCustomView) {
 		this.executeCustomView = executeCustomView;
 	}
+
+	public Transaccion getTransaccion() {
+		return transaccion;
+	}
+
+	public void setTransaccion(Transaccion transaccion) {
+		this.transaccion = transaccion;
+	}
+
+	public ISecurityService getSecurityService() {
+		return securityService;
+	}
+
+	public void setSecurityService(ISecurityService securityService) {
+		this.securityService = securityService;
+	}
+
+	public AutenticarUsuario getAutenticarUsuario() {
+		return autenticarUsuario;
+	}
+
+	public void setAutenticarUsuario(AutenticarUsuario autenticarUsuario) {
+		this.autenticarUsuario = autenticarUsuario;
+	}
+	
+	
 
 }

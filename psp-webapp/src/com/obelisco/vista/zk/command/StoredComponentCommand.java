@@ -2,6 +2,7 @@ package com.obelisco.vista.zk.command;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -43,9 +44,11 @@ public class StoredComponentCommand extends ShowCommand {
 		if (isDialogo()) {
 
 			super.execute();
-
+			for (Entry e : window.getAttributes().entrySet()) {
+				System.out.println(e.getKey() + " = " + e.getValue());
+			}
 			action = (ActionType) window.getAttribute("MODAL_VALUE");
-
+			System.out.println("Action: " +action);
 			if (action == null) {
 				action = ActionType.NINGUNA;
 			}

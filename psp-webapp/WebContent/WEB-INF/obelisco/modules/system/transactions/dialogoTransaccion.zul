@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgTransaccion"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureDialog.zs" />
+
+	<zscript> 
+	
+		<![CDATA[
+
+					transaccion = arg.get("aEntity");
+					
+					operaciones = new ArrayList();
+					
+					operacionTransaccionUsuarios = new ArrayList();
+					
+					if(transaccion != null && transaccion.codigo > 0){
+						operaciones = securityService.getOperacionesByTransaccionId(transaccion.codigo);
+						if(operaciones.size() > 0){
+							for(o : operaciones){
+								o.usuarios.addAll(securityService.getUsuariosByOperacionAndTransaccion(transaccion.codigo, o.codigo));
+							}
+						}
+					}
+					
+					for(o1 : operaciones){
+						System.out.println("Nombre: " + o1.nombre + " Cantidad usuarios: " + o1.usuarios.size());
+					}
+		
+	]]>						
+		
+		
+
+	</zscript>
+
+	<window id="dlgTransaccion" title="Transaccion" maximizable="true"
+		border="normal" width="700px" height="450px"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/mystyle.css" dynamic="true" />
+		<div height="85%">
+			<textbox visible="false" />
+			<tabbox orient="horizontal" height="100%">
+				<tabs width="120px">
+					<tab label="Datos Generales" />
+					<tab label="Operaciones" />
+					<tab label="Seguridad" visible="false"/>
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<grid>
+							<columns>
+								<column width="30%" align="left" />
+								<column width="70%" align="left"/>
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<textbox id="txtNombre" 
+										readonly="${executeReadOnly}" maxlength="100"
+										value="@{transaccion.nombre}" />
+								</row>
+								<row>
+									<label value="Descripcion" />
+									<textbox id="txtDescripcion"
+										 maxlength="100" value="@{transaccion.descripcion}" />
+								</row>
+
+								<row>
+									<label value="Tipo de Transaccion" />
+									<listbox id="cmbTipoTransaccion"
+										rows="1" model="@{tiposTransaccion}" mold="select"
+										selectedItem="@{transaccion.tipotransaccion}"
+										disabled="${executeEditMode or executeReadOnly}">
+										<listitem
+											self="@{each=tipoTransaccionActual}"
+											label="@{tipoTransaccionActual.nombre}" />
+									</listbox>
+								</row>
+
+								<row>
+									<label value="Tipo de Despliegue" />
+									<listbox id="cmbTipoDespliegue"
+										rows="1" model="@{tiposDespliegue}" mold="select"
+										selectedItem="@{transaccion.tipodespliegue}">
+										<listitem
+											self="@{each=tipoDespliegueActual}"
+											label="@{tipoDespliegueActual.nombre}" />
+									</listbox>
+								</row>
+								
+								<row>
+									<label value="Tipo Transaccion" />
+									<textbox id="txtAcceso"  readonly="true"
+										maxlength="100" value="@{transaccion.tipoTransaccion}" />
+								</row>
+								
+							</rows>
+						</grid>
+					</tabpanel>
+					<tabpanel>
+						
+					</tabpanel>					
+				</tabpanels>
+			</tabbox>
+		</div>
+		<div align="right" height="15%" style="background:#c5e6ef">
+			<button id="btnAceptar" label="Aceptar" mold="trendy"
+				image="/images/icons/disk_blue.png" orient="vertical">
+			</button>
+			<button id="btnCancelar" label="Cancelar" mold="trendy"
+				image="/images/icons/delete.png" orient="vertical">
+			</button>
+		</div>
+
+		<zscript>
+
+		
+
+		
+		Boolean doValidate() {
+		
+
+			
+			boolean esValido = true;
+			
+			Boolean valido = new Boolean(esValido);
+			return valido;
+		}		
+		
+		void doConfirmData(){
+//			servicioAdministrarSeguridad.guardarTransaccion(transaccion);
+		}
+		
+		</zscript>
+
+
+	</window>
+</zk>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"  arg0="./viewTransaccion" ?>
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+
+
+	<zscript>
+	<![CDATA[
+	objeto = arg.get("aObjeto");
+]]>
+	</zscript>
+
+
+	<panel id="viewTransaccion" height="100%" style="margin-bottom:10px"
+		title="Transaccion" border="normal" maximizable="false"
+		collapsible="false" closable="false" framable="false">
+		<panelchildren>
+			<style src="/css/mystyle.css" dynamic="true" />
+			<textbox visible="false" />
+			<tabbox orient="vertical" height="100%" tabscroll="true">
+				<tabs width="120px">
+					<tab label="Datos Generales" />
+					<tab label="Operaciones" />
+					<tab label="Seguridad" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<grid>
+							<columns>
+								<column width="30%" align="right" />
+								<column width="70%" />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<label value="@{objeto.nombre}" />
+								</row>
+								<row>
+									<label value="Descripcion" />
+									<label
+										value="@{objeto.descripcion}" />
+								</row>
+								<row>
+									<label value="Tipo de Transaccion" />
+									<label
+										value="@{objeto.tipoTransaccion}" />
+								</row>
+								
+								
+								<row>
+									<label value="Clase" />
+									<label value="@{objeto.clase}" />
+								</row>
+								
+								
+							</rows>
+						</grid>
+					</tabpanel>
+					
+				</tabpanels>
+			</tabbox>
+		</panelchildren>
+	</panel>
+
+	<zscript>
+	<![CDATA[
+	
+]]>
+</zscript>
+
+</zk>

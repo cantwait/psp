@@ -5,8 +5,10 @@
 
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native"
 	xmlns:h="http://www.w3.org/1999/xhtml">
-	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
-
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />	
+	<zscript src="/WEB-INF/obelisco/commons/configureDialog.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
+	
 	<zscript>
 	<![CDATA[
 	{
@@ -88,10 +90,10 @@
 				<div height="100%" align="right"
 					style="background:#c5e6ef">
 
-					<button id="btnAceptar" label="Aceptar"
+					<button id="btnAceptar" label="Aceptar" mold="trendy"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>
-					<button id="btnCancelar" label="Cancelar"
+					<button id="btnCancelar" label="Cancelar" mold="trendy"
 						image="/images/icons/delete.png" orient="vertical">
 					</button>
 				</div>

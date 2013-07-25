@@ -1,0 +1,20 @@
+<?page title="PDVSA - PSP" contentType="text/html;charset=UTF-8"?>
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zk">
+
+	<borderlayout height="100%" width="100%">
+		<north border="0" height="98%">
+			<borderlayout>
+				<west title="Arbol Transacciones" self="@{insert(barra)}" hflex="1" vflex="1" width="20%"></west>
+				<east title="Area de Trabajo" hflex="1" vflex="1" width="80%" self="@{insert(areatrabajo)}">
+					
+				</east>
+			</borderlayout>
+		</north>		
+		<south self="@{insert(piepagina)}" border="none" height="22px"
+			splittable="false">
+		</south>
+	</borderlayout>
+
+</zk>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./catOperacionesDisponibles"?>
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript>
+		Collection os = (Collection) arg.get("currentCollection");
+		
+		List operaciones = new ArrayList();
+		
+		for (Iterator iterator = os.iterator(); iterator.hasNext();) {
+				Operacion o = (Operacion) iterator.next();			
+				operaciones.add(o);
+		}
+		
+		
+					
+		List listaCatalogo = servicioAdministrarSeguridad.buscarOperacionesDisponibles(operaciones);
+	</zscript>
+
+	<window id="catOperacionesDisponibles"
+		title="Operaciones Disponibles" selectedEntity="@{entidadCatalogo}"
+		maximizable="true" border="normal" width="70%" height="60%"
+		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<div height="85%">
+			<borderlayout height="100%">
+				<center autoscroll="true" border="0">
+					<div style="padding:5px;overflow:hidden;">
+						<listbox id="lstbox" model="@{listaCatalogo}"
+							selectedItem="@{entidadCatalogo}" rows="10" mold="paging"
+							pageSize="10" multiple="true" checkmark="true">
+							<listhead sizable="true">
+								<listheader width="100px"
+									label="Codigo" />
+								<listheader label="Nombre" />
+							</listhead>
+							<listitem sclass="row-border item"
+								self="@{each=actualCatalogo}">
+								<listcell
+									label="@{actualCatalogo.codigo}" />
+								<listcell
+									label="@{actualCatalogo.nombre}" />
+							</listitem>
+						</listbox>
+					</div>
+				</center>
+			</borderlayout>
+		</div>
+		<div align="right" height="15%" style="background:#c5e6ef">
+			<button id="btnAceptar" label="Aceptar"
+				image="/images/icons/disk_blue.png" orient="vertical">
+			</button>
+			<button id="btnCancelar" label="Cancelar"
+				image="/images/icons/delete.png" orient="vertical">
+			</button>
+		</div>
+	</window>
+
+</zk>

@@ -1,0 +1,2 @@
+transaccion = arg.get("transaccion");
+

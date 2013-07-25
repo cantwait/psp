@@ -13,8 +13,7 @@ public class OperacionHelper {
 
 	private static ResourceBundle funcionesBundle = ResourceBundle.getBundle("com.obelisco.vista.zk.controls.Funciones");
 
-	public static Operacion getOperacion(
-			OperationType tipo) {
+	public static Operacion getOperacion(OperationType tipo) {
 
 		Operacion o = new Operacion();
 		String texto = funcionesBundle.getString(tipo.toString() + ".texto");

@@ -15,7 +15,6 @@ public class GenericWindow extends Window {
 
 		Object result = null;
 		Function function = getPage().getZScriptFunction(this, functionName, types);
-		
 		if (function != null) {
 
 			try {

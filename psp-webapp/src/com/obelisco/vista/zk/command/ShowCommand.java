@@ -25,8 +25,7 @@ public class ShowCommand implements IObeliscoCommand {
 	protected Window getWindow() {
 		String winFile = "/WEB-INF/templates/window.zul";
 
-		Window window = (Window) Executions.createComponents(winFile, null,
-				parametros);
+		Window window = (Window) Executions.createComponents(winFile, null,	parametros);
 
 		return window;
 	}
@@ -50,7 +49,7 @@ public class ShowCommand implements IObeliscoCommand {
 		return exist;
 	}
 
-	// @Override
+	 @Override
 	public Object execute() throws Exception {
 		Component component = null;
 		
@@ -62,13 +61,11 @@ public class ShowCommand implements IObeliscoCommand {
 					"zul", null, parametros);
 
 		} else {
-			// System.out.println(getArchivoZul());
 
 			String executeFile = getArchivoZul();
 
 			if (checkExist(executeFile)) {
-				component = Executions.createComponents(executeFile, null,
-						parametros);
+				component = Executions.createComponents(executeFile, null, parametros);
 			}
 
 		}
@@ -89,11 +86,10 @@ public class ShowCommand implements IObeliscoCommand {
 		return null;
 	}
 
-	// @Override
+	@Override
 	public Object execute(Component parent) throws Exception {
 
 		if (parent != null) {
-
 			if (parent instanceof Panel) {
 				Panel panel = (Panel) parent;
 				panel.getPanelchildren().getChildren().clear();
@@ -102,18 +98,16 @@ public class ShowCommand implements IObeliscoCommand {
 
 				if (getCodigoZul() != null) {
 
-					component = Executions.createComponentsDirectly(
-							getCodigoZul(), "zul", panel.getPanelchildren(),
-							parametros);
+					component = Executions.createComponentsDirectly(getCodigoZul(), "zul", panel.getPanelchildren(), parametros);
 
 				} else {
 
 					String executeFile = getArchivoZul();
 
 					if (checkExist(executeFile)) {
-						component = Executions.createComponents(
-								getArchivoZul(), panel.getPanelchildren(),
-								parametros);
+						
+						
+						component = Executions.createComponents(getArchivoZul(), panel.getPanelchildren(),	parametros);
 
 					}
 
@@ -125,23 +119,18 @@ public class ShowCommand implements IObeliscoCommand {
 				}
 
 			} else {
-
 				parent.getChildren().clear();
 
 				Component component = null;
 
 				if (getCodigoZul() != null) {
-
-					component = Executions.createComponentsDirectly(
-							getCodigoZul(), "zul", parent, parametros);
+					component = Executions.createComponentsDirectly(getCodigoZul(), "zul", parent, parametros);
 
 				} else {
-
+					
 					String executeFile = getArchivoZul();
-
 					if (checkExist(executeFile)) {
-						component = Executions.createComponents(
-								getArchivoZul(), parent, parametros);
+						component = Executions.createComponents(getArchivoZul(), parent, parametros);
 					}
 
 				}

@@ -5,6 +5,7 @@ package com.obelisco.vista.zk.command;
 import com.obelisco.vista.zk.controls.OperacionHelper;
 import com.obelisco.vista.zk.controls.OperationType;
 import com.pdvsa.psp.model.Operacion;
+import com.pdvsa.psp.model.Transaccion;
 
 public class ObjectCommand extends StoredComponentCommand {
 
@@ -64,20 +65,20 @@ public class ObjectCommand extends StoredComponentCommand {
 			String objectZulFile = BASE_PATH + "/viewNothing.zul";
 
 			if (objeto != null) {
+				
 				String className = objeto.getClass().getSimpleName();
-
 				String numeroZulFile = "";
 				if (numero > 0) {
+					
 					numeroZulFile = numero.toString();
 				}
 
-				if (OperacionHelper.getType(getOperacion()).equals(
-						OperationType.INCLUIR)
-						|| OperacionHelper.getType(getOperacion()).equals(
-								OperationType.MODIFICAR)) {
+				if (OperacionHelper.getType(getOperacion()).equals(OperationType.INCLUIR) || OperacionHelper.getType(getOperacion()).equals(OperationType.MODIFICAR)) {
 
 					objectZulFile = BASE_PATH + "/edit" + "/edit" + className
 							+ numeroZulFile + ".zul";
+					
+					
 
 				} else if (OperacionHelper.getType(getOperacion()).equals(
 						OperationType.BUSCAR)) {

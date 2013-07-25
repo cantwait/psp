@@ -24,13 +24,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<log-base>org.zkoss</log-base>
 	</log>
 	-->
-
+	<library-property>
+		<name>org.zkoss.theme.preferred</name>
+		<value>silvertail</value>
+	</library-property>
 	<!-- Turn on if you want to use language addons.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
 	-->
-
+	
 	<!-- Optional -->
 	<!-- Map extensions to the xml language.
 		 By default, xml is mapped to xml -->

@@ -22,7 +22,7 @@ public class Toolbar extends org.zkoss.zul.Toolbar implements AfterCompose{
 	public void afterCompose() {
 		ConventionWires.wireVariables(this, this);
 		ConventionWires.addForwards(this, this);
-		createDefaultFunctions();		
+//		createDefaultFunctions();		
 	}
 	
 
@@ -35,11 +35,9 @@ public class Toolbar extends org.zkoss.zul.Toolbar implements AfterCompose{
 	
 	
 	public void createFunctions( Collection<Operacion> funciones) {
-		
 		this.getChildren().clear();
 		
 		for (Operacion operacion : funciones) {
-			
 			FunctionImagemap item = new FunctionImagemap(operacion);
 			item.setParent(this);
 			item.addEventListener("onClick", funcionesListener);
@@ -59,15 +57,12 @@ public class Toolbar extends org.zkoss.zul.Toolbar implements AfterCompose{
 
 
 			public void onEvent(Event event) throws Exception {
-				// TODO Auto-generated method stub
-
 				Object t = event.getTarget();
 
 				if (t instanceof FunctionImagemap) {
 					FunctionImagemap m = (FunctionImagemap) t;
 
 					Operacion operacion = m.getOperacion();
-
 					generarEvento(operacion);
 				} 
 				

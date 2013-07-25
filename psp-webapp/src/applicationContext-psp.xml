@@ -128,6 +128,14 @@ http://www.springframework.org/schema/security
 			value="http://${ws-address}:${ws-port}/psp/services/opcinfo/ManageOpcInfoRegisterService" />
 	</bean>
 	
+	<bean id="securityService" class="com.pdvsa.psp.service.ISecurityService"
+		factory-bean="securityFactory" factory-method="create" />
+
+	<bean id="securityFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass" value="com.pdvsa.psp.service.ISecurityService" />
+		<property name="address" value="http://${ws-address}:${ws-port}/psp/services/security/ManageSecurityService" />
+	</bean>
+	
 	<bean id="importarArchivo" class="com.obelisco.herramientas.ImportarArchivo">
 		<property name="rutaFormato" value="${reporteOpcModbus}"/>
 	</bean>

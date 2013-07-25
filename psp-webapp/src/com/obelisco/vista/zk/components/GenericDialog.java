@@ -80,7 +80,7 @@ public class GenericDialog extends GenericWindow implements AfterCompose {
 
 			if (checkData()) {
 				setReturnData();
-				confirmData();				
+				confirmData();
 				setAttribute("MODAL_VALUE", ActionType.ACEPTAR);
 				detach();
 			} else {

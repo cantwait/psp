@@ -17,14 +17,12 @@ public class TargetWindow extends Window implements AfterCompose {
 		 
 		public void onEvent(Event event) {
 			try {
-
 				Object o = event;
 				if (o instanceof Event) {
 					Event e = (Event) o;
 
 					Object data = e.getData();
 					if (data instanceof IObeliscoCommand) {
-
 						IObeliscoCommand command = (IObeliscoCommand) data;
 						
 						if (!isVisible())
@@ -73,11 +71,10 @@ public class TargetWindow extends Window implements AfterCompose {
 	};
 
 	public void afterCompose() {
- 
 		ConventionWires.wireVariables(this, this);
 		ConventionWires.addForwards(this, this);
 		EventQueues.lookup("seguridad").subscribe(listenerSeguridad);
-		EventQueues.lookup("contenido").subscribe(listenerContenido);
+//		EventQueues.lookup("contenido").subscribe(listenerContenido);
 
 	}
 

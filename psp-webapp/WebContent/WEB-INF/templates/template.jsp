@@ -14,73 +14,39 @@
 </head>
 
 <body>
-<center>
-<table style="height: 100%;" width="100%" border="0" cellpadding="0"
-	cellspacing="0">
-	<tbody>
-		<tr>
-			<td>
-			<table border="0" cellpadding="0" cellspacing="0" width="100%">
-				<tbody>
-					<tr>
-						<td valign="top">
-						<table border="0" cellpadding="0" cellspacing="0" width="100%">
-							<tbody>
-								<tr>
-									<td valign="top" width="190" height="56"><a
-										href="http://www.pdvsa.com/"><img
-										src="images/imagenes_02.gif" border="0" /></a></td>
-								</tr>
-								<tr>
-									<td height="12"><img src="images/spacer.gif" alt=""
-										height="10" width="10"></td>
-								</tr>
+	<table style="height: 100%;" width="100%" border="0">
+		<tr style="height: 10%">
+			<td valign="top">
+				<table border="0" width="100%">
+					<tbody>
+						<tr>
+							<td><a href="http://www.pdvsa.com/"> <img
+									src="images/imagenes_02.gif" />
+							</a></td>
+						</tr>
+						<tr>
+							<td><img src="images/spacer.gif" alt="" height="2" /></td>
+						</tr>
 
-								<tr>
-									<td style="background-color: red;" height="2"><img
-										src="images/spacer.gif" alt="" height="2" width="10"></td>
-								</tr>
+						<tr>
+							<td style="background-color: red;" height="5"><img
+								src="images/spacer.gif" alt="" height="2" /></td>
+						</tr>
 
-							</tbody>
-						</table>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+					</tbody>
+				</table>
 			</td>
 		</tr>
-		<tr>
-			<td>
-			<table style="height: 100%;" width="100%" border="0" cellpadding="0"
-				cellspacing="0">
-				<tbody>
-					<tr>
-						<td valign="top"></td>
-					</tr>
-					<tr>
-						<td style="height: 100%;" valign="top"><decorator:body /></td>
-					</tr>
-				</tbody>
-			</table>
+		<tr style="height: 80%">
+			<td><decorator:body /></td>
+		</tr>
+		<tr style="height: 5%">
+			<td style="background-color: rgb(200, 0, 0);" 
+							align="center"><span style="color: white">
+				PDVSA,
+								Comercio y Suministro</span> </a> </span>
 			</td>
 		</tr>
-		<tr>
-			<td style="height: 36px;"><!-- Bottom b -->
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<tbody>
-					<tr>
-						<td style="background-color: red;" height="2"><img
-							src="images/spacer.gif" alt="" height="2" width="10"></td>
-					</tr>
-					<tr>
-						<td style="background-color: rgb(200, 0, 0);" height="34px"
-							align="center"><span style="color: white">PDVSA, Comercio y Suministro</span> </a> </span></td>
-					</tr>
-				</tbody>
-			</table>
-			</td>
-		</tr>
-	</tbody>
-</table>
+	</table>
 </body>
 </html>

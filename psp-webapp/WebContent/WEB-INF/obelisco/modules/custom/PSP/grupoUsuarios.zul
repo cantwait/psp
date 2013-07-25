@@ -7,137 +7,94 @@
 	xmlns:h="http://www.w3.org/1999/xhtml">
 
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
-	<!--	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />-->
+	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
 
 	<zscript>
 		<![CDATA[
-	usuarios = userService.getAllUsers();
+		         
+		         usuarioAEditar = null;
+		         usuarios = new ArrayList();
+				 usuarios = userService.getAllUsers();
 ]]>
 	</zscript>
  
 	<window id="lstUsers" title="Usuarios" closable="true" height="100%"
-		width="100%" border="normal"
-		use="com.obelisco.vista.zk.components.WindowCRUDList">
+		width="100%" border="normal" entity="@{usuarioAEditar}" entityList="@{usuarios}"
+		transaccion="@{transaccion}"
+		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
 	
-		<panel border="normal" width="100%">
-			<toolbar mold="panel" style="background:#c5e6ef;">
-				<button label="Agregar Usuario" mold="os"
-					image="/images/icons/16x16/add2.png"
-					style="background-color:#fff000;border: 1px solid;	font-size: 10px;">
-					<attribute name="onClick">
-											<![CDATA[
-	{
-
-		command = new ObjectCommand();
-
-		user = new com.pdvsa.psp.model.Usuario();
-		command.objeto = user;
-		command.dialogo = true;
-		command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
-
-		if (command.execute(null) == ActionType.ACEPTAR) {
-			//Se refresca el Arbol
-			usuarios = userService.getAllUsers();
-			binder.loadAll();
-		}
-
-	}
-]]>
-											</attribute>
-				</button>
+		<panel  width="100%" height="100%">
+			<toolbar id="tool"  mold="panel" 
+				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
+			
+			
 			<panelchildren>
+			
+				<listbox id="lstbox" rows="5" model="@{usuarios}" height="600px" mold="paging"
+					selectedItem="@{usuarioAEditar}">
+					<listhead sizable="true">
+						<listheader width="30%" label="Login" />						
+						<listheader width="50%" label="Nombre" />
+						<listheader label="Activo" width="20%"/>
+					</listhead>
+					<listitem sclass="row-border item"
+						self="@{each=e}">
+						<listcell label="@{e.login}" />
+						<listcell label="@{e.nombre}"/>
+						<listcell  >
+							<checkbox checked="@{e.activo}" disabled="true" />
+						</listcell>					
+					</listitem>
+				</listbox>
 
 
-				<grid preloadSize="10" id="lstbox" model="@{usuarios}"
-					mold="paging" pageSize="10">
-					<columns sizable="true">
-						<column label="Login" width="250px" />
-						<column label="Nombre" width="450px"  />
-						<column label="Activo" align="center" width="50px" />
-						<column label="Operacion" align="center" />
-					</columns>
-					<rows>
-						<row self="@{each=usu}" value="@{usu}">
-
-							<label value="@{usu.login}" />
-
-							<label value="@{usu.nombre}" />
-
-							<hbox>
-								<checkbox checked="@{usu.activo}"
-									disabled="true" />
-							</hbox>
-
-							<hbox spacing="5px">
-
-								<toolbarbutton
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									objeto="@{usu}" tooltiptext="Editar ..."
-									image="/images/icons/16x16/edit.png">
-									<attribute name="onClick">
-											<![CDATA[
-	{
-		c = event.target;
-		user2 = (com.pdvsa.psp.model.Usuario) c.objeto;
-		command = new ObjectCommand();
-
-		command.objeto = user2;
-		command.dialogo = true;
-		command.operacion = OperacionHelper
-				.getOperacion(OperationType.MODIFICAR);
-
-		if (command.execute(null) == ActionType.ACEPTAR) {
-			//Se refresca el Arbol
-			//tree.refreshTree(OperationType.MODIFICAR, o);
-			binder.loadAll();
-
-		}
-	}
-]]>
-											</attribute>
-
-								</toolbarbutton>
-
-								<toolbarbutton
-									style="font-size: 9px; font-weight: normal;" objeto="@{usu}"
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									image="/images/icons/16x16/delete2.png"
-									tooltiptext="Eliminar ...">
-									<attribute name="onClick">
-													<![CDATA[
-	{
-		c = event.target;
-		user3 = (com.pdvsa.psp.model.Usuario) c.objeto;
-		//tanqueService.removeTanque(tanq.id);
-		if (Messagebox.show("Desea Eliminar el Usuario?", "Eliminar",
-				Messagebox.YES + Messagebox.NO, Messagebox.QUESTION) == Messagebox.YES) {
-			if (userService.delete(user3)) {
-				usuarios.remove(user3);
-				binder.loadAll();
-			} else {
-				alert("No se ha podido Eliminar el Usuario");
-			}
-
-		}
-	}
-]]>
-											</attribute>
-								</toolbarbutton>
-
-
-							</hbox>
-
-						</row>
-					</rows>
-				</grid>
+				
 
 
 			</panelchildren>
 		</panel>
+		<zscript>
+			<![CDATA[
+			         
+void doNewEntity() {
+	command = new ObjectCommand();
+	user = new com.pdvsa.psp.model.Usuario(); 
+	command.objeto = user; 
+	command.dialogo = true;
+	command.operacion = OperacionHelper.getOperacion(com.obelisco.vista.zk.controls.OperationType.INCLUIR);
+	
+//	System.out.println(command.execute().name());
 
+	if (command.execute(null) == ActionType.ACEPTAR) {
+		alert("POR AQUI PASO");
+		usuarios.clear();
+		
+		usuarios.addAll(userService.getAllUsers());
+		alert(usuarios.size());
+		binder.loadAll();
+	} 
+	
+//	lista = userService.getAllUsers();
+//	for(u : lista){
+//		alert(u.nombre);	
+//	}
+	
+
+} 
+
+void doDeleteEntity(Object o) {
+	userService.delete(o);
+	usuarios.remove(o);
+	binder.loadAll();
+}
+
+
+]]>
+			
+		</zscript>
 
 	</window>
 

@@ -3,28 +3,25 @@
 <zk xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	<window id="win" self="@{define(areatrabajo)}">
-		<borderlayout height="450px" width="100%">
-			<center border="none" autoscroll="true"
-				self="@{insert(areatrabajo)}">
-				<panel style="margin-bottom:10px" movable="true"
-					floatable="true" title="Entrada al Sistema" border="normal"
-					framable="false" width="40%">
-					<panelchildren style="border:0px">
-						<grid style="border:0px">
+	<window id="win" vflex="1" hflex="1" height="100%" >
+		<borderlayout>
+<!-- 			<center  autoscroll="true"> -->
+			<east>
+				<panel title="Entrada al Sistema" width="50%" >
+					<panelchildren >
+						<grid >
 							<columns>
-								<column width="100" />
+								<column />
 							</columns>
 							<rows>
 								<row>
 									<h:form id="f" name="f"
 										action="j_spring_security_check" method="POST">
 
-										<grid fixedLayout="true"
-											style="border:0px">
+										<grid style="border:0px">
 											<columns>
-												<column width="40%" />
-												<column width="60%" />
+												<column width="10%" />
+												<column width="90%" />
 											</columns>
 											<rows>
 
@@ -61,7 +58,14 @@
 						</grid>
 					</panelchildren>
 				</panel>
-			</center>
+				
+			</east>
+			<west>
+				
+			</west>
+				
+				
+<!-- 			</center> -->
 		</borderlayout>
 	</window>
 </zk>

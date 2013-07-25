@@ -19,12 +19,10 @@ public class TransaccionCommand extends ShowCommand {
 		if (transaccion != null) {
 			
 
-				if (transaccion.getArchivoZul() != null
-						&& !transaccion.getArchivoZul().equals("")) {
-
+				if (transaccion.getArchivoZul() != null	&& !transaccion.getArchivoZul().equals("")) {
+					
 					setArchivoZul(transaccion.getArchivoZul());
 					getParametros().put("transaccion", transaccion);
-
 					super.execute(parent);
 					return;
 				}				

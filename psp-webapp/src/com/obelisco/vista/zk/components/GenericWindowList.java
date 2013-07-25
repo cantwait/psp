@@ -31,7 +31,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 	
 	protected Listbox lstbox;
 	protected Toolbar tool;
-	protected Menubar mnu;
 	private Transaccion transaccion;
 	private Object entity;
 	private Collection entityList;
@@ -52,11 +51,9 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 				List<Operacion> operaciones = new ArrayList<Operacion>();
 				Usuario currentUser = autenticarUsuario.getCurrentUser();
 				if(currentUser != null){
-					List<TransaccionOperacionUsuario> tou = securityService.getOperacionesTransaccionUsuarioByTransaccion(transaccion);
-					if(tou != null && tou.size() > 0){
-						for (TransaccionOperacionUsuario transaccionOperacionUsuario : tou) {
-							operaciones.add(transaccionOperacionUsuario.getOperacion());
-						}
+					List<Operacion> ops = securityService.getOperacionesByUsersTransactions(transaccion.getCodigo(), currentUser.getId());
+					if(ops != null && ops.size() > 0){
+						operaciones.addAll(ops);
 					}
 				}
 				
@@ -72,7 +69,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 					
 				});
 				tool.createFunctions(operaciones);
-				mnu.createFunctions(operaciones);
 			}
 		}
 	};
@@ -110,17 +106,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 		executeOperation(operacion);
 	}
 
-	public void onSelectFunction$mnu(Event event) throws InterruptedException {
-
-		Operacion operacion = null;
-
-		if (event instanceof ForwardEvent) {
-			ForwardEvent forwardEvent = (ForwardEvent) event;
-			operacion = (Operacion) forwardEvent.getOrigin().getData();
-		}
-
-		executeOperation(operacion);
-	}
 
 	protected Object getCurrentEntity() {
 		return entity;
@@ -146,25 +131,7 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 
 	}
 
-	protected boolean canDeleteEntity() {
-		boolean isDelete = false;
-		int answer = Integer.valueOf(Messagebox.NO);
-		answer = Messagebox
-				.show("Desea Eliminar los Elementos Seleccionados?",
-						"Eliminar", Messagebox.YES | Messagebox.NO,
-						Messagebox.QUESTION);
-		switch (answer) {
-		case Messagebox.YES:
-			isDelete = true;
-			break;
-
-		case Messagebox.NO:
-			isDelete = false;
-			break;
-		}
-
-		return isDelete;
-	}
+	
 
 	protected void doEditEntity(Object entity) throws InterruptedException {
 
@@ -187,7 +154,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 		try {
 
 			String nombreMetodo = "doNewEntity";
-
 			Object[] args = new Object[] {};
 			Class[] types = new Class[] {};
 
@@ -221,7 +187,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 		try {
 
 			String nombreMetodo = "doDeleteEntity";
-
 			Object[] args = new Object[] { entity };
 			Class[] types = new Class[] { Object.class };
 
@@ -236,7 +201,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 
 	protected void executeOperation(Operacion operacion) throws InterruptedException {
 		OperationType type = com.obelisco.vista.zk.controls.OperacionHelper.getType(operacion);
-
 		if (type == OperationType.MODIFICAR) {
 			if (getCurrentEntity() != null) {
 				doEditEntity(getCurrentEntity());
@@ -245,10 +209,23 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 			doNewEntity();
 		} else if (type == OperationType.ELIMINAR) {
 			if (getCurrentEntity() != null) {
-
-				if (canDeleteEntity()) {
-					doDeleteEntity(getCurrentEntity());
-				}
+//				if (canDeleteEntity()) {
+				Messagebox.show("Desea Eliminar los Elementos Seleccionados?",	"Eliminar", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new EventListener<Event>(){					
+					@Override
+					public void onEvent(Event event) throws Exception {
+						if(Messagebox.ON_YES.equals(event.getName())){
+							doDeleteEntity(getCurrentEntity());
+							return;
+						}else if(Messagebox.ON_NO.equals(event.getName())){
+							
+						}
+						
+						
+					}							
+					
+				});
+					
+//				}
 			}
 		} else if (type == OperationType.IMPRIMIR) {
 			doPrint();
@@ -313,6 +290,8 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 	public void setAutenticarUsuario(AutenticarUsuario autenticarUsuario) {
 		this.autenticarUsuario = autenticarUsuario;
 	}
+
+
 	
 	
 

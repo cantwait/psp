@@ -1,18 +1,19 @@
 <?page title="PDVSA - PSP" contentType="text/html;charset=UTF-8"?>
 <?init class="org.zkoss.zk.ui.util.Composition"
-arg0="/WEB-INF/templates/template.zul"?>
+arg0="/WEB-INF/templates/template3.zul"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <zk>
-	<menubar width="100%" self="@{define(barra)}" use="com.obelisco.vista.zk.controls.MainMenu">
-	</menubar>
+	<tree width="100%" self="@{define(barra)}" use="com.obelisco.vista.zk.controls.TransactionTree" visible="true" zclass="z-dottree" >
+	</tree>
 	
-	<window self="@{define(areatrabajo)}" id="targetArea" width="100%" use="com.obelisco.vista.zk.controls.TargetWindow" height="100%">
+	<window self="@{define(areatrabajo)}" id="targetArea" width="100%" use="com.obelisco.vista.zk.controls.TargetWindow" height="100%" visible="true">
+	
 		
 	</window>
 	
-	<toolbar self="@{define(piepagina)}" align="end">
-		<toolbarbutton label="Salir" image="/images/icons/folder_window.png" href="/j_spring_security_logout">
+	<toolbar self="@{define(piepagina)}" align="end" visible="true">
+		<toolbarbutton label="Salir" mold="toggle" style="background:silver;" href="/j_spring_security_logout">
 		</toolbarbutton>
 	</toolbar>
 </zk>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!--<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>-->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgCarpetaTransaccion"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureDialog.zs" />
+
+	<zscript> 
+		carpeta = arg.get("aEntity");
+		org.zkoss.util.media.Media m = null;
+	</zscript>
+
+	<window id="dlgCarpetaTransaccion" title="Carpeta"
+		maximizable="true" border="normal" width="700px" height="450px"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/mystyle.css" dynamic="true" />
+		<div height="85%">
+			<textbox visible="false" />
+			<tabbox orient="vertical" height="100%">
+				<tabs width="120px">
+					<tab label="Datos Generales" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<grid>
+							<columns>
+								<column width="30%" align="right" />
+								<column width="70%" />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<textbox id="txtNombre" cols="40"
+										readonly="${executeReadOnly}" maxlength="100"
+										value="@{carpeta.nombre}">
+										<attribute name="onChanging" >
+//								txtRuta.value = carpeta.padre.ruta + event.value ;
+								carpeta.ruta = carpeta.padre.ruta + " " + event.value;							 							
+							</attribute>
+									</textbox>
+								</row>
+								<row>
+									<label value="Descripcion" />
+									<textbox id="txtDescripcion"
+										cols="60" maxlength="100" value="@{carpeta.descripcion}" />
+								</row>
+
+								<row>
+									<label value="Ruta" />
+									<textbox id="txtRuta" cols="60"
+										maxlength="100" value="@{carpeta.ruta}" readonly="true" />
+								</row>
+								<row>
+									<label value="Padre" />
+									<textbox id="txtPadre" cols="60"
+										maxlength="100" value="@{carpeta.padre.ruta}" readonly="true" />
+								</row>
+								<row>
+									<label value="Nivel" />
+									<textbox id="txtNivel" cols="10"
+										maxlength="100" value="@{carpeta.nivel}" readonly="true" />
+								</row>
+
+								<row valign="top">
+									<label value="Icono" />
+									<hbox>
+										<iframe id="iframeIcono"
+											width="75px" height="75px" content="@{m}" />
+
+										<button label="Subir">
+											<attribute name="onClick">
+
+								m = Fileupload.get();
+							 
+								if (m != null) { 
+									if (m instanceof org.zkoss.image.Image) { 
+										Archivo arch = new Archivo();
+										arch.setNombre(m.getName());
+										arch.setTipo(m.getContentType());
+										arch.setContenido(m.getByteData());
+										carpeta.setIcono(arch);
+										iframeIcono.setContent(m); 
+									} 
+								} else {
+									iframeIcono.setContent(null);
+								}
+
+										</attribute>
+										</button>
+
+
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</div>
+		<div align="right" height="15%" style="background:#c5e6ef">
+			<button id="btnAceptar" label="Aceptar"
+				image="/images/icons/disk_blue.png" orient="vertical">
+			</button>
+			<button id="btnCancelar" label="Cancelar"
+				image="/images/icons/delete.png" orient="vertical">
+			</button>
+		</div>
+
+
+		<zscript>
+
+		if (carpeta.getIcono() != null) {
+			m = new AMedia(null,null,null,carpeta.getIcono().getContenido());
+		}
+
+		
+		Boolean doValidate() {
+			
+			
+			boolean esValido = true;
+			Boolean valido = new Boolean(esValido);
+			return valido;
+		}		
+		
+		</zscript>
+
+
+	</window>
+</zk>

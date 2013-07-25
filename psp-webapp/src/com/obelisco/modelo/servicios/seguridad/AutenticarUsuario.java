@@ -43,6 +43,7 @@ public class AutenticarUsuario implements UserDetailsService{
 	
 	public Usuario getCurrentUser(){
 		Authentication a = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(a == null);
 		User currentUser = (User) a.getPrincipal();
 		Usuario usuarioObelisco = getUserService().getUserByLoginName(currentUser.getUsername());
 		if (usuarioObelisco != null) {
