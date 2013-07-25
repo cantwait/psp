@@ -47,6 +47,7 @@ public class Transaccion implements Serializable{
 	private String descripcion;
 	@Column(name = "estado", length = 1)
 	private String estado;
+	private String clase;
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipoTransaccion;
 	@OneToMany(mappedBy="transaccion", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
@@ -200,6 +201,14 @@ public class Transaccion implements Serializable{
 		} else if (!codigo.equals(other.codigo))
 			return false;
 		return true;
+	}
+
+	public String getClase() {
+		return clase;
+	}
+
+	public void setClase(String clase) {
+		this.clase = clase;
 	}
 	
 	

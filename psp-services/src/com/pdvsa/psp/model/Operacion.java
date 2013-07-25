@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -24,6 +25,8 @@ public class Operacion implements Serializable{
 	private Integer orden = new Integer(0);
 	@OneToMany(mappedBy="operacion", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario = new HashSet<TransaccionOperacionUsuario>();
+	@Transient
+	private Set<Usuario> usuarios = new HashSet<Usuario>();
 	
 	public Operacion(){}
 	
@@ -89,6 +92,15 @@ public class Operacion implements Serializable{
 		} else if (!codigo.equals(other.codigo))
 			return false;
 		return true;
+	}
+	
+	@XmlTransient
+	public Set<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(Set<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	

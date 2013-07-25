@@ -11,5 +11,12 @@ import com.pdvsa.psp.model.Usuario;
 public interface ITransaccionOperacionUsuarioDAO extends GenericDAO<TransaccionOperacionUsuario, Long>{
 	
 	List<Operacion> getOperacionesByTransaccionAndUsuario(Integer transaccionId, Long usuarioId);
+	
+	List<TransaccionOperacionUsuario> getOperacionesUsuarioByTransaccion(Integer transaccionId);
+	
+	
+	List<Usuario> getUsuariosByTransaccionAndOperacion(Integer transaccionId, String codigoId);
+	
+	List<Operacion> getOperacionByTransaccion(Integer transaccionId);
 
 }

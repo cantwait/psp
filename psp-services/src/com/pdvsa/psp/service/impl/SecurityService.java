@@ -3,6 +3,7 @@ package com.pdvsa.psp.service.impl;
 import java.util.List;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
@@ -115,6 +116,24 @@ public class SecurityService implements ISecurityService{
 	public List<Operacion> getAllOperaciones() {
 		
 		return operacionDAO.findAll();
+	}
+
+	
+	public List<TransaccionOperacionUsuario> getOperacionesUsuariosByTransaccionId(Integer transaccionId) {		
+		return transaccionOperacionUsuarioDAO.getOperacionesUsuarioByTransaccion(transaccionId);
+	}
+
+	@Override
+	public List<Operacion> getOperacionesByTransaccionId(Integer transaccionId) {
+		
+		
+		return transaccionOperacionUsuarioDAO.getOperacionByTransaccion(transaccionId);
+	}
+
+	@Override
+	public List<Usuario> getUsuariosByOperacionAndTransaccion(Integer transaccionId, String operacionId) {
+		
+		return transaccionOperacionUsuarioDAO.getUsuariosByTransaccionAndOperacion(transaccionId, operacionId);
 	}
 
 }

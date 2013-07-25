@@ -49,5 +49,17 @@ public interface ISecurityService {
 	@WebMethod
 	@WebResult(name="operaciones")
 	List<Operacion> getAllOperaciones();
+	
+	@WebMethod
+	@WebResult(name="transaccionoperacionusuario")
+	List<TransaccionOperacionUsuario> getOperacionesUsuariosByTransaccionId(@WebParam(name="transactionId")Integer transaccionId);
+	
+	@WebMethod
+	@WebResult(name="operaciones")
+	List<Operacion> getOperacionesByTransaccionId(@WebParam(name="transaccionId")Integer transaccionId);
+	
+	@WebMethod
+	@WebResult(name="usuarios")
+	List<Usuario> getUsuariosByOperacionAndTransaccion(@WebParam(name="transaccionId") Integer transaccionId, @WebParam(name="operacionId") String operacionId);
 
 }

@@ -24,4 +24,32 @@ public class TransaccionOperacionUsuarioDAO extends BaseDAO<TransaccionOperacion
 		return qry.getResultList();
 	}
 
+	@Override
+	public List<TransaccionOperacionUsuario> getOperacionesUsuarioByTransaccion(
+			Integer transaccionId) {
+		String qrtStr = "Select tou From TransaccionOperacionUsuario tou where tou.transaccion.codigo = :transaccion";		
+		Query qry = em().createQuery(qrtStr);
+		qry.setParameter("transaccion", transaccionId);		
+		return qry.getResultList();
+	}
+
+	@Override
+	public List<Usuario> getUsuariosByTransaccionAndOperacion(Integer transaccionId, String codigoId) {
+		String qrtStr = "Select tou.usuario From TransaccionOperacionUsuario tou where tou.transaccion.codigo = :transaccion and tou.operacion.codigo = :operacion";		
+		Query qry = em().createQuery(qrtStr);
+		qry.setParameter("transaccion", transaccionId);		
+		qry.setParameter("operacion", codigoId);
+		return qry.getResultList();
+	}
+
+	@Override
+	public List<Operacion> getOperacionByTransaccion(Integer transaccionId) {
+		String qrtStr = "Select tou.operacion From TransaccionOperacionUsuario tou where tou.transaccion.codigo = :transaccion";		
+		Query qry = em().createQuery(qrtStr);
+		qry.setParameter("transaccion", transaccionId);		
+		return qry.getResultList();
+	}
+	
+	
+
 }
