@@ -64,7 +64,16 @@ public class TransaccionOperacionUsuario implements Serializable{
 	public void setOperacion(Operacion operacion) {
 		this.operacion = operacion;
 	}
+	
 
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 	@Override
 	public int hashCode() {

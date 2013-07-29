@@ -35,6 +35,7 @@ public class SecurityService implements ISecurityService{
 	@Override
 	public Transaccion saveTransaccion(Transaccion t) {
 		if(t != null){
+			System.out.println("Guardando Transaccion");
 			return transaccionDAO.save(t);
 		}
 		return null;
@@ -48,7 +49,7 @@ public class SecurityService implements ISecurityService{
 			}
 			t.getTransaccionOperaciones().addAll(operacionUsuarios);
 		}
-		return saveTransaccion(t);
+		return this.saveTransaccion(t);
 	}
 
 	@Override
