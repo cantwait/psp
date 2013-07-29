@@ -110,10 +110,10 @@ http://www.springframework.org/schema/security
 			value="http://${ws-address}:${ws-port}/psp/services/unidadmedida/ManageUnidadMedidaService" />
 	</bean>
 
-	<bean id="userService" class="com.pdvsa.psp.service.IUserService"
+	<bean id="userService" class="com.pdvsa.psp.service.IUserService" scope="prototype"
 		factory-bean="clientFactoryUser" factory-method="create" />
 
-	<bean id="clientFactoryUser" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+	<bean id="clientFactoryUser" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IUserService" />
 		<property name="address"
 			value="http://${ws-address}:${ws-port}/psp/services/usuario/ManageUsuarioService" />

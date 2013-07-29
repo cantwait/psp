@@ -37,8 +37,7 @@ public class ShowCommand implements IObeliscoCommand {
 
 		try {
 			Execution exe = Executions.getCurrent();
-			String fileName = exec.getDesktop().getWebApp().getRealPath(
-					resource);
+			String fileName = exec.getDesktop().getWebApp().getRealPath(resource);
 			File file = new File(fileName);
 			exist = file.exists();
 
@@ -57,18 +56,20 @@ public class ShowCommand implements IObeliscoCommand {
 
 		if (executeCode != null) {
 
-			component = Executions.createComponentsDirectly(executeCode,
-					"zul", null, parametros);
+			component = Executions.createComponentsDirectly(executeCode,"zul", null, parametros);
 
 		} else {
 
 			String executeFile = getArchivoZul();
 
 			if (checkExist(executeFile)) {
+				
 				component = Executions.createComponents(executeFile, null, parametros);
 			}
 
 		}
+		
+		
 
 		if (component == null) {
 			component = getWindow();
@@ -80,8 +81,13 @@ public class ShowCommand implements IObeliscoCommand {
 			window = getWindow();
 			component.setParent(window);
 		}
+		
+		
+		
+		
 
 		window.doModal();
+//		window.doHighlighted();
 
 		return null;
 	}

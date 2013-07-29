@@ -4,6 +4,11 @@ arg0="/WEB-INF/templates/template3.zul"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <zk>
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" >		
+		<![CDATA[
+		         obeCtx.setUsuarioActual(autenticarUsuario.getCurrentUser());
+]]>
+	</zscript>
 	<tree width="100%" self="@{define(barra)}" use="com.obelisco.vista.zk.controls.TransactionTree" visible="true" zclass="z-dottree" >
 	</tree>
 	
@@ -13,7 +18,13 @@ arg0="/WEB-INF/templates/template3.zul"?>
 	</window>
 	
 	<toolbar self="@{define(piepagina)}" align="end" visible="true">
-		<toolbarbutton label="Salir" mold="toggle" style="background:silver;" href="/j_spring_security_logout">
+		<toolbarbutton id="toolSalir" label="Salir" mold="toggle" style="background:silver;" >
+			<attribute name="onClick">
+	{
+		session.invalidate();
+		toolSalir.setHref("/j_spring_security_logout");
+	}
+</attribute>
 		</toolbarbutton>
 	</toolbar>
 </zk>

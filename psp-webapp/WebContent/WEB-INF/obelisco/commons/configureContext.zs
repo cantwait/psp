@@ -16,9 +16,33 @@ import org.zkoss.gmaps.*;
 import com.obelisco.vista.zk.controls.*;
 import com.obelisco.vista.zk.components.*;
 import com.obelisco.vista.zk.util.OccurEventUtil;
-import com.pdvsa.psp.model.*;
+import com.obelisco.modelo.*;
 import java.util.*;
 import java.text.*;
 import org.springframework.security.*;
+
+
+
+Session session = Sessions.getCurrent();
+
+
+
+ContextoObelisco obeCtx = (ContextoObelisco) session.getAttribute(ContextoObelisco.ID_CONTEXTO_OBELISCO);
+
+
+if (obeCtx != null) {
+	usuario = obeCtx.getUsuarioActual();
+}  else {
+
+			obeCtx = new ContextoObeliscoImpl();
+
+			//Usuario usuario = app.getGuestUser();;
+			//obeCtx.setUsuarioActual(usuario);
+			
+			session.setAttribute(ContextoObelisco.ID_CONTEXTO_OBELISCO, obeCtx);
+
+}
+
+
 
 

@@ -16,6 +16,7 @@ public class GenericDialog extends GenericWindow implements AfterCompose {
 
 	@Override
 	public void afterCompose() {
+		
 		ConventionWires.wireVariables(this, this);
 		ConventionWires.addForwards(this, this);
 	}
@@ -81,7 +82,8 @@ public class GenericDialog extends GenericWindow implements AfterCompose {
 			if (checkData()) {
 				setReturnData();
 				confirmData();
-				setAttribute("MODAL_VALUE", ActionType.ACEPTAR);
+				event.getTarget().setAttribute("MODAL_VALUE", ActionType.ACEPTAR);
+//				setAttribute("MODAL_VALUE", ActionType.ACEPTAR);
 				detach();
 			} else {
 				showMessage("Por Favor Revise los Datos del Formulario. Imposible Confirmar la Accion");

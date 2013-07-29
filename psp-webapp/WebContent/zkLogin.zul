@@ -20,8 +20,8 @@
 
 										<grid style="border:0px">
 											<columns>
-												<column width="10%" />
-												<column width="90%" />
+												<column width="20%" />
+												<column width="80%" />
 											</columns>
 											<rows>
 
