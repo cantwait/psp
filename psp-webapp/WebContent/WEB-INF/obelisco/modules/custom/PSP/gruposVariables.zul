@@ -7,166 +7,88 @@
 	xmlns:h="http://www.w3.org/1999/xhtml">
 
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
 
 	<zscript>
 		<![CDATA[
-		        
+	grupoAEditar = null;
 	grupos = grupoService.getGruposLikeNombre("");
 ]]>
 	</zscript>
 
 	<window id="lstGrupos" title="Grupos de Variables" closable="true"
-		height="100%" width="100%" border="normal" >
+		height="100%" width="100%" border="normal" entity="@{grupoAEditar}"
+		entityList="@{grupos}" transaccion="@{transaccion}"
+		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />		
-		<panel border="normal" width="100%" >
-			<toolbar mold="panel" style="background:#c5e6ef">
-				<button label="Agregar Grupo" mold="os" image="/images/icons/16x16/add2.png"
-					style="background-color:#fff000; border: 1px solid; font-size: 9px;">
-					<attribute name="onClick">
-									<![CDATA[
-	{
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<panel border="normal" width="100%">
 
-		command = new ObjectCommand();
-		grp = new com.pdvsa.psp.model.Grupo();
-		command.objeto = grp;
-		command.dialogo = true;
-		command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
-		if (command.execute(null) == ActionType.ACEPTAR) {
-			//Se refresca el Arbol
-			//tree.refreshTree(OperationType.MODIFICAR, tanque);
-			grupos = grupoService.getGruposLikeNombre("");
-			binder.loadAll();
-
-		}
-
-	}
-]]>
-									</attribute>
-				</button>
+			<toolbar id="tool" mold="panel"
+				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
+
+
 			<panelchildren>
 				<!-- Lista de grupos -->
+				<listbox id="lstbox" rows="10" model="@{grupos}"
+					height="430px" mold="paging" selectedItem="@{grupoAEditar}">
+					<listhead sizable="true">
+						<listheader width="30%" label="Nombre" />
+						<listheader width="40%" label="Descripciòn" />
+						<listheader width="20%" label="Pooling" />
+						<listheader label="Activo" width="10%" />
+					</listhead>
+					<listitem sclass="row-border item"
+						self="@{each=e}">
+						<listcell label="@{e.nombre}" />
+						<listcell label="@{e.descripcion}" />
+						<listcell label="@{e.pooling}" />
+						<listcell>
+							<checkbox checked="@{e.activo}"
+								disabled="true" />
+						</listcell>
+					</listitem>
+				</listbox>
 
-				<grid preloadSize="10" id="gridGrupos" model="@{grupos}"
-					mold="paging" pageSize="10" >
-					<columns sizable="true">
-
-
-						<column label="Nombre" 
-							valign="middle" width="250px" />
-						<column label="Descripcion" 
-							valign="middle" width="450px" />
-						<column label="Pooling" 
-							valign="middle" width="100px" />
-						<column label="Activo" align="center"
-							valign="middle" width="50px" />
-						<column label="Operacion" align="center"
-							valign="middle" />
-
-					</columns>
-					<rows>
-						<row self="@{each=grupo}" value="@{grupo}">
-
-							<label value="@{grupo.nombre}" />
-
-							<label value="@{grupo.nombre}" />
-							<label value="@{grupo.pooling}" />
-
-							<hbox>
-								<checkbox checked="@{grupo.activo}"
-									disabled="true" />
-							</hbox>
-
-							<hbox spacing="5px">
-
-								<toolbarbutton
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									objeto="@{grupo}" tooltiptext="Ver Detalles..."
-									image="/images/icons/16x16/find_selection.png">
-									<attribute name="onClick">
-											<![CDATA[
-	{
-		c = event.target;
-		grp = (com.pdvsa.psp.model.Grupo) c.objeto;
-
-		command = new ObjectCommand();
-		command.objeto = grp;
-		command.dialogo = true;
-		command.operacion = OperacionHelper
-		.getOperacion(OperationType.BUSCAR);
-		if (command.execute(null) == ActionType.ACEPTAR) {
-	
-
-		}
-	}
-]]>
-											</attribute>
-
-								</toolbarbutton>
-
-								<toolbarbutton
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									objeto="@{grupo}" tooltiptext="Editar ..."
-									image="/images/icons/16x16/edit.png">
-									<attribute name="onClick">
-											<![CDATA[
-	{
-		c = event.target;
-		grp = (com.pdvsa.psp.model.Grupo) c.objeto;
-
-		command = new ObjectCommand();
-		command.objeto = grp;
-		command.dialogo = true;
-		command.operacion = OperacionHelper
-				.getOperacion(OperationType.MODIFICAR);
-		if (command.execute(null) == ActionType.ACEPTAR) {
-			
-			binder.loadAll();
-
-		}
-	}
-]]>
-											</attribute>
-
-								</toolbarbutton>
-
-								<toolbarbutton
-									style="font-size: 9px; font-weight: normal;" objeto="@{grupo}"
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									image="/images/icons/16x16/delete2.png"
-									tooltiptext="Eliminar ...">
-									<attribute name="onClick">
-											<![CDATA[
-	{
-		c = event.target;
-		grp = (com.pdvsa.psp.model.Grupo) c.objeto;
-		// tanqueService.removeTanque(tanq.id);
-
-		if (Messagebox.show("Desea Eliminar el grupo?", "Eliminar",
-				Messagebox.YES + Messagebox.NO, Messagebox.QUESTION) == Messagebox.YES) {
-			grupoService.removeGrupo(grp.id);
-			grupos.remove(grp);
-			binder.loadAll();
-		}
-
-	}
-]]>
-											</attribute>
-								</toolbarbutton>
-
-
-							</hbox>
-
-						</row>
-					</rows>
-				</grid>
 
 			</panelchildren>
 		</panel>
 		<zscript>
 			<![CDATA[
+	public void doNewEntity() {
+		command = new ObjectCommand();
+		grupo = new com.pdvsa.psp.model.Grupo();
+		command.objeto = grupo;
+		command.dialogo = true;
+		command.operacion = OperacionHelper
+				.getOperacion(com.obelisco.vista.zk.controls.OperationType.INCLUIR);
+
+		if (command.execute().equals(ActionType.ACEPTAR)) {
+
+			grupos = grupoService.getGruposLikeNombre("");
+
+			binder.loadAll();
+		}
+	}
+	public void doEditEntity(Object o) {
+		command = new ObjectCommand();
+		command.objeto = o;
+		command.dialogo = true;
+		command.operacion = OperacionHelper.getOperacion(OperationType.MODIFICAR);
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			grupos = grupoService.getGruposLikeNombre("");
+
+			binder.loadAll();
+		}
+	}
 	
+	void doDeleteEntity(Object o) {
+		grupoService.removeGrupo(o.id);
+		grupos.remove(o);
+		binder.loadAll();
+	}
 ]]>
 	
 		</zscript>

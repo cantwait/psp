@@ -15,12 +15,14 @@
 		         usuarioAEditar = null;
 		         usuarios = new ArrayList();
 				 usuarios = userService.getAllUsers();
+				 
+				 
 ]]>
 	</zscript>
  
 	<window id="lstUsers" title="Usuarios" closable="true" height="100%"
 		width="100%" border="normal" entity="@{usuarioAEditar}" entityList="@{usuarios}"
-		transaccion="@{transaccion}"
+		transaccion="@{transaccion}" 
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
@@ -33,7 +35,7 @@
 			
 			<panelchildren>
 			
-				<listbox id="lstbox" rows="5" model="@{usuarios}" height="600px" mold="paging"
+				<listbox id="lstbox" rows="5" model="@{usuarios}" height="400px" mold="paging"
 					selectedItem="@{usuarioAEditar}">
 					<listhead sizable="true">
 						<listheader width="30%" label="Login" />						
@@ -62,28 +64,32 @@
 void doNewEntity() {
 	command = new ObjectCommand();
 	user = new com.pdvsa.psp.model.Usuario(); 
-	command.objeto = user; 
+	command.objeto = user;
 	command.dialogo = true;
 	command.operacion = OperacionHelper.getOperacion(com.obelisco.vista.zk.controls.OperationType.INCLUIR);
 	
-//	System.out.println(command.execute().name());
 
-	if (command.execute(null) == ActionType.ACEPTAR) {
-		alert("POR AQUI PASO");
-		usuarios.clear();
+	if (command.execute().equals(ActionType.ACEPTAR)) {
 		
-		usuarios.addAll(userService.getAllUsers());
-		alert(usuarios.size());
+		usuarios = userService.getAllUsers();
 		binder.loadAll();
 	} 
-	
-//	lista = userService.getAllUsers();
-//	for(u : lista){
-//		alert(u.nombre);	
-//	}
-	
+
 
 } 
+
+void doEditEntity(Object o){
+	command = new ObjectCommand();
+	command.objeto = o;
+	command.dialogo = true;
+	command.operacion = OperacionHelper.getOperacion(OperationType.MODIFICAR);
+
+	if (command.execute(null) == ActionType.ACEPTAR) {
+		usuarios = userService.getAllUsers();
+
+		binder.loadAll();
+	}
+}
 
 void doDeleteEntity(Object o) {
 	userService.delete(o);

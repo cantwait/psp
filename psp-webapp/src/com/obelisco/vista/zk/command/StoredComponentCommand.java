@@ -45,15 +45,16 @@ public class StoredComponentCommand extends ShowCommand {
 
 			super.execute();
 			for (Entry e : window.getAttributes().entrySet()) {
-				System.out.println(e.getKey() + " = " + e.getValue());
+				
 			}
 			action = (ActionType) window.getAttribute("MODAL_VALUE");
-			System.out.println("Action: " +action);
+			
 			if (action == null) {
 				action = ActionType.NINGUNA;
 			}
 
 			return action;
+//			return window;
 
 		} else {
 			return super.execute();

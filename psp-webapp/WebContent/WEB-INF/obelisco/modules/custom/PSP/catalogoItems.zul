@@ -47,12 +47,12 @@
 							pageSize="10" preloadSize="10" multiple="true"
 							checkmark="true">
 							<listhead sizable="true">
-								<listheader width="15px" align="center" />
+								<listheader width="5%" align="center" />
 								<listheader label="Nombre"
-									width="100px" />
+									width="25%" />
 								<listheader label="Descripcion"
-									width="300px" />
-								<listheader label="item-opc" />
+									width="35%" />
+								<listheader label="item-opc" width="35%"/>
 							</listhead>
 							<listitem sclass="row-border item"
 								self="@{each=e}">

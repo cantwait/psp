@@ -11,127 +11,45 @@
 
 	<zscript>
 		<![CDATA[
+	itemAEditar = null;
 	items = itemService.getItemsLikeNombre("");
-	item = new com.pdvsa.psp.model.Item();
 ]]>
 	</zscript>
 
 	<window id="lstItems" title="Variables Individuales" closable="true"
-		height="100%" width="100%" border="normal"
-		use="com.obelisco.vista.zk.components.WindowCRUDList">
+		height="100%" width="100%" border="normal" entity="@{itemAEditar}"
+		entityList="@{items}" transaccion="@{transaccion}"
+		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
 
 		<panel border="normal" width="100%">
-			<toolbar mold="panel" style="background:#c5e6ef;">
-				<button label="Agregar Variable" mold="os"
-					image="/images/icons/16x16/add2.png"
-					style="background-color:#fff000;border: 1px solid;	font-size: 10px;">
-					<attribute name="onClick">
-											<![CDATA[
-	{
-
-		command = new ObjectCommand();
-		itemm = new com.pdvsa.psp.model.Item();
-		command.objeto = itemm;
-		command.dialogo = true;
-		command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
-		if (command.execute(null) == ActionType.ACEPTAR) {
-			//Se refresca el Arbol
-			//tree.refreshTree(OperationType.MODIFICAR, tanque);
-			items = itemService.getItemsLikeNombre("");
-			binder.loadAll();
-
-		}
-
-	}
-]]>
-											</attribute>
-				</button>
+			<toolbar id="tool" mold="panel"
+				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
 			<panelchildren>
-				<grid preloadSize="10" id="lstbox" model="@{items}"
-					mold="paging" pageSize="10">
-					<columns sizable="true">
-						<column width="200px" label="Nombre" />
-						<column label="Tipo Item" width="150px"
-							align="center" />
-						<column label="Unidad" width="100px"
-							align="center" />
-						<column label="Tag OPC" align="center" width="350px" />
-						<column label="Activo" align="center" width="50px" />
-						<column label="Operacion" align="center" />
-					</columns>
-					<rows>
-						<row self="@{each=itenn}" value="@{itenn}">
-							<label value="@{itenn.nombre}" />
-							<label value="@{itenn.tipoItem}" />
-							<label value="@{itenn.unidadMedida}" />
-							<label value="@{itenn.itemOpc}" />
-							<checkbox checked="@{itenn.activo}"
-									disabled="true" />
+				<listbox id="lstbox" rows="10" model="@{items}"
+					height="420px" mold="paging" selectedItem="@{itemAEditar}">
+					<listhead sizable="true">
+						<listheader width="30%" label="Nombre" />
+						<listheader width="10%" label="Tipo Item" />
+						<listheader width="30%" label="Unidad" />
+						<listheader label="Tag-opc" width="20%"/>
+						<listheader label="Activo" width="10%" />
+					</listhead>
+					<listitem sclass="row-border item"
+						self="@{each=e}">
+						<listcell label="@{e.nombre}" />
+						<listcell label="@{e.tipoItem}" />
+						<listcell label="@{e.unidadMedida}"/>
+						<listcell label="@{e.itemOpc}" />
+						<listcell>
+							<checkbox checked="@{e.activo}"
+								disabled="true" />
+						</listcell>
+					</listitem>
+				</listbox>
 
-							<hbox spacing="5px">
-
-								<toolbarbutton
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									objeto="@{itenn}" tooltiptext="Editar ..."
-									image="/images/icons/16x16/edit.png">
-									<attribute name="onClick">
-											<![CDATA[
-	{
-		c = event.target;
-		itemm = (com.pdvsa.psp.model.Item) c.objeto;
-
-		command = new ObjectCommand();
-		command.objeto = itemm;
-		command.dialogo = true;
-		command.operacion = OperacionHelper
-				.getOperacion(OperationType.MODIFICAR);
-		if (command.execute(null) == ActionType.ACEPTAR) {
-			//Se refresca el Arbol
-			//tree.refreshTree(OperationType.MODIFICAR, o);
-			binder.loadAll();
-
-		}
-	}
-]]>
-											</attribute>
-
-								</toolbarbutton>
-
-								<toolbarbutton
-									style="font-size: 9px; font-weight: normal;" objeto="@{itenn}"
-									use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-									image="/images/icons/16x16/delete2.png"
-									tooltiptext="Eliminar ...">
-									<attribute name="onClick">
-													<![CDATA[
-	{
-		c = event.target;
-		itemm = (com.pdvsa.psp.model.Item) c.objeto;
-		//tanqueService.removeTanque(tanq.id);
-		if (Messagebox.show("Desea Eliminar la Variable?", "Eliminar",
-				Messagebox.YES + Messagebox.NO, Messagebox.QUESTION) == Messagebox.YES) {
-			if (itemService.removeItem(itemm.id)) {
-				items.remove(itemm);
-				binder.loadAll();
-			} else {
-				alert("No se ha podido Eliminar la Variable");
-			}
-
-		}
-	}
-]]>
-											</attribute>
-								</toolbarbutton>
-
-
-							</hbox>
-
-						</row>
-					</rows>
-				</grid>
 			</panelchildren>
 		</panel>
 
@@ -140,14 +58,47 @@
 
 
 	<zscript>
-	void doLoadData() {
-		items = itemService.getItemsLikeNombre("");
+	<![CDATA[
+	void doNewEntity(){
+		command = new ObjectCommand();
+		item = new com.pdvsa.psp.model.Item();
+		command.objeto = item;
+		command.dialogo = true;
+		command.operacion = OperacionHelper.getOperacion(com.obelisco.vista.zk.controls.OperationType.INCLUIR);
+
+		if (command.execute().equals(ActionType.ACEPTAR)) {
+
+			items = itemService.getItemsLikeNombre("");
+
+			binder.loadAll();
+		}
 	}
 	void doDeleteEntity(Object o) {
+		
+			if (itemService.removeItem(o.id)) {
+				items.remove(o);
+				binder.loadAll();
+			} else {
+				alert("No se ha podido Eliminar la Variable");
+			}
 	}
 	void doCustomAction(Object object, Operacion operacion) {
 
 	}
+	void doEditEntity(Object o){
+		command = new ObjectCommand();
+		command.objeto = o;
+		command.dialogo = true;
+		command.operacion = OperacionHelper.getOperacion(OperationType.MODIFICAR);
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			items = itemService.getItemsLikeNombre("");
+
+			binder.loadAll();
+		}
+		
+	}
+]]>
 </zscript>
 
 

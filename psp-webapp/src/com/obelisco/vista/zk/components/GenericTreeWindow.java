@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.ForwardEvent;
@@ -14,6 +16,7 @@ import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tree;
 
+import com.obelisco.modelo.ContextoObelisco;
 import com.obelisco.modelo.servicios.seguridad.AutenticarUsuario;
 import com.obelisco.vista.zk.command.ObjectCommand;
 import com.obelisco.vista.zk.controls.Menubar;
@@ -41,6 +44,18 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 		super();
 		this.addEventListener("onCreate", createListener);
 	}
+	
+	public Usuario getCurrentUser() {
+		
+		Session session = Executions.getCurrent().getSession();
+		
+		ContextoObelisco obeCtx = (ContextoObelisco) session.getAttribute(ContextoObelisco.ID_CONTEXTO_OBELISCO);
+		if(obeCtx != null){
+			return obeCtx.getUsuarioActual();
+		}
+		
+		return null;
+	}
 
 	protected EventListener createListener = new EventListener() {
 
@@ -48,7 +63,7 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 			
 			if (transaccion != null) {
 				List<Operacion> operaciones = new ArrayList<Operacion>();
-				Usuario currentUser = autenticarUsuario.getCurrentUser();
+				Usuario currentUser = getCurrentUser();
 				if(currentUser != null){
 					List<Operacion> ops = securityService.getOperacionesByUsersTransactions(transaccion.getCodigo(), currentUser.getId());
 					if(ops != null && ops.size() > 0){
