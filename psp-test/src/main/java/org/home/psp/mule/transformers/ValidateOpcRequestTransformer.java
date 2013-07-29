@@ -2,6 +2,7 @@ package org.home.psp.mule.transformers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 
@@ -25,7 +26,8 @@ public class ValidateOpcRequestTransformer extends AbstractTransformer{
 		if(src != null && src instanceof String){			
 			String xmlPayload = (String) src;			
 //			URL schemaFile = new URL("http://localhost:8081/schemas/opcinforegister.xsd");
-			Source schemaFile = new StreamSource(new File("C://schemas//opcinforequest.xsd"));
+			Source schemaFile = new StreamSource("http://localhost:8081/schemas/opcinforegister.xsd");
+//			Source schemaFile = new StreamSource(new File("C://schemas//opcinforequest.xsd"));
 //	        Source xmlFile = new StreamSource(new File("C://schemas//opcrequest.xml"));
 			Source xmlSource = new StreamSource(new StringReader(xmlPayload));
 	        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

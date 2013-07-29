@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+<mule xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
 http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
@@ -11,7 +11,8 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd">
 
 	
 	
@@ -53,6 +54,39 @@ http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/
     </mongo:config>
     <custom-transformer class="org.home.psp.mule.transformers.JSONArrayToOpcInfoArray" name="Java" doc:name="Java"/>
     
+    
+    <catch-exception-strategy name="Catch_Exception_Strategy_DEFAUT" enableNotifications="false">
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[if(exception instanceof java.net.ConnectException){
+					println "Mensaje Exception: " + exception.cause.message;
+				
+					println "Extendido: " + exception.cause;
+				
+				}else if(exception instanceof org.mule.api.transport.DispatchException){
+					
+					println "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					
+				}
+				]]></scripting:script>
+        </scripting:transformer>
+    </catch-exception-strategy>
+    
+    
+    <configuration defaultExceptionStrategy-ref="Catch_Exception_Strategy_DEFAUT" doc:name="Configuration"/>
+    <flow name="pspTestFlow" doc:name="pspTestFlow">
+        <quartz:inbound-endpoint jobName="TEST" repeatInterval="1000" startDelay="1000" responseTimeout="10000" doc:name="Quartz">
+            <quartz:event-generator-job>
+                <quartz:payload>HOLA MULE</quartz:payload>
+            </quartz:event-generator-job>
+        </quartz:inbound-endpoint>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" method="POST" doc:name="HTTP"/>
+        <exception-strategy ref="Catch_Exception_Strategy_DEFAUT" doc:name="Reference Exception Strategy"/>
+    </flow>
+   
+   	
+   
+   
+    <!-- 
     <flow name="psp-testFlow1" doc:name="psp-testFlow1">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="find-opc-data" doc:name="HTTP"/>
         <jersey:resources doc:name="REST" >
@@ -60,7 +94,6 @@ http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/
         </jersey:resources>
         <object-to-string-transformer doc:name="Object to String"/>
         <logger message="HA PASADO POR AQUI A PESAR DE LA EXCEPCION" level="INFO" doc:name="Logger"/>
-<!--         <custom-transformer class="org.home.psp.mule.transformers.ValidateOpcRequestTransformer" doc:name="Java"/> -->
         <mulexml:xml-to-object-transformer returnClass="org.home.psp.data.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
             <mulexml:alias name="Opc.Request" class="org.home.psp.data.OpcInfoRegisterRequest"/>
             <mulexml:converter class="org.home.psp.DateConverterMapper"/>
@@ -141,7 +174,7 @@ return resp]]></scripting:script>
         </scripting:component>
     </flow>
     
- <!-- 
+ 
     <flow name="OpcDataSimulator" doc:name="OpcDataSimulator">
         <quartz:inbound-endpoint jobName="poll-data-mongo-service" repeatInterval="10000" responseTimeout="10000" connector-ref="Quartz-Connector" doc:name="Quartz">
             <quartz:event-generator-job groupName="TEST" jobGroupName="TEST"/>
