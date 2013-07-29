@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./catOperacionUsuario"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	         
+operacionModificar = arg.get("aOperacion");
+entidadCatalogoOpe = null;
+operacionesActuales = new ArrayList();
+
+if(operacionModificar != null){
+	operacionesActuales.add(operacionModificar);
+	entidadCatalogoOpe = operacionModificar;;
+}else{
+	operacionesSeleccionadas = arg.get("aEntity");
+	operacionesActuales = securityService.getAllOperaciones();
+
+	for (i = operacionesActuales.iterator(); i.hasNext();) {
+		currusu = i.next();
+
+		existe = false;
+		for (j = operacionesSeleccionadas.iterator(); j.hasNext();) {
+			curselusu = j.next();
+			if (curselusu.equals(currusu)) {
+				existe = true;
+			}
+		}
+
+		if (existe) {
+			i.remove();
+		}
+
+	}
+}
+	
+	
+	
+	
+	
+]]>
+</zscript>
+
+	<window id="catOperacionUsuario" title="Catalogo Operaciones" maximizable="false"
+		mode="modal" maximized="false" border="normal" width="90%"
+		height="80%" selectedEntity="@{entidadCatalogoOpe}"
+		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<north autoscroll="true">
+				<panel height="100%">
+					<panelchildren>
+						<listbox id="lstbox" model="@{operacionesActuales}"
+							selectedItem="@{entidadCatalogoOpe}" mold="paging" rows="10"
+							pageSize="10" preloadSize="10" multiple="false"  vflex="true"
+							checkmark="true">
+							<listhead sizable="true">
+								<listheader label="Codigo"
+									width="150px" /> 
+								<listheader label="Nombre"
+									width="350px" />
+							</listhead>
+							<listitem sclass="row-border item"
+								self="@{each=e}">
+								<listcell label="@{e.codigo}" />
+								<listcell label="@{e.nombre}" />
+							</listitem>
+						</listbox>
+
+					</panelchildren>
+				</panel>
+			</north>
+			<center>
+				<panel title="Usuario" collapsible="false"
+							height="299px">
+							<toolbar mold="panel">
+								<button label="Agregar Usuarios"
+									mold="trendy">
+									<attribute name="onClick">
+									<![CDATA[
+	{
+
+		command1 = new ShowDialogCommand();
+		command1.parametros.put("aEntity", entidadCatalogoOpe.usuarios);
+
+		command1.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoUsuarios.zul";
+
+		if (command1.execute(null) == ActionType.ACEPTAR) {
+			sel1 = command1.getReturnValue("CATALOG_RESULT");
+			entidadCatalogoOpe.usuarios.addAll(sel1);
+			binder.loadComponent(lstBoxUsuarios);
+		}
+
+	}
+]]>
+
+									</attribute>
+								</button>
+							</toolbar>
+							<panelchildren>
+								<!-- Lista de grupos -->
+								<borderlayout height="100%">
+									<center autoscroll="true">
+										<listbox id="lstBoxUsuarios" preloadSize="10" vflex="true"
+											model="@{entidadCatalogoOpe.usuarios}" mold="paging" pageSize="10" >
+											<listhead sizable="true">
+												<listheader
+													label="Login" width="40%" />
+												<listheader
+													label="Nombre" width="40%" />	
+												<listheader label="Operación" width="20%"/>											
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=usu}">
+												<listcell
+													label="@{usu.login}" />
+												<listcell
+													label="@{usu.nombre}" />
+												
+												<listcell>
+													<hbox
+														spacing="5px">
+														<toolbarbutton
+															style="font-size: 9px; font-weight: normal;"
+															objeto="@{usu}"
+															use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+															image="/images/icons/16x16/delete2.png"
+															tooltiptext="Eliminar ...">
+															<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		it = (com.pdvsa.psp.model.Usuario) c.objeto;
+		entidadCatalogoOpe.usuarios.remove(it);
+		binder.loadComponent(lstBoxUsuarios);
+
+	}
+]]>
+											</attribute>
+														</toolbarbutton>
+													</hbox>
+												</listcell>
+											</listitem>
+										</listbox>
+
+
+									</center>
+								</borderlayout>
+							</panelchildren>
+						</panel>
+				
+			</center>
+			<south height="48px">
+				<div align="right" style="background:#c5e6ef"
+					height="100%">
+					<button id="btnAceptar" label="Aceptar" mold="trendy"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar" mold="trendy"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+
+			</south>
+		</borderlayout>
+	</window>
+
+</zk>

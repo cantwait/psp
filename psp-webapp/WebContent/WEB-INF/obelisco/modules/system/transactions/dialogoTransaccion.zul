@@ -18,6 +18,8 @@
 					
 					operacionTransaccionUsuarios = new ArrayList();
 					
+					operacionSelected = null;
+					
 					if(transaccion != null && transaccion.codigo > 0){
 						operaciones = securityService.getOperacionesByTransaccionId(transaccion.codigo);
 						if(operaciones.size() > 0){
@@ -38,7 +40,7 @@
 	</zscript>
 
 	<window id="dlgTransaccion" title="Transaccion" maximizable="true"
-		border="normal" width="700px" height="450px"
+		border="normal" width="100%" height="100%"
 		use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/mystyle.css" dynamic="true" />
@@ -68,31 +70,7 @@
 									<label value="Descripcion" />
 									<textbox id="txtDescripcion"
 										 maxlength="100" value="@{transaccion.descripcion}" />
-								</row>
-
-								<row>
-									<label value="Tipo de Transaccion" />
-									<listbox id="cmbTipoTransaccion"
-										rows="1" model="@{tiposTransaccion}" mold="select"
-										selectedItem="@{transaccion.tipotransaccion}"
-										disabled="${executeEditMode or executeReadOnly}">
-										<listitem
-											self="@{each=tipoTransaccionActual}"
-											label="@{tipoTransaccionActual.nombre}" />
-									</listbox>
-								</row>
-
-								<row>
-									<label value="Tipo de Despliegue" />
-									<listbox id="cmbTipoDespliegue"
-										rows="1" model="@{tiposDespliegue}" mold="select"
-										selectedItem="@{transaccion.tipodespliegue}">
-										<listitem
-											self="@{each=tipoDespliegueActual}"
-											label="@{tipoDespliegueActual.nombre}" />
-									</listbox>
-								</row>
-								
+								</row>								
 								<row>
 									<label value="Tipo Transaccion" />
 									<textbox id="txtAcceso"  readonly="true"
@@ -103,7 +81,136 @@
 						</grid>
 					</tabpanel>
 					<tabpanel>
-						
+						<borderlayout>
+							<north height="30%">
+								<panel title="Operaciones">
+									<toolbar mold="panel">
+										<button label="Agregar" mold="trendy">
+											<attribute name="onClick">
+									<![CDATA[
+	{
+
+		command = new ShowDialogCommand();
+		
+		command.parametros.put("aEntity", operaciones);
+
+		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoOperacionesxUsuarios.zul";
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			seleccion = command.getReturnValue("CATALOG_RESULT");
+			if(seleccion.size() > 0){
+				operaciones.add(seleccion.get(0));
+				binder.loadComponent(lstboxOperaciones);
+				binder.loadComponent(lstboxUsuarios);	
+			}
+		}
+
+	}
+]]>
+											</attribute>
+										</button>
+									</toolbar>
+									<panelchildren>
+										<listbox id="lstboxOperaciones" rows="5"
+											model="@{operaciones}" height="400px" mold="paging"
+											selectedItem="@{operacionSelected}">
+											<listhead sizable="true">
+												<listheader width="20%"
+													label="codigo" />
+												<listheader width="60%"
+													label="Nombre" />
+												<listheader  width="20%" label="Operaciones"/>												
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=e}">
+												<listcell
+													label="@{e.codigo}" />
+												<listcell
+													label="@{e.nombre}" />
+												<listcell>
+													<hbox
+														spacing="5px">
+														<toolbarbutton
+															style="font-size: 9px; font-weight: normal;"
+															objeto="@{e}"
+															use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+															image="/images/icons/16x16/edit.png"
+															tooltiptext="Modificar...">
+															<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		opera = (com.pdvsa.psp.model.Operacion) c.objeto;
+		
+		command = new ShowDialogCommand();
+		
+		
+		
+//		command.parametros.put("aEntity", operaciones);
+		
+		command.parametros.put("aOperacion", opera);
+
+		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoOperacionesxUsuarios.zul";
+
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			
+			seleccion = command.getReturnValue("CATALOG_RESULT");
+			if(seleccion.size() > 0){
+				operaciones.remove(opera);
+				operaciones.add(seleccion.get(0));
+				binder.loadComponent(lstboxOperaciones);
+				binder.loadComponent(lstboxUsuarios);	
+			}
+			        
+		}
+
+	}
+]]>
+											</attribute>
+														</toolbarbutton>
+													</hbox>
+												</listcell>	
+												
+											</listitem>
+											<attribute name="onSelect">
+												<![CDATA[
+												         if(operacionSelected != null){
+//												        	 usuarios = securityService.getUsuariosByOperacionAndTransaccion(transaccion.codigo, operacionSelected.codigo);
+															 usuarios = operacionSelected.usuarios;
+
+												        	 binder.loadComponent(lstboxUsuarios);
+												         }
+]]>
+											</attribute>
+										</listbox>
+									</panelchildren>
+								</panel>
+							</north>
+							<south height="70%">
+								<panel title="Usuarios">
+									<panelchildren>
+										<listbox id="lstboxUsuarios" rows="5"
+											model="@{usuarios}" height="400px" mold="paging">
+											<listhead sizable="true">
+												<listheader width="20%"
+													label="Login" />
+												<listheader width="60%"
+													label="Nombre" />
+												<listheader width="20%" label="Operaciones"/>												
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=u}">
+												<listcell
+													label="@{u.login}" />
+												<listcell
+													label="@{u.nombre}" />
+												
+											</listitem>
+										</listbox>
+									</panelchildren>									
+								</panel>	
+							</south>
+						</borderlayout>						
 					</tabpanel>					
 				</tabpanels>
 			</tabbox>
@@ -118,7 +225,7 @@
 		</div>
 
 		<zscript>
-
+			<![CDATA[
 		
 
 		
@@ -133,9 +240,24 @@
 		}		
 		
 		void doConfirmData(){
+			if(operaciones.size() > 0){
+				transaccionopeusuario = new ArrayList();
+				for(op : operaciones){
+					for(usu : op.usuarios){
+						tranOpeUsuario = new TransaccionOperacionUsuario();
+						tranOpeUsuario.transaccion = transaccion;
+						tranOpeUsuario.operacion = op;
+						tranOpeUsuario.usuario = usu;
+						transaccionopeusuario.add(tranOpeUsuario);
+					}
+				}
+			}
+			
+			securityService.saveTransaccionOperacionUsuario(transaccion, transaccionopeusuario);
+		
 //			servicioAdministrarSeguridad.guardarTransaccion(transaccion);
 		}
-		
+		]]>
 		</zscript>
 
 

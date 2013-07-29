@@ -111,8 +111,6 @@ public class ShowCommand implements IObeliscoCommand {
 					String executeFile = getArchivoZul();
 
 					if (checkExist(executeFile)) {
-						
-						
 						component = Executions.createComponents(getArchivoZul(), panel.getPanelchildren(),	parametros);
 
 					}

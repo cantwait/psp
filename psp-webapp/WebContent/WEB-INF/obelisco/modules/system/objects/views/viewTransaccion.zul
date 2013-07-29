@@ -8,6 +8,12 @@
 	<zscript>
 	<![CDATA[
 	objeto = arg.get("aObjeto");
+	operacionSelected = null;	
+	usuarios = new ArrayList();
+	operaciones = new ArrayList();
+	if(objeto != null){
+		operaciones = securityService.getOperacionesByTransaccionId(objeto.codigo);
+	}
 ]]>
 	</zscript>
 
@@ -18,11 +24,11 @@
 		<panelchildren>
 			<style src="/css/mystyle.css" dynamic="true" />
 			<textbox visible="false" />
-			<tabbox orient="vertical" height="100%" tabscroll="true">
+			<tabbox orient="horizontal" height="100%" tabscroll="true">
 				<tabs width="120px">
 					<tab label="Datos Generales" />
-					<tab label="Operaciones" />
-					<tab label="Seguridad" />
+					<tab label="Operaciones / Usuarios" />
+					<tab label="Seguridad" visible="false" />
 				</tabs>
 				<tabpanels>
 					<tabpanel>
@@ -46,18 +52,77 @@
 									<label
 										value="@{objeto.tipoTransaccion}" />
 								</row>
-								
-								
+
+
 								<row>
 									<label value="Clase" />
 									<label value="@{objeto.clase}" />
 								</row>
-								
-								
+
+
 							</rows>
 						</grid>
 					</tabpanel>
-					
+					<tabpanel>
+						<borderlayout>
+							<north height="30%">
+								<panel title="Operaciones">
+									<panelchildren>
+										<listbox id="lstboxOperaciones" rows="5"
+											model="@{operaciones}" height="400px" mold="paging"
+											selectedItem="@{operacionSelected}">
+											<listhead sizable="true">
+												<listheader width="20%"
+													label="codigo" />
+												<listheader width="80%"
+													label="Nombre" />												
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=e}">
+												<listcell
+													label="@{e.codigo}" />
+												<listcell
+													label="@{e.nombre}" />
+												
+											</listitem>
+											<attribute name="onSelect">
+												<![CDATA[
+												         if(operacionSelected != null){
+												        	 usuarios = securityService.getUsuariosByOperacionAndTransaccion(objeto.codigo, operacionSelected.codigo);
+												        	 binder.loadComponent(lstboxUsuarios);
+												         }
+]]>
+											</attribute>
+										</listbox>
+									</panelchildren>
+								</panel>
+							</north>
+							<south height="70%">
+								<panel title="Usuarios">
+									<panelchildren>
+										<listbox id="lstboxUsuarios" rows="5"
+											model="@{usuarios}" height="400px" mold="paging">
+											<listhead sizable="true">
+												<listheader width="20%"
+													label="Login" />
+												<listheader width="80%"
+													label="Nombre" />												
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=u}">
+												<listcell
+													label="@{u.login}" />
+												<listcell
+													label="@{u.nombre}" />
+												
+											</listitem>
+										</listbox>
+									</panelchildren>									
+								</panel>							
+							</south>
+						</borderlayout>
+					</tabpanel>
+
 				</tabpanels>
 			</tabbox>
 		</panelchildren>
