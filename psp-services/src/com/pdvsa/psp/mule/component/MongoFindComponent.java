@@ -52,7 +52,7 @@ public class MongoFindComponent {
 	@SuppressWarnings("unused")
 	private Date changeDateFormat(Date d){
 		Date newDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(d);

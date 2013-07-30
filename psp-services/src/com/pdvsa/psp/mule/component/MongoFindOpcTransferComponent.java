@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
+import com.pdvsa.psp.model.xml.OpcItemsTransfer;
 
 public class MongoFindOpcTransferComponent {
 	
@@ -14,12 +15,12 @@ public class MongoFindOpcTransferComponent {
 	private MongoTemplate mongoTemplate;
 	
 	
-	public OpcInfoRegisterListResponse findAllItems(){
+	public OpcItemsTransfer findAllItems(){
 		
-		OpcInfoRegisterListResponse response = new OpcInfoRegisterListResponse();
+		OpcItemsTransfer response = new OpcItemsTransfer();
 		List<OpcInfoRegisterMongo> items = new ArrayList<OpcInfoRegisterMongo>();		
 		items = getMongoTemplate().findAll(OpcInfoRegisterMongo.class, "opcInfoRegister");	
-		response.getListaopc().addAll(items);		
+		response.getOpcItems().addAll(items);		
 		return response;
 	}
 	

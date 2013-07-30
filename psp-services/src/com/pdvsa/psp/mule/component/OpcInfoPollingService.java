@@ -1,5 +1,6 @@
 package com.pdvsa.psp.mule.component;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class OpcInfoPollingService extends AbstractTransformer{
 		
 		List<OpcInfoRegister> oir = new ArrayList<OpcInfoRegister>();
 		
-		
+		DateFormat df;
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		

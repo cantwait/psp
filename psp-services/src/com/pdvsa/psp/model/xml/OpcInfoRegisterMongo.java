@@ -2,23 +2,26 @@ package com.pdvsa.psp.model.xml;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.pdvsa.psp.serializer.JsonTimeSerializer;
 
 
 //@XmlRootElement(name="opc")
 //@XmlAccessorType(XmlAccessType.FIELD)
-@Document
+@Document(collection="opcInfoRegister")
 public class OpcInfoRegisterMongo implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6080212548241392706L;
+	@Id
+	private String id = UUID.randomUUID().toString();
 	@Indexed
 	private Long stationId;
 	private String hostModbusSlave;
@@ -38,8 +41,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 		
 	}
 	
-	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc,
-			String tagName, String hostModbusSlave, Integer portModbusSlave, String localidadNombre, String regionNombre, String paisNombre) {
+	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName, String hostModbusSlave, Integer portModbusSlave, String localidadNombre, String regionNombre, String paisNombre) {
 		super();
 		this.stationId = stationId;
 		this.hostModbusSlave = hostModbusSlave;
@@ -53,8 +55,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 		
 	}
 
-	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName,
-			Date timestamp, String regValue, Short quality) {
+	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName, Date timestamp, String regValue, Short quality) {
 		this.reference = reference;
 		this.tagOpc = tagOpc;
 		this.tagName = tagName;		
@@ -63,6 +64,15 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.quality = quality;
 	}
 	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public Integer getReference() {
 		return reference;
 	}
@@ -87,12 +97,13 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.tagName = tagName;
 	}
 	
-	@JsonSerialize(using= JsonTimeSerializer.class)
+//	@JsonSerialize(using= JsonTimeSerializer.class)
+	@XmlElement(name = "timestamp", required = true) 
+    @XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)
 	public Date getTimestamp() {
 		return timestamp;
 	}
 	
-
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
