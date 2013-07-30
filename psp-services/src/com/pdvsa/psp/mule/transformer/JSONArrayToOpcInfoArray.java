@@ -19,7 +19,7 @@ public class JSONArrayToOpcInfoArray extends AbstractTransformer{
 	protected Object doTransform(Object src, String enc)
 			throws TransformerException {
 		
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		
 		
 		 Type type = new TypeToken<List<OpcInfoRegisterMongo>>(){}.getType();

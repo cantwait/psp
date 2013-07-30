@@ -64,7 +64,7 @@ public class OpcInfoPollingService extends AbstractTransformer{
 		
 		
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		String date1 = "2013-06-23";
 		String date2 = "2013-06-24";
