@@ -42,16 +42,36 @@
      <catch-exception-strategy name="Catch_Exception_Strategy_DEFAUT" enableNotifications="false">
         <scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[
-                if(exception instanceof java.net.ConnectException){
-				println "Mensaje Exception: " + exception.cause.message;
-
-				}else if(exception instanceof org.mule.api.transport.DispatchException){
-	
+                import java.text.SimpleDateFormat;
+                import java.util.Calendar;
+                import com.pdvsa.psp.model.xml.TransferExceptionMongo;             
+                
+                Date currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(Calendar.getInstance().getTime());
+                
+                println "Fecha Actual: " + currentTime;
+                
+                error = new TransferExceptionMongo();
+                
+                if(exception instanceof org.mule.api.transport.DispatchException){
 					println "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
-	
+					error.descripcion = "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					error.fecha = currentTime;
+					error.causa = exception.cause;
+
+				}else{
+					println "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					error.descripcion = "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					error.fecha = currentTime;
+					error.causa = exception.cause;	
+				}error.fecha = currentTime;	
 				}
+				
+				return error;
 				]]></scripting:script>
         </scripting:transformer>
+        <component>
+	    	<spring-object bean="mongoInsertErrorComponent"/>
+		</component> 
     </catch-exception-strategy>
     
     <flow name="ExposeOpcInfoRegionService" doc:name="ExposeOpcServiceRegion">
@@ -95,7 +115,7 @@
 		<object-to-string-transformer doc:name="Object to String" />		
 		<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
 		
-		<exception-strategy ref="Default Catch Exception Strategy" doc:name="Default Catch Exception Strategy"/>
+		<exception-strategy ref="Catch_Exception_Strategy_DEFAUT" doc:name="Default Catch Exception Strategy"/>
 	</flow>
 	
 	<flow name="UpdateOpcItemRegion" doc:name="UpdateOpcItemRegion"	processingStrategy="synchronous">

@@ -138,6 +138,14 @@
      <bean id="mongoFindLastOpcItem" class="com.pdvsa.psp.mule.component.MongoFindLastRecordComponent">
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
+    
+     <bean id="mongoInsertErrorComponent" class="com.pdvsa.psp.mule.component.MongoInsertErrorComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+     <bean id="mongoFindLastRecordInsertedComponent" class="com.pdvsa.psp.mule.component.MongoFindLastRecordInsertedComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"/>
+     </bean>
 	
 	
 </beans>

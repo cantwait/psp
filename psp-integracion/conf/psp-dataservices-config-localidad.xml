@@ -40,21 +40,40 @@
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
     
     
-    <catch-exception-strategy name="Catch_Exception_Strategy_DEFAUT" enableNotifications="false">
+   <catch-exception-strategy name="Catch_Exception_Strategy_DEFAUT" enableNotifications="false">
         <scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[
-                if(exception instanceof java.net.ConnectException){
-				println "Mensaje Exception: " + exception.cause.message;
-
-				}else if(exception instanceof org.mule.api.transport.DispatchException){
-	
+                import java.text.SimpleDateFormat;
+                import java.util.Calendar;
+                import com.pdvsa.psp.model.xml.TransferExceptionMongo;                             
+                
+                Date currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(Calendar.getInstance().getTime());
+                
+                println "Fecha Actual: " + currentTime;
+                
+                error = new TransferExceptionMongo();
+                
+                if(exception instanceof org.mule.api.transport.DispatchException){
 					println "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
-	
+					error.descripcion = "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					error.fecha = currentTime;
+					error.causa = exception.cause;
+
+				}else{
+					println "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					error.descripcion = "DETALLES: "+ "MENSAJE ORIGINAL "+ exception.event.message.originalPayload + " SE TRATO DE ENVIAR A: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+					error.fecha = currentTime;
+					error.causa = exception.cause;	
 				}
+				
+				return error;
 				]]></scripting:script>
         </scripting:transformer>
+        <component>
+	    	<spring-object bean="mongoInsertErrorComponent"/>
+		</component> 
     </catch-exception-strategy>
-    
+    <!-- 
     <flow name="OpcLocalidadDataPooling">
         <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
 			repeatInterval="10000" repeatCount="-1" responseTimeout="20000" connector-ref="Quartz-Connector"
@@ -74,7 +93,61 @@
 		<logger level="INFO" message="Se han enviado Exitosamente la cantidad de: #[payload.opcItems.size()] items"/>
 		<exception-strategy ref="Default Catch Exception Strategy" doc:name="Default Catch Exception Strategy"/>
     </flow>
+	 -->
+	 
+    <flow name="StoreOpcInfoLocalidad">
+	    <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
+			repeatInterval="10000" repeatCount="-1" connector-ref="Quartz-Connector"
+			doc:name="Quartz">
+			<quartz:event-generator-job />
+		</quartz:inbound-endpoint>
+		<transformer ref="OpcData" />
+		<foreach collection="#[payload.opcItems]">
+		    <transformer ref="ProcessOpcData"/>
+		</foreach>		
+		<component>
+	    	<spring-object bean="mongoInsertComponent"/>
+		</component> 	
+	    
+	</flow>
 	
+	<flow name="OpcDataSendToRegion">
+	    <quartz:inbound-endpoint jobName="poll-data-sender-mongo-localidad-to-region-service"
+			repeatInterval="20000" repeatCount="-1" connector-ref="Quartz-Connector"
+			doc:name="Quartz">
+			<quartz:event-generator-job />
+		</quartz:inbound-endpoint>
+		<component>
+	    	<spring-object bean="mongoFindComponentTransfer"/>
+		</component>
+		<mule-xml:object-to-xml-transformer>
+		    <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
+		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
+		</mule-xml:object-to-xml-transformer>
+		<logger level="INFO" message="Enviando Datos a Pais: #[payload]"/>
+		<http:outbound-endpoint exchange-pattern="request-response"	host="${rest.region.host}" port="${rest.region.port}" path="opc-info/save-opc-item" method="POST" doc:name="HTTP-ED" />
+		<object-to-string-transformer doc:name="Object to String" />		
+		<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
+		
+<!-- 		<exception-strategy ref="Catch_Exception_Strategy_DEFAUT" doc:name="Default Catch Exception Strategy"/> -->
+	</flow>
+	
+	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemRegion"	processingStrategy="synchronous">
+		<vm:inbound-endpoint exchange-pattern="one-way"	path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
+		<logger level="INFO" message="Retornando Datos de Region para Actualizar: #[payload]"/>
+		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
+		   <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
+		   <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />				    
+		</mule-xml:xml-to-object-transformer>
+		<all doc:name="All">			
+			<component>
+	    		<spring-object bean="mongoRemoveItemsComponent"/>
+			</component>
+			<logger level="INFO" message="Se han Actualizado la catidad de : #[payload.opcItems.size()] Items"/>
+		</all>
+	</flow>	
 	 
 	<flow name="ItemReplicationFlow">
 		<quartz:inbound-endpoint jobName="opc-polling-item-job"	connector-ref="Quartz-Connector" repeatInterval="10000"	responseTimeout="10000" doc:name="QuartzPollItemOpc" repeatCount="-1">
