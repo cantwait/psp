@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pdvsa.psp.dao.IRolDAO;
-import com.pdvsa.psp.dao.IServidorRolDAO;
 import com.pdvsa.psp.model.Rol;
-import com.pdvsa.psp.model.ServidorRol;
 import com.pdvsa.psp.model.UsuarioRol;
 import com.pdvsa.psp.service.IRolService;
 
@@ -20,7 +18,6 @@ import com.pdvsa.psp.service.IRolService;
 public class RolService implements IRolService{
 
 	private IRolDAO rolDAO;
-	private IServidorRolDAO servidorrolDAO;
 	
 	@Override
 	public Rol getRolByName(String nombre) {
@@ -51,20 +48,8 @@ public class RolService implements IRolService{
 		return rolDAO.findByServidor(idServidor, activo);
 	}
 
-	@Override
-	public ServidorRol saveServidorRol(ServidorRol servidorrol) {
-		return servidorrolDAO.save(servidorrol);
-	}
+		
 	
-	@Autowired
-	public void setServidorrolDAO(IServidorRolDAO servidorrolDAO) {
-		this.servidorrolDAO = servidorrolDAO;
-	}
-
-	public IServidorRolDAO getServidorrolDAO() {
-		return servidorrolDAO;
-	}
-
 	@Override
 	public Rol saveRolUsuario(Rol rol, List<UsuarioRol> usuarios) {
 		

@@ -8,7 +8,6 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import com.pdvsa.psp.model.Rol;
-import com.pdvsa.psp.model.ServidorRol;
 import com.pdvsa.psp.model.UsuarioRol;
 
 @WebService
@@ -32,10 +31,6 @@ public interface IRolService {
 			@WebParam(name = "idServidor") Long idServidor,
 			@WebParam(name = "activo") Boolean activo);
 
-	@WebMethod
-	@WebResult(name = "servidorRol")
-	public ServidorRol saveServidorRol(
-			@WebParam(name = "servidorRol") ServidorRol servidorrol);
 
 	@WebMethod
 	@WebResult(name = "Rol")

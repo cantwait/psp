@@ -51,7 +51,6 @@ public class ServidorOpc implements Serializable, BizEntity {
 	private Localidad localidad;
 	private Set<Tanque> tanques = new HashSet<Tanque>(0);
 	private Set<ServidorGrupo> servidorGrupos = new HashSet<ServidorGrupo>(0);
-	private Set<ServidorRol> servidorRoles = new HashSet<ServidorRol>(0);
 	
 	private Boolean transferred = Boolean.FALSE;
 
@@ -210,17 +209,6 @@ public class ServidorOpc implements Serializable, BizEntity {
 
 	public void setServidorGrupos(Set<ServidorGrupo> servidorGrupos) {
 		this.servidorGrupos = servidorGrupos;
-	}
-
-	@OneToMany(mappedBy = "servidorOpc", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
-//	@OptimisticLock(excluded = true)
-	@XmlTransient
-	public Set<ServidorRol> getServidorRoles() {
-		return this.servidorRoles;
-	}
-
-	public void setServidorRoles(Set<ServidorRol> servidorRoles) {
-		this.servidorRoles = servidorRoles;
 	}
 
 	@Column(length = 100, name = "host_adquisicion")

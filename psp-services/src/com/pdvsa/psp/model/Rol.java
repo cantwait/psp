@@ -16,7 +16,6 @@ public class Rol implements Serializable, BizEntity {
 	private Boolean activo = true;
 	private String nombre;
 	private Integer version = 0;
-	private Set<ServidorRol> servidorRoles = new HashSet<ServidorRol>(0);
 	private Set<UsuarioRol> usuarioRoles = new HashSet<UsuarioRol>(0);
 
 	public Rol() {
@@ -71,8 +70,7 @@ public class Rol implements Serializable, BizEntity {
 		this.version = version;
 	}
 
-	@OneToMany(mappedBy = "rol", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "rol", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)	
 	//@OptimisticLock(excluded = true)
 	@XmlTransient
 	public Set<UsuarioRol> getUsuarioRoles() {
@@ -114,15 +112,5 @@ public class Rol implements Serializable, BizEntity {
 		return nombre;
 	}
 
-	public void setServidorRoles(Set<ServidorRol> servidorRoles) {
-		this.servidorRoles = servidorRoles;
-	}
-
-	@OneToMany(mappedBy = "rol", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	//@OptimisticLock(excluded = true)
-	@XmlTransient
-	public Set<ServidorRol> getServidorRoles() {
-		return servidorRoles;
-	}
+	
 }

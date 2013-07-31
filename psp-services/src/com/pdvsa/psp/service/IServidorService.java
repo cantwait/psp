@@ -11,7 +11,6 @@ import javax.jws.WebService;
 import org.springframework.stereotype.Service;
 import com.pdvsa.psp.model.ServidorGrupo;
 import com.pdvsa.psp.model.ServidorOpc;
-import com.pdvsa.psp.model.ServidorRol;
 import com.pdvsa.psp.model.Tanque;
 
 @WebService
@@ -52,18 +51,13 @@ public interface IServidorService {
 	public ServidorOpc saveServidorOpc(
 			@WebParam(name = "servidor") ServidorOpc servidor,
 			@WebParam(name = "tanques") List<Tanque> tanques,
-			@WebParam(name = "roles") List<ServidorRol> roles,
 			@WebParam(name = "grupos") List<ServidorGrupo> grupos);
 
 	@WebMethod
 	@WebResult(name = "grupos")
 	public List<ServidorGrupo> getServidorGrupoByServidor(
 			@WebParam(name = "servidoresGrupo") Long idServidorGrupo);
-
-	@WebMethod
-	@WebResult(name = "roles")
-	public List<ServidorRol> getServidorRolByServidor(
-			@WebParam(name = "servidorRolId") Long idServidorRol);
+	
 	
 	public HashMap<String, Object> getValuesFromServerById(Long id);
 	

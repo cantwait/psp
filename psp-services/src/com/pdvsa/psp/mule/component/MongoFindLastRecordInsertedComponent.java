@@ -1,5 +1,6 @@
 package com.pdvsa.psp.mule.component;
 
+import org.mule.transport.NullPayload;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -12,7 +13,9 @@ public class MongoFindLastRecordInsertedComponent {
 	
 	private MongoTemplate mongoTemplate;
 	
+	
 	public OpcInfoRegisterMongo findLastRecord(){
+		
 		return getMongoTemplate().findOne(new Query().with(new Sort(new Order(Direction.DESC, "timestamp"))).limit(1), OpcInfoRegisterMongo.class, "opcInfoRegisterHistoric");
 	}
 	

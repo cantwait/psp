@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
 import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.IServidorGrupoDAO;
 import com.pdvsa.psp.dao.IServidorOpcDAO;
-import com.pdvsa.psp.dao.IServidorRolDAO;
 import com.pdvsa.psp.dao.ITanqueDAO;
 import com.pdvsa.psp.model.ServidorGrupo;
 import com.pdvsa.psp.model.ServidorOpc;
-import com.pdvsa.psp.model.ServidorRol;
 import com.pdvsa.psp.model.Tanque;
 import com.pdvsa.psp.service.IOpcControllerService;
 import com.pdvsa.psp.service.IServidorService;
@@ -31,7 +29,6 @@ public class ServidorService implements IServidorService{
 	private IOpcControllerService controllerService;
 	private IServidorOpcDAO servidorDAO;
 	private ITanqueDAO tanqueDAO;
-	private IServidorRolDAO servidorRolDAO;
 	private IServidorGrupoDAO servidorGrupoDAO;
 
 	public IServidorGrupoDAO getServidorGrupoDAO() {
@@ -95,8 +92,7 @@ public class ServidorService implements IServidorService{
 
 	@Override
 	public ServidorOpc saveServidorOpc(ServidorOpc servidor,
-			List<Tanque> tanques, List<ServidorRol> roles,
-			List<ServidorGrupo> grupos) {
+			List<Tanque> tanques, List<ServidorGrupo> grupos) {
 
 		
 
@@ -118,14 +114,7 @@ public class ServidorService implements IServidorService{
 			}
 		}
 
-		if (roles != null) {
-			if (roles.size() > 0) {
-				for (ServidorRol rol : roles) {
-					rol.setServidorOpc(servidor);
-				}
-				servidor.getServidorRoles().addAll(roles);
-			}
-		}
+		
 		boolean addOpcServer = false;
 		if(servidor.getId() == null){
 			addOpcServer = true;
@@ -151,24 +140,13 @@ public class ServidorService implements IServidorService{
 		return tanqueDAO;
 	}
 
-	@Autowired
-	public void setServidorRolDAO(IServidorRolDAO servidorRolDAO) {
-		this.servidorRolDAO = servidorRolDAO;
-	}
-
-	public IServidorRolDAO getServidorRolDAO() {
-		return servidorRolDAO;
-	}
-
+	
 	@Override
 	public List<ServidorGrupo> getServidorGrupoByServidor(Long idServidorGrupo) {
 		return servidorGrupoDAO.findServidorGrupoByServidor(idServidorGrupo);
 	}
 
-	@Override
-	public List<ServidorRol> getServidorRolByServidor(Long idServidorRol) {
-		return servidorRolDAO.findServidorRolByServidor(idServidorRol);
-	}
+	
 
 	public IOpcControllerService getControllerService() {
 		return controllerService;
