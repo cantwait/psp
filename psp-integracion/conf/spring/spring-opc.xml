@@ -146,6 +146,10 @@
      <bean id="mongoFindLastRecordInsertedComponent" class="com.pdvsa.psp.mule.component.MongoFindLastRecordInsertedComponent">
          <property name="mongoTemplate" ref="mongoTemplate"/>
      </bean>
+     
+     <bean id="mongoDeleteHistoricComponent" class="com.pdvsa.psp.mule.component.MongoDeleteHistoricComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
 	
 	
 </beans>

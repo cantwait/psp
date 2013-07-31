@@ -233,7 +233,19 @@
 		</component>
 	</flow>
 	
-	<catch-exception-strategy name="Catch_Exception_Strategy_DEFAUT" enableNotifications="false">
+	<flow name="DeleteHistoricRegistryLocalidad">
+	     <quartz:inbound-endpoint jobName="poll-delete-historic-localidad-service"
+			cronExpression="0 0 * * 0" repeatCount="-1" connector-ref="Quartz-Connector"
+			doc:name="Quartz">
+			<quartz:event-generator-job />
+		</quartz:inbound-endpoint>
+		<logger level="INFO" message="Se Borraran todo los registros de la Colección Historicos"/>
+		<component>
+			<spring-object bean="mongoDeleteHistoricComponent"/>
+		</component>
+	</flow>
+	
+	<catch-exception-strategy name="Catch_Exception_Strategy_DEFAULT" enableNotifications="false">
         <scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[
                 import java.text.SimpleDateFormat;
@@ -247,81 +259,23 @@
                 
                 Date currentTime = dateFormat.parse(dateStr);
                 
-                def error = new TransferExceptionMongo();                
-               
-					println "DETALLES: "+ "NO SE PUDO ENTREGAR EL SIGUIENTE MENSAJE: "+ flowVars['originalPayload'] + " AL DESTINO: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
-					error.descripcion = "DETALLES: "+ "NO SE PUDO ENTREGAR EL SIGUIENTE MENSAJE: "+ flowVars['originalPayload'] + " AL DESTINO: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
-					error.fecha = currentTime;
-					error.causa = exception.cause;				
+                def error = new TransferExceptionMongo();	
+				error.descripcion = "SE HA INTENTADO ENVIAR SIN EXITO LA CANTIDAD: "+ flowVars['originalPayload'] + " ITEMS AL DESTINO: " + exception.event.message.getOutboundProperty("MULE_ENDPOINT");
+				error.fecha = currentTime;
+				error.causa = exception.cause;				
 				
 				return error;
 				]]></scripting:script>
         </scripting:transformer>
-        <component>
-	    	<spring-object bean="mongoInsertErrorComponent"/>
-		</component> 
+        <all>
+	        <component>
+		    	<spring-object bean="mongoInsertErrorComponent"/>
+			</component>
+			<vm:outbound-endpoint path="vm.error.transmision"/>
+		</all> 
     </catch-exception-strategy>
     
-	<flow name="PollTimeWithoutTransmission">
-	    <quartz:inbound-endpoint jobName="poll-data-without-transmission-service"
-			repeatInterval="1000" repeatCount="-1" connector-ref="Quartz-Connector"
-			doc:name="Quartz">
-			<quartz:event-generator-job />
-		</quartz:inbound-endpoint>
-		<component>
-	    	<spring-object bean="mongoFindLastRecordInsertedComponent"/>
-		</component>
-		<set-variable variableName="fechaUltimoRegistro" value="#[payload.timestamp]" />
-		<scripting:transformer doc:name="Groovy">
-            <scripting:script engine="Groovy"><![CDATA[
-                import java.text.SimpleDateFormat;
-                import java.util.Date;
-                import java.text.DateFormat;
-                import java.util.Calendar;
-                import com.pdvsa.psp.model.xml.TransferExceptionMongo;
-                import java.lang.String; 
-                import java.lang.Integer;
-                import java.util.Locale;
-                            
-                
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateStr = dateFormat.format(Calendar.getInstance().getTime());
-                
-                def calendar = Calendar.getInstance();
-                calendar.setTime(flowVars['fechaUltimoRegistro']);
-                def month = calendar.get(Calendar.MONTH) + 1;
-                
-                if(Integer.valueOf(month) < 10){
-                	month = "0" + month;
-                }
-                
-                def newFormattedDate = calendar.get(Calendar.YEAR) + "-" + month + "-" +  calendar.get(Calendar.DATE) + " "+ calendar.get(Calendar.HOUR_OF_DAY) + ":"+ calendar.get(Calendar.MINUTE) + ":"+ calendar.get(Calendar.SECOND);
-                
-                println "Current Date: " + dateStr;                
-                println "Last Records Date: " + newFormattedDate;
-                
-                
-                Date currentTime = dateFormat.parse(dateStr);
-                Date lastRecord = dateFormat.parse(newFormattedDate);
-                
-                def diff = currentTime.getTime() -  lastRecord.getTime(); 
-                
-                def diffMinutes = diff / (60 * 1000) % 60;
-                
-                println "La diferencia es de : " + diffMinutes;
-                
-                payload = diffMinutes;
-                
-                
-				]]></scripting:script>
-        </scripting:transformer>
-         <choice doc:name="Choice">
-            <when expression="#[payload > 1]">
-                <logger level="INFO" message="entro en la condicion"></logger>
-<!--                 <smtp:outbound-endpoint host="localhost" responseTimeout="10000" doc:name="SMTP"/> -->
-            </when>
-        </choice>
-	</flow>
+	
 	
 	<flow name="StoreOpcInfoLocalidad">
 	    <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
@@ -345,27 +299,26 @@
 			repeatInterval="20000" repeatCount="-1" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
 			<quartz:event-generator-job />
-		</quartz:inbound-endpoint>
+		</quartz:inbound-endpoint>		
 		<component>
 	    	<spring-object bean="mongoFindComponentTransfer"/>
 		</component>
+		<set-variable variableName="originalPayload" value="#[payload.opcItems.size()]" />
 		<mule-xml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml">
 		    <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
 		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
 		</mule-xml:object-to-xml-transformer>
-		<set-variable variableName="originalPayload" value="#[payload]" />
-		<logger level="INFO" message="ANTES DE ENVIAR #[payload]"/>
+		
 		<http:outbound-endpoint exchange-pattern="request-response"	host="${rest.region.host}" port="${rest.region.port}" path="opc-info/transfer-opc-item" method="POST" doc:name="HTTP-ED" />
 		<object-to-string-transformer doc:name="Object to String" />
 		<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
 		
-		<exception-strategy ref="Catch_Exception_Strategy_DEFAUT" doc:name="Default Catch Exception Strategy"/>
+		<exception-strategy ref="Catch_Exception_Strategy_DEFAULT" doc:name="Default Catch Exception Strategy"/>
 	</flow>
 	
 	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemRegion">
 		<vm:inbound-endpoint exchange-pattern="one-way"	path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
-		<logger level="INFO" message="Retornando Datos de Region para Actualizar: #[payload]"/>
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
 		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
@@ -379,10 +332,99 @@
 	    		<spring-object bean="mongoRemoveItemsComponent"/>
 			</component>
 			<logger level="INFO" message="Se han Actualizado la catidad de : #[payload.opcItems.size()] Items"/>
+			 <expression-component>       			     
+       			     app.registry['counter'] = java.lang.Integer.valueOf(app.registry['counter']) + 20;
+       		 </expression-component>
 		</all>
 	</flow>	
-	 <!--
-	 <flow name="OpcLocalidadDataPooling">
+	
+	<flow name="ValidateTimeWithoutTransmission">
+		<vm:inbound-endpoint path="vm.error.transmision"/>
+		<set-payload value="#[groovy:payload = org.mule.transport.NullPayload.getInstance()]" doc:name="Set Payload to Null"/>
+		<component>
+	    	<spring-object bean="mongoFindLastRecordInsertedComponent"/>
+		</component>
+		<expression-filter expression="#[payload != null]" evaluator="payload" />
+		<set-variable variableName="fechaUltimoRegistro" value="#[payload.timestamp]" />
+		<scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[
+                import java.text.SimpleDateFormat;
+                import java.util.Date;
+                import java.text.DateFormat;
+                import java.util.Calendar;
+                import com.pdvsa.psp.model.xml.TransferExceptionMongo;
+                import org.joda.time.Period;
+                import org.joda.time.PeriodType;
+                import org.joda.time.DurationFieldType;
+                import org.joda.time.DateTime;
+                
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateStr = dateFormat.format(Calendar.getInstance().getTime());
+                
+                def calendar1 = Calendar.getInstance();
+                def calendar2 = Calendar.getInstance();
+                calendar1.setTime(flowVars['fechaUltimoRegistro']);
+                
+                Date currentTime = dateFormat.parse(dateStr);
+                
+                calendar2.setTime(currentTime);
+                
+                def dateTime1 = new DateTime(calendar1.getTime());
+                
+                def dateTime2 = new DateTime(calendar2.getTime());
+                
+                DurationFieldType[] args = [DurationFieldType.minutes()] as DurationFieldType[];
+                
+                def type = PeriodType.forFields(args);
+                
+                def difference = new Period(dateTime1, dateTime2, type).getMinutes();
+                
+                payload = difference;
+                
+				]]></scripting:script>
+        </scripting:transformer>
+        <logger level="INFO" message="Han transcurrido #[payload] minutos desde la ultima transmision valida!"/>
+         <choice doc:name="Choice">
+            <when expression="#[payload > app.registry.counter]">                
+       			 <expression-component>       			     
+       			     app.registry['counter'] = java.lang.Integer.valueOf(app.registry['counter']) + 20;
+       			 </expression-component>
+       			 <logger level="INFO" message="#[app.registry.counter]"/>
+<!--                 <smtp:outbound-endpoint host="localhost" responseTimeout="10000" doc:name="SMTP" /> -->
+
+            </when>
+            <otherwise>
+                <logger level="INFO" message="NO CUMPLE CONDICION"/>
+            </otherwise>
+        </choice>
+	</flow>
+<!-- 	<flow name="ExposeOpcInfoRegionService" doc:name="ExposeOpcServiceRegion"> -->
+<!-- 		<http:inbound-endpoint exchange-pattern="request-response" -->
+<!-- 			host="localhost" port="9000" doc:name="http-save-opc-endpoint" path="opc-info"/> -->
+<!-- 		<jersey:resources doc:name="REST"> -->
+<!-- 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" /> -->
+<!-- 		</jersey:resources> -->
+<!-- 		<object-to-string-transformer doc:name="Object to String" /> -->
+<!-- 		<logger level="INFO" message="#[payload]"/> -->
+<!-- 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml"> -->
+<!-- 		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/> -->
+<!-- 		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/> -->
+<!-- 		   <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />				     -->
+<!-- 		</mule-xml:xml-to-object-transformer>		 -->
+<!-- 		<component> -->
+<!-- 	    	<spring-object bean="mongoInsertComponent"/> -->
+<!-- 		</component>  -->
+<!-- 		<mule-xml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml"> -->
+<!-- 		    <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/> -->
+<!-- 		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/> -->
+<!-- 		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		     -->
+<!-- 		</mule-xml:object-to-xml-transformer> -->
+<!-- 	</flow> -->
+	<!--
+	
+	 
+	
+	<flow name="OpcLocalidadDataPooling">
         <quartz:inbound-endpoint jobName="poll-data-mongo-localidad-service"
 			repeatInterval="10000" repeatCount="-1" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
@@ -401,30 +443,6 @@
 		<object-to-string-transformer doc:name="Object to String" />	    
 		<logger level="INFO" message="#[payload]"/>
     </flow>
-    
-	 <flow name="ExposeOpcInfoRegionService" doc:name="ExposeOpcServiceRegion">
-		<http:inbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="9000" doc:name="http-save-opc-endpoint" path="opc-info"/>
-		<jersey:resources doc:name="REST">
-			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
-		</jersey:resources>
-		<object-to-string-transformer doc:name="Object to String" />
-		<logger level="INFO" message="#[payload]"/>
-		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
-		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
-		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
-		   <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />				    
-		</mule-xml:xml-to-object-transformer>		
-		<component>
-	    	<spring-object bean="mongoInsertComponent"/>
-		</component> 
-		<mule-xml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml">
-		    <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
-		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
-		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
-		</mule-xml:object-to-xml-transformer>
-	</flow>
-	
 
 	
 	

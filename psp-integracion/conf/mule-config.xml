@@ -41,6 +41,12 @@
 		<spring:import resource="classpath:spring/spring-opc.xml" />
 		<spring:import resource="classpath:psp-dataservices-config.xml" />			
 	</spring:beans>
+	
+	<!-- PROPIEDADES GLOBALES -->
+	
+	<global-property name="counter" value="${global.property.counter}" />
+	<global-property name="sumaContador" value="${global.property.sum}"></global-property>
+	
 
 	<!-- NUEVO -->
 
