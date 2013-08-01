@@ -19,8 +19,7 @@
 		<class>com.pdvsa.psp.model.Localidad</class>
 		<class>com.pdvsa.psp.model.Item</class>
 		<class>com.pdvsa.psp.model.GrupoItem</class>
-		<class>com.pdvsa.psp.model.Grupo</class>     
-		<class>com.pdvsa.psp.model.ServidorRol</class>  
+		<class>com.pdvsa.psp.model.Grupo</class> 
 		<class>com.pdvsa.psp.model.Pais</class> 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

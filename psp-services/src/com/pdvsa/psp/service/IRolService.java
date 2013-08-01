@@ -39,5 +39,9 @@ public interface IRolService {
 	
 	@WebMethod
 	public boolean removeRol(@WebParam(name="idRol")Long idRol);
+	
+	@WebMethod
+	@WebResult(name="correos")
+	public String getEmailAdressesByRole(@WebParam(name="roleName")String roleName);
 
 }

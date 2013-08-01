@@ -2,7 +2,7 @@ package com.pdvsa.psp.mule.component;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-public class MongoDelteHistoricComponent {
+public class MongoDeleteHistoricComponent {
 	
 	private MongoTemplate mongoTemplate;
 

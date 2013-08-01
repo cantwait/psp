@@ -1,7 +1,11 @@
 package com.pdvsa.psp.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pdvsa.psp.dao.IRolDAO;
+import com.pdvsa.psp.dao.IUserRoleDAO;
 import com.pdvsa.psp.model.Rol;
+import com.pdvsa.psp.model.Usuario;
 import com.pdvsa.psp.model.UsuarioRol;
 import com.pdvsa.psp.service.IRolService;
 
@@ -18,6 +24,8 @@ import com.pdvsa.psp.service.IRolService;
 public class RolService implements IRolService{
 
 	private IRolDAO rolDAO;
+	@Autowired
+	private IUserRoleDAO roleUserDAO;
 	
 	@Override
 	public Rol getRolByName(String nombre) {
@@ -72,6 +80,26 @@ public class RolService implements IRolService{
 			return rolDAO.remove(rol);
 		}
 		return false;
+	}
+
+	@Override
+	public String getEmailAdressesByRole(@WebParam(name = "roleName") String roleName) {
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+		String to = "";
+		usuarios.addAll(roleUserDAO.getUsuariosByRol(roleName));
+		
+		if(usuarios.size() == 1){
+			to = usuarios.get(0).getEmail();
+			return to;
+		}else if (usuarios.size() > 1){
+			for (Usuario usuario : usuarios) {
+				to = to + usuario.getEmail() + ", ";
+			}
+			
+			return to;
+		}
+		
+		return "psdvsa-bus@pdvsa.com";
 	}
 
 }
