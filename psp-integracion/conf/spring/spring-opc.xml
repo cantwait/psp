@@ -100,13 +100,13 @@
 	</bean>	
 	
 	<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
-        <constructor-arg name="username" value="admin"/>
-        <constructor-arg name="password" value="admin"/>
+        <constructor-arg name="username" value="${mongo.user}"/>
+        <constructor-arg name="password" value="${mongo.password}"/>
     </bean>
 
     <bean class="com.mongodb.Mongo" id="mongo">
-        <constructor-arg name="host" value="localhost" />
-        <constructor-arg name="port" value="27017" />
+        <constructor-arg name="host" value="${mongo.host}" />
+        <constructor-arg name="port" value="${mongo.port}" />
     </bean>
 	
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">

@@ -46,20 +46,21 @@
 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
+		<logger level="INFO" message="#[payload]"/>
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
-		   <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
 		   <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />				    
 		</mule-xml:xml-to-object-transformer>		
 		<component>
 	    	<spring-object bean="mongoInsertComponent"/>
 		</component> 
-		<mule-xml:object-to-xml-transformer>
-		    <mule-xml:alias name="opcItemTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
+		<mule-xml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml">
+		    <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
 		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
 		</mule-xml:object-to-xml-transformer>
-		<logger level="INFO" message="RETORNANDO DATOS A REGION: #[payload]"/>
+		<logger level="INFO" message="RETORNANDO DATOS A LOCALIDAD: #[payload]"/>
 	</flow>
     
     
