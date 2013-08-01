@@ -14,9 +14,9 @@ public class FunctionImagemap extends Button implements AfterCompose {
 	
 	private void initControl() {
 
-		setLabel(operacion.getNombre());
+		setLabel(operacion.getNombre());		
 		setMold("trendy");
-		setStyle("background-color:#fff000;border: 1px solid;	font-size: 9px;");		
+//		setStyle("background-color:#fff000;border: 1px solid;	font-size: 9px;");		
 		
 	}
 	

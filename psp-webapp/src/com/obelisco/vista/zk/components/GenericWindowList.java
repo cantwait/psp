@@ -58,10 +58,10 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 			if (transaccion != null) {
 				List<Operacion> operaciones = new ArrayList<Operacion>();
 				Usuario currentUser = getCurrentUser();
-				System.out.println(currentUser);
 				if(currentUser != null){
 					List<Operacion> ops = securityService.getOperacionesByUsersTransactions(transaccion.getCodigo(), currentUser.getId());
 					if(ops != null && ops.size() > 0){
+						
 						operaciones.addAll(ops);
 					}
 				}

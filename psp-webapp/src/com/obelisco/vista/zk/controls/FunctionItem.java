@@ -11,6 +11,7 @@ public class FunctionItem extends org.zkoss.zul.Menuitem {
 	private void initControl() {		
 		setLabel(operacion.getNombre());
 		setTooltip(operacion.getNombre());
+//		setMold("trendy");
 
 	}
 

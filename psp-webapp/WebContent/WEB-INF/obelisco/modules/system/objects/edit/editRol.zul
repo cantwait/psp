@@ -9,12 +9,12 @@
 
 	<zscript>
 	<![CDATA[
-	usuario = new ArrayList();
+	usuarios = new ArrayList();
 	aRolGeneral = arg.get("aObjeto");
 	if (aRolGeneral.nombre != null) {
-		usuario = userService.getUsuariosByRol(aRolGeneral.id);
-		if (usuario == null) {
-			usuario = new ArrayList();		
+		usuarios = userService.getUsuariosByRol(aRolGeneral.id);
+		if (usuarios == null) {
+			usuarios = new ArrayList();		
 		}
 	}
 ]]>
@@ -45,7 +45,8 @@
 									<textbox id="txtDescripcion"
 										value="@{aRolGeneral.descripcion}" cols="50" rows="2" />
 								</row>
-								<row spans="2" align="right">
+								<row  >
+									<label value="Activo"/>
 									<hbox>
 										<checkbox id="checkActivo" label="Activo"
 											checked="@{aRolGeneral.activo}">
@@ -61,20 +62,21 @@
 							collapsible="false" height="299px">
 							<toolbar mold="panel"
 								style="background:#c5e6ef">
-								<button label="Agregar Usuario" mold="os"
-									style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+								<button label="Agregar Usuario" mold="trendy"
+									>
 									<attribute name="onClick">
 									<![CDATA[
 	{
 
 		command = new ShowDialogCommand();
-		command.parametros.put("aEntity", usuario);
+		command.parametros.put("aEntity", usuarios);
 
 		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoUsuarios.zul";
 
 		if (command.execute(null) == ActionType.ACEPTAR) {
 			seleccion = command.getReturnValue("CATALOG_RESULT");
-			usuario.addAll(seleccion);
+			alert(seleccion.getClass().getName());
+			usuarios.addAll(seleccion);
  
 			binder.loadAll();
 		}
@@ -89,7 +91,7 @@
 								<!-- Lista de usuarios -->
 
 								<grid preloadSize="10" id="gridGrupos"
-									model="@{usuario}" mold="paging" pageSize="10">
+									model="@{usuarios}" mold="paging" pageSize="10">
 									<columns sizable="true">
 
 										<column label="Login"
@@ -133,7 +135,7 @@
 	{
 		c = event.target;
 		it = (com.pdvsa.psp.model.Usuario) c.objeto;
-		usuario.remove(it);
+		usuarios.remove(it);
 		binder.loadAll();
 
 	}
@@ -156,10 +158,10 @@
 			<south height="48px">
 				<div height="100%" align="right"
 					style="background:#c5e6ef">
-					<button id="btnAceptar" label="Aceptar"
+					<button id="btnAceptar" label="Aceptar" mold="trendy"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>
-					<button id="btnCancelar" label="Cancelar"
+					<button id="btnCancelar" label="Cancelar" mold="trendy"
 						image="/images/icons/delete.png" orient="vertical">
 					</button>
 				</div>
@@ -186,7 +188,7 @@
 
 		usuarioRoles = new ArrayList();
 
-		for (com.pdvsa.psp.model.Usuario usu : usuario) {
+		for (com.pdvsa.psp.model.Usuario usu : usuarios) {
 			usuarioRol = new com.pdvsa.psp.model.UsuarioRol();
 			usuarioRol.usuario = usu;
 			usuarioRol.rol = aRolGeneral;
