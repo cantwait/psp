@@ -11,7 +11,8 @@
 	<zscript> 
 	
 		<![CDATA[
-transaccion = arg.get("aEntity");
+		         
+					transaccion = arg.get("aEntity");
 					
 					operaciones = new ArrayList();
 					
@@ -20,17 +21,20 @@ transaccion = arg.get("aEntity");
 					operacionSelected = null;
 					
 					if(transaccion != null && transaccion.codigo > 0){
+						
 						operaciones = securityService.getOperacionesByTransaccionId(transaccion.codigo);
-						if(operaciones.size() > 0){
+						
+						if(operaciones != null && operaciones.size() > 0){
+							
 							for(o : operaciones){
 								o.usuarios.addAll(securityService.getUsuariosByOperacionAndTransaccion(transaccion.codigo, o.codigo));
 							}
+						}else{
+							
+							operaciones = new ArrayList();
 						}
 					}
 					
-					for(o1 : operaciones){
-						System.out.println("Nombre: " + o1.nombre + " Cantidad usuarios: " + o1.usuarios.size());
-					}
 ]]>						
 		
 		
@@ -85,8 +89,8 @@ transaccion = arg.get("aEntity");
 								</grid>
 							</north>
 							<south height="80%">
-								<borderlayout>
-									<north height="30%">
+								<borderlayout >
+									<north height="40%">
 										<panel title="Operaciones">
 											<toolbar mold="panel">
 												<button label="Agregar"
@@ -116,9 +120,9 @@ transaccion = arg.get("aEntity");
 												</button>
 											</toolbar>
 											<panelchildren>
-												<listbox
-													id="lstboxOperaciones" rows="5" model="@{operaciones}"
-													height="400px" mold="paging"
+												<listbox 
+													id="lstboxOperaciones" rows="3" model="@{operaciones}"
+													height="150px" mold="paging"
 													selectedItem="@{operacionSelected}">
 													<listhead
 														sizable="true">
@@ -130,17 +134,17 @@ transaccion = arg.get("aEntity");
 															width="20%" label="Operaciones" />
 													</listhead>
 													<listitem
-														sclass="row-border item" self="@{each=e}">
+														sclass="row-border item" self="@{each=op}">
 														<listcell
-															label="@{e.codigo}" />
+															label="@{op.codigo}" />
 														<listcell
-															label="@{e.nombre}" />
+															label="@{op.nombre}" />
 														<listcell>
 															<hbox
 																spacing="5px">
 																<toolbarbutton
 																	style="font-size: 9px; font-weight: normal;"
-																	objeto="@{e}"
+																	objeto="@{op}"
 																	use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
 																	image="/images/icons/16x16/edit.png"
 																	tooltiptext="Modificar...">
@@ -174,6 +178,26 @@ transaccion = arg.get("aEntity");
 ]]>
 											</attribute>
 																</toolbarbutton>
+																<toolbarbutton
+																	style="font-size: 9px; font-weight: normal;"
+																	objeto="@{op}"
+																	use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+																	image="/images/icons/16x16/delete2.png"
+																	tooltiptext="Eliminar...">
+																	<attribute name="onClick">
+											<![CDATA[
+	{
+		ce = event.target;
+		ite = (com.pdvsa.psp.model.Operacion) ce.objeto;
+		operaciones.remove(ite);
+		binder.loadAll();
+		
+
+	}
+]]>
+											</attribute>
+																</toolbarbutton>
+																
 															</hbox>
 														</listcell>
 
@@ -192,7 +216,7 @@ transaccion = arg.get("aEntity");
 											</panelchildren>
 										</panel>
 									</north>
-									<south height="70%">
+									<south height="60%">
 										<panel title="Usuarios">
 											<panelchildren>
 												<listbox
@@ -249,12 +273,13 @@ transaccion = arg.get("aEntity");
 		return valido;
 	}
 	void doConfirmData(){
+		transaccionopeusuario = new ArrayList();
 			if(operaciones.size() > 0){
-				transaccionopeusuario = new ArrayList();
+				
 				for(op : operaciones){
-					alert(operaciones.size());
+					
 					for(usu : op.usuarios){
-						alert(op.usuarios.size());
+						
 						tranOpeUsuario = new TransaccionOperacionUsuario();
 						tranOpeUsuario.transaccion = transaccion;
 						tranOpeUsuario.operacion = op;
