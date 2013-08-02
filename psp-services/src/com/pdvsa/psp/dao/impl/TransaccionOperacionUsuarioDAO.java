@@ -44,7 +44,7 @@ public class TransaccionOperacionUsuarioDAO extends BaseDAO<TransaccionOperacion
 
 	@Override
 	public List<Operacion> getOperacionByTransaccion(Integer transaccionId) {
-		String qrtStr = "Select tou.operacion From TransaccionOperacionUsuario tou where tou.transaccion.codigo = :transaccion";		
+		String qrtStr = "Select distinct(tou.operacion) From TransaccionOperacionUsuario tou where tou.transaccion.codigo = :transaccion";		
 		Query qry = em().createQuery(qrtStr);
 		qry.setParameter("transaccion", transaccionId);		
 		return qry.getResultList();

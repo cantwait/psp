@@ -50,7 +50,7 @@ public class Transaccion implements Serializable{
 	private String clase;
 	@Enumerated(EnumType.STRING)
 	private TipoTransaccion tipoTransaccion;
-	@OneToMany(mappedBy="transaccion", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="transaccion", fetch=FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval=true)
 	private Set<TransaccionOperacionUsuario> transaccionOperaciones = new HashSet<TransaccionOperacionUsuario>();
 	private String archivoZul;
 	@ManyToOne

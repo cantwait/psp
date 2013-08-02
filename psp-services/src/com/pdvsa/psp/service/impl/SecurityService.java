@@ -1,5 +1,6 @@
 package com.pdvsa.psp.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -36,6 +37,9 @@ public class SecurityService implements ISecurityService{
 	public Transaccion saveTransaccion(Transaccion t) {
 		if(t != null){
 			System.out.println("Guardando Transaccion");
+			if(t.getTransaccionOperaciones() != null && t.getTransaccionOperaciones().size() > 0){
+				System.out.println("Hijos: " + t.getTransaccionOperaciones().size());
+			}
 			return transaccionDAO.save(t);
 		}
 		return null;
@@ -43,11 +47,15 @@ public class SecurityService implements ISecurityService{
 
 	@Override
 	public Transaccion saveTransaccionOperacionUsuario(Transaccion t, List<TransaccionOperacionUsuario> operacionUsuarios) {
+		
 		if(operacionUsuarios != null && operacionUsuarios.size() > 0){
+			System.out.println("Cantidad de hijos: " + operacionUsuarios.size());
 			for (TransaccionOperacionUsuario transaccionOperacionUsuario : operacionUsuarios) {
+				System.out.println("esta entrando por aqui!!");
 				transaccionOperacionUsuario.setTransaccion(t);
+				t.getTransaccionOperaciones().add(transaccionOperacionUsuario);
 			}
-			t.getTransaccionOperaciones().addAll(operacionUsuarios);
+//			t.getTransaccionOperaciones().addAll(operacionUsuarios);
 		}
 		return this.saveTransaccion(t);
 	}
@@ -89,9 +97,11 @@ public class SecurityService implements ISecurityService{
 
 	@Override
 	public List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(Long transaccionId) {
+		List<TransaccionOperacionUsuario> ops =  new ArrayList<TransaccionOperacionUsuario>();
 		Search s = new Search();
 		s.addFilterEqual("transaccion.codigo", transaccionId);
-		return transaccionOperacionUsuarioDAO.search(s);
+		ops = transaccionOperacionUsuarioDAO.search(s);
+		return ops;
 	}
 
 	@Override
