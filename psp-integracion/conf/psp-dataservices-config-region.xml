@@ -39,17 +39,6 @@
           http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
           
-      <flow name="DeleteHistoricRegistryLocalidad">
-	     <quartz:inbound-endpoint jobName="poll-delete-historic-localidad-service"
-			cronExpression="0 0 * * 0" repeatCount="-1" connector-ref="Quartz-Connector"
-			doc:name="Quartz">
-			<quartz:event-generator-job />
-		</quartz:inbound-endpoint>
-		<logger level="INFO" message="Se Borraran todo los registros de la Colección Historicos"/>
-		<component>
-			<spring-object bean="mongoDeleteHistoricComponent"/>
-		</component>
-	</flow>
 	
 	<catch-exception-strategy name="Catch_Exception_Strategy_DEFAULT" enableNotifications="false">
         <scripting:transformer doc:name="Groovy">
@@ -80,6 +69,27 @@
 			<vm:outbound-endpoint path="vm.error.transmision"/>
 		</all> 
     </catch-exception-strategy>
+    
+	<flow name="ConsultarErroresBus" doc:name="ConsultarErroresBus">
+	    <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8810" path="query-errors" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.pdvsa.psp.mule.rest.QueryErrorLogDataMongo" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		
+		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="OpcErrorRequest"	class="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" />
+			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
+		</mule-xml:xml-to-object-transformer>
+		<component>
+	    	<spring-object bean="mongoFindErrorComponent"/>
+		</component>		
+		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="OpcErrorResponse"	class="com.pdvsa.psp.model.xml.OpcErrorResponse" />
+			<mule-xml:alias name="Error"	class="com.pdvsa.psp.model.xml.TransferExceptionMongo" />
+		</mule-xml:object-to-xml-transformer>
+		
+	</flow>
     
 	<flow name="ExposeOpcInfoRegionService" doc:name="ExposeOpcServiceRegion">
 		<http:inbound-endpoint exchange-pattern="request-response"
@@ -146,6 +156,8 @@
        		 </expression-component>
 		</all>
 	</flow>	
+	
+	
 	
 	
 	<flow name="ConsultarDatosOpcPentahoFlow" doc:name="ConsultarDatosOpcPentahoFlow">

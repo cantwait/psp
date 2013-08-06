@@ -233,7 +233,69 @@
 		</component>
 	</flow>
 	
+	<flow name="ConsultarErroresBus" doc:name="ConsultarErroresBus">
+	    <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8810" path="query-errors" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.pdvsa.psp.mule.rest.QueryErrorLogDataMongo" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		
+		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="OpcErrorRequest"	class="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" />
+			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
+		</mule-xml:xml-to-object-transformer>
+		<component>
+	    	<spring-object bean="mongoFindErrorComponent"/>
+		</component>		
+		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="OpcErrorResponse"	class="com.pdvsa.psp.model.xml.OpcErrorResponse" />
+			<mule-xml:alias name="Error"	class="com.pdvsa.psp.model.xml.TransferExceptionMongo" />
+		</mule-xml:object-to-xml-transformer>
+		
+	</flow>
 	
+	
+	<flow name="ConsultarDatosOpcPentahoFlow" doc:name="ConsultarDatosOpcPentahoFlow">
+		<description>Flow
+			que Consulta Datos Opc en registro Historicos guardados en mongo, se
+			presenta
+			en dos modalidades,filtra por fecha desde-hasta y tambien por stationId
+		</description>
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8810" path="query-vars" doc:name="HTTP" />
+		<jersey:resources >
+			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="Opc.Request"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
+			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
+		</mule-xml:xml-to-object-transformer>
+		<component>
+	    	<spring-object bean="mongoFindComponent"/>
+		</component>		
+		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="Opc.Response"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
+			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		</mule-xml:object-to-xml-transformer>
+	</flow> 
+	
+	<flow name="ConsultarUltimoRegistroFlow" doc:name="ConsultarUltimoRegistroFlow">		
+		<http:inbound-endpoint exchange-pattern="request-response"	host="localhost" port="8810" path="query-last" doc:name="HTTP" />
+		<jersey:resources >
+			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
+		</jersey:resources>
+		<object-to-string-transformer doc:name="Object to String" />
+		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="Opc.Request"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
+			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
+		</mule-xml:xml-to-object-transformer>
+		<component>
+	    	<spring-object bean="mongoFindLastOpcItem"/>
+		</component>		
+		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		</mule-xml:object-to-xml-transformer>
+	</flow>
 	
 	
 	<!-- 

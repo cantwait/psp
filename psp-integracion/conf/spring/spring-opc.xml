@@ -150,6 +150,10 @@
      <bean id="mongoDeleteHistoricComponent" class="com.pdvsa.psp.mule.component.MongoDeleteHistoricComponent">
          <property name="mongoTemplate" ref="mongoTemplate"></property>
      </bean>
+     
+     <bean id="mongoFindErrorComponent" class="com.pdvsa.psp.mule.component.MongoFindErrorComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
 	
 	
 </beans>
