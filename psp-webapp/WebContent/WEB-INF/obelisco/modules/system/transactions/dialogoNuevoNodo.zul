@@ -9,7 +9,7 @@
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 
 	<zscript> 
-		tiposNodo = servicioAdministrarSeguridad.buscarTiposNodo();
+		tiposNodo = securityService.getTipoTransacciones();
 		tipoNodoActual = tiposNodo.get(0);
 	</zscript>
 

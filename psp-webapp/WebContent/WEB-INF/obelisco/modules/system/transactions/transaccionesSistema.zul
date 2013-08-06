@@ -67,7 +67,7 @@
 
 		void doNewEntity(Object parent) {
 			
-			if (parent instanceof CarpetaTransaccion) {
+			if (parent.tipoTransaccion.equals(Transaccion.TipoTransaccion.FOLDER)) {
 			
 				commandSelectNodo = new ShowDialogCommand();
 				commandSelectNodo.archivoZul = "/WEB-INF/obelisco/modules/system/transactions/dialogoNuevoNodo.zul";
@@ -77,27 +77,28 @@
 					//Se refresca el Arbol
 					tipoNodo = commandSelectNodo.getReturnValue("tipoNodo");
 					
-					nodo = servicioAdministrarSeguridad.crearNuevoNodo(tipoNodo, parent);
+					nodo = new Transaccion();
+					nodo.padre = parent;
+					nodo.tipoTransaccion = tipoNodo;
 					
 					command = new ShowDialogCommand();
+					
 					command.parametros.put("aEntity",nodo);
 					command.parametros.put("aOperacion",OperacionHelper.getOperacion(OperationType.INCLUIR));
 
 					
-					if (nodo instanceof Transaccion) {
-						command.archivoZul = "/WEB-INF/obelisco/modules/system/transactions/dialogoTransaccion.zul";
-					} else if (nodo instanceof CarpetaTransaccion) {
-						command.archivoZul = "/WEB-INF/obelisco/modules/system/transactions/dialogoCarpetaTransaccion.zul";
-					}
+					
+					command.archivoZul = "/WEB-INF/obelisco/modules/system/transactions/dialogoTransaccion.zul";
+					 
 					
 					
 					if (command.execute(null) == ActionType.ACEPTAR) {
 						//Se refresca el Arbol
-						if (nodo instanceof Transaccion) {
-							parent.transacciones.add(nodo);
-						} else if (nodo instanceof CarpetaTransaccion) {
-							parent.hijos.add(nodo);
-						}
+//						if (nodo instanceof Transaccion) {
+//							parent.transacciones.add(nodo);
+//						} else if (nodo instanceof CarpetaTransaccion) {
+//							parent.hijos.add(nodo);
+//						}
 
 						tree.refreshTree(OperationType.INCLUIR,nodo);	
 					}

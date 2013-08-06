@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./lstErrors"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
+
+	<zscript>
+		<![CDATA[
+		         
+		         usuarioAEditar = null;
+		         errores = new ArrayList();
+		         response = new OpcErrorResponse();
+				 
+				 
+]]>
+	</zscript>
+ 
+	<window id="lstErrors" title="Errores Bus" closable="true" height="100%"
+		width="100%" border="normal" entityList="@{errores}"
+		transaccion="@{transaccion}" 
+		use="com.obelisco.vista.zk.components.GenericWindowList">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+	
+		<panel  width="100%" height="100px">
+			
+			
+			
+			<panelchildren>
+			
+				<toolbar id="tool"  mold="panel" 
+					use="com.obelisco.vista.zk.controls.Toolbar">
+				</toolbar>
+
+				<h:table border="0" width="100%" heigth="100%">
+					<h:tr>
+						<h:td>
+							<grid align="left">
+							 	<columns>
+							 		<column width="10%"></column>
+							 		<column width="90%"></column>
+							 	</columns>
+								<rows>
+									<row>
+										<label value="Fecha" />
+										<hbox>
+										 	<label value="Desde"></label>
+											<datebox id="dateDesde" format="dd/MM/yyyy" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>											
+											<label value="Hasta"></label>
+											<datebox id="dateHasta" format="dd/MM/yyyy" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>
+											
+										</hbox>
+									</row>									
+								</rows>
+							</grid>
+						</h:td>
+					</h:tr>
+				</h:table>
+				
+
+
+			</panelchildren>
+		</panel>
+		<panel title="Resultados de Búsqueda" border="normal" height="500px"
+			width="100%" collapsible="true">
+			<panelchildren>
+				<listbox id="lstbox" rows="5" model="@{errores}" height="400px" mold="paging"
+					>
+					<listhead sizable="true">
+						<listheader width="30%" label="Causa" />						
+						<listheader width="10%" label="Fecha" />
+						<listheader label="Descripción" width="60%"/>
+					</listhead>
+					<listitem sclass="row-border item"
+						self="@{each=e}">
+						<listcell label="@{e.causa}" />
+						<listcell label="@{e.fecha}"/>
+						<listcell  label="@{e.descripcion}">							
+						</listcell>					
+					</listitem>
+				</listbox>
+			</panelchildren>
+		</panel>
+		<zscript>
+			<![CDATA[
+			         
+	void doFindEntities(){
+		errores.clear();
+		if(dateDesde != null && dateHasta != null){
+			if(!dateDesde.getValue().after(dateHasta.getValue())){
+				error = servicioMongo.findErrors(new OpcErrorMongoRequest(dateDesde.getValue(), dateHasta.getValue()));
+				if(error != null && error.errores.size() > 0){
+					errores = error.errores;
+				}
+				
+			}else{
+				alert("La fecha Desde no puede ser Mayor que Hasta");
+			}
+				
+		}else{
+			alert("Las fechas no pueden ser nulas!!!");
+		}
+		
+		if(errores.size() == 0){
+			alert("No se encontraron resultados!!!");
+		}
+		binder.loadAll();
+	}
+
+]]>
+			
+		</zscript>
+
+	</window>
+
+</zk>

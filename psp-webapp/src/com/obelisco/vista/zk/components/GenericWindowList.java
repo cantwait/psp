@@ -248,7 +248,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 		}else if(type == OperationType.CSV){
 			doCustomActionOperation(operacion);
 		}else if(type == OperationType.BUSCAR){
-			System.out.println("por aqui");
 			doFindEntities();
 		}
 
@@ -257,7 +256,6 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 	private void doFindEntities() throws InterruptedException {
 		
 		try {
-			System.out.println("doFindEntities");
 			String nombreMetodo = "doFindEntities";
 			Object[] args = new Object[] { };
 			Class[] types = new Class[] { };

@@ -16,7 +16,6 @@ public class GenericDialog extends GenericWindow implements AfterCompose {
 
 	@Override
 	public void afterCompose() {
-		
 		ConventionWires.wireVariables(this, this);
 		ConventionWires.addForwards(this, this);
 	}

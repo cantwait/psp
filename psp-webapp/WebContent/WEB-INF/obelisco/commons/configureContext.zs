@@ -1,5 +1,6 @@
 import com.obelisco.comunes.*;
 import com.pdvsa.psp.model.*;
+import com.pdvsa.psp.model.xml.*;
 import com.obelisco.modelo.data.seguridad.*;
 import com.obelisco.modelo.servicios.seguridad.*;
 import com.obelisco.vista.zk.command.*;
