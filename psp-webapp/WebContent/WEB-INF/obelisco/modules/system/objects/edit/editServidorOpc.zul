@@ -28,10 +28,10 @@
 		gruposServidor = new ArrayList();
 	}
 
-	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
-	if (rolesServidor == null) {
-		rolesServidor = new ArrayList();
-	}
+//	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
+//	if (rolesServidor == null) {
+//		rolesServidor = new ArrayList();
+//	}
 ]]>
 
 </zscript>
@@ -465,8 +465,7 @@
 		return true;
 	}
 	void doConfirmData() {
-		servidor = servidorService.saveServidorOpc(servidor, tanques,
-				rolesServidor, gruposServidor);
+		servidor = servidorService.saveServidorOpc(servidor, tanques, gruposServidor);
 		self.setAttribute("SAVED_VALUE", servidor);
 
 	}

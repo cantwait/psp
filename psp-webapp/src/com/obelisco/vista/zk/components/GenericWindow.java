@@ -33,6 +33,7 @@ public class GenericWindow extends Window {
 			}
 
 		}
+		System.out.println("function null: " +function == null);
 
 		return result;
 

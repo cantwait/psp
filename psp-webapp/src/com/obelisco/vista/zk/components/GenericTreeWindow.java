@@ -13,6 +13,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.ConventionWires;
+import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tree;
 
@@ -38,14 +39,14 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 	protected boolean executeCustomView = false;
 	private Transaccion transaccion;
 	private ISecurityService securityService;
-	private AutenticarUsuario autenticarUsuario;
+//	private AutenticarUsuario autenticarUsuario;
 
 	public GenericTreeWindow() {
 		super();
 		this.addEventListener("onCreate", createListener);
 	}
 	
-	public Usuario getCurrentUser() {
+public Usuario getCurrentUser() {
 		
 		Session session = Executions.getCurrent().getSession();
 		
@@ -91,6 +92,7 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 
 	@Override
 	public void afterCompose() {
+		securityService = (ISecurityService) SpringUtil.getBean("securityService");
 		ConventionWires.wireVariables(this, this);
 		// auto forward
 		ConventionWires.addForwards(this, this);
@@ -304,13 +306,13 @@ public class GenericTreeWindow extends GenericWindow implements AfterCompose {
 		this.securityService = securityService;
 	}
 
-	public AutenticarUsuario getAutenticarUsuario() {
-		return autenticarUsuario;
-	}
-
-	public void setAutenticarUsuario(AutenticarUsuario autenticarUsuario) {
-		this.autenticarUsuario = autenticarUsuario;
-	}
+//	public AutenticarUsuario getAutenticarUsuario() {
+//		return autenticarUsuario;
+//	}
+//
+//	public void setAutenticarUsuario(AutenticarUsuario autenticarUsuario) {
+//		this.autenticarUsuario = autenticarUsuario;
+//	}
 	
 	
 

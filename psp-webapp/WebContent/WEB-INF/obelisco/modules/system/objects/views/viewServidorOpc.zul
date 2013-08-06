@@ -20,10 +20,10 @@
 		gruposServidor = new ArrayList();
 	}
 
-	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
-	if (rolesServidor == null) {
-		rolesServidor = new ArrayList();
-	}
+//	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
+//	if (rolesServidor == null) {
+//		rolesServidor = new ArrayList();
+//	}
 ]]>
 </zscript>
 
@@ -39,7 +39,7 @@
 							<tab label="Datos Generales" />
 							<tab label="Tanques" />
 							<tab label="Grupos de Variables" />
-							<tab label="Roles" />
+							
 						</tabs>
 						<tabpanels height="100%">
 							<tabpanel>
@@ -220,38 +220,7 @@
 									</panelchildren>
 								</panel>
 							</tabpanel>
-							<tabpanel>
-								<panel height="100%">
-									<panelchildren>
-										<grid preloadSize="10"
-											id="gridRoles" model="@{rolesServidor}" mold="paging"
-											vflex="true" pageSize="10">
-											<columns sizable="true">
-
-												<column label="Nombre"
-													align="center" valign="middle" width="150px" />
-
-												<column
-													label="Descripción" align="center" valign="middle" />
-
-											</columns>
-											<rows>
-												<row
-													self="@{each=srvrol}" value="@{srvrol}">
-
-													<label
-														value="@{srvrol.rol.nombre}" />
-
-													<label
-														value="@{srvrol.rol.descripcion}" />
-
-												</row>
-											</rows>
-										</grid>
-
-									</panelchildren>
-								</panel>
-							</tabpanel>
+							
 						</tabpanels>
 					</tabbox>
 				</panelchildren>

@@ -6,12 +6,14 @@
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native"
 	xmlns:h="http://www.w3.org/1999/xhtml">
 
+	
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
 
 	<zscript>
 		<![CDATA[
 	region = new ArrayList();
-
+	itemAEditar = null;
 	region = regionService.getRegionesLikeNombre("");
 	regiones = new ArrayList();
 	com.pdvsa.psp.model.Region regionSeleccionada = new com.pdvsa.psp.model.Region();
@@ -27,6 +29,8 @@
 	</zscript>
 
 	<window id="reporteOpc" title="Tabla Modbus-Opc" closable="true"
+	transaccion="@{transaccion}"  entity="@{itemAEditar}" entityList="@{opcinfo}"
+		use="com.obelisco.vista.zk.components.GenericWindowList"
 		height="100%" width="100%" border="normal">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
@@ -47,28 +51,22 @@
 												self="@{each=reg}" label="@{reg.nombre}"
 												description="@{reg.descripcion}" />
 										</combobox>
-									</row>
-									<!--									<row>-->
-									<!--										<label value="Formato" />-->
-									<!--										<listbox id="formato"-->
-									<!--											mold="select" disabled="true">-->
-									<!--											<listitem label="PDF"-->
-									<!--												value="pdf" />-->
-									<!--											<listitem label="Excel"-->
-									<!--												value="xls" selected="true" />-->
-									<!--										</listbox>-->
-									<!--									</row>-->
+									</row>									
 								</rows>
 							</grid>
 						</h:td>
 					</h:tr>
 				</h:table>
+				<toolbar id="tool"  mold="panel" 
+					use="com.obelisco.vista.zk.controls.Toolbar">
+				</toolbar>
+				
 			</panelchildren>
 		</panel>
 		<panel title="Resultados de Búsqueda" border="normal"
 			width="100%" collapsible="true">
 
-			<toolbar mold="panel" style="background:#c5e6ef">
+			<toolbar mold="panel" style="background:#c5e6ef" visible="false">
 				<button label="Realizar Busqueda" mold="os"
 					style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
 					<attribute name="onClick">
@@ -122,7 +120,7 @@
 			</toolbar>
 			<panelchildren>
 				<!-- Informacion OPC -->
-				<listbox preloadSize="10" model="@{opcinfo}"
+				<listbox preloadSize="10" model="@{opcinfo}" 
 					mold="paging" pageSize="10">
 					<listhead sizable="true">
 						<listheader label="ID Estacion" valign="middle"
@@ -153,6 +151,42 @@
 				</listbox>
 			</panelchildren>
 		</panel>
+		<zscript>
+			<![CDATA[
+			        void doFindEntities(){
+			        	if(cmbServidor.getSelectedItem() == null){
+			        		alert("Debe seleccionar una región!!");
+			        	}else{
+			        		if (regionSeleccinada.id != null && regionSeleccinada.id != -1) {
+			        			opcinfo = itemService.findMapItemsByRegion(regionSeleccinada.id);
+			        			//for(com.pdvsa.psp.model.OpcInfoRegister o : opcinfo){
+			        			//alert(o.getReference());
+			        			//}
+			        			formato.setDisabled(false);
+			        			binder.loadAll();
+			        		} else {
+			        			alert("No hay datos que mostrar !!!");
+			        		}
+			        	}
+			        }
+			        
+			        void doPrintDocuments(){
+			        	if (opcinfo != null && opcinfo.size() > 0) {
+			        		if (formato.getSelectedItem().getValue().equals("xls")) {
+			        			com.obelisco.herramientas.ShowFormat.executeExcel(importarArchivo
+			        					.getUrl(), opcinfo, "Reporte_Opc-Modbus");
+			        		} else {
+			        			com.obelisco.herramientas.ShowFormat.execute(importarArchivo
+			        					.getUrl(), opcinfo, "Reporte_Opc-Modbus");
+			        		}
+			        	} else {
+			        		alert("No hay Datos que mostrar!!!");
+			        	}
+			        }
+			         
+]]>
+			
+			</zscript>
 	</window>
 
 </zk>

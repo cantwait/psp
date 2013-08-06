@@ -46,7 +46,7 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 	
 	public GenericWindowList() {	
 		super();
-		securityService = (ISecurityService) SpringUtil.getBean("securityService");
+		
 //		autenticarUsuario = (AutenticarUsuario) SpringUtil.getBean("autenticarUsuario");
 //		currentUser = autenticarUsuario.getCurrentUser();
 		this.addEventListener("onCreate", createListener);
@@ -86,6 +86,7 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 
 	@Override
 	public void afterCompose() {
+		securityService = (ISecurityService) SpringUtil.getBean("securityService");
 		ConventionWires.wireVariables(this, this);
 		ConventionWires.addForwards(this, this);
 	}
@@ -210,6 +211,7 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 
 	protected void executeOperation(Operacion operacion) throws InterruptedException {
 		OperationType type = com.obelisco.vista.zk.controls.OperacionHelper.getType(operacion);
+		
 		if (type == OperationType.MODIFICAR) {
 			if (getCurrentEntity() != null) {
 				doEditEntity(getCurrentEntity());
@@ -239,18 +241,50 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 		} else if (type == OperationType.IMPRIMIR) {
 			doPrint();
 		} else if (type == OperationType.DEFINIDA_USUARIO) {			
-			if (getCurrentEntity() != null) {				
-				doCustomAction(getCurrentEntity(), operacion);
-			}
+//			if (getCurrentEntity() != null) {				
+//				doCustomAction(getCurrentEntity(), operacion);
+//			}
+			doCustomActionOperation(operacion);
 		}else if(type == OperationType.CSV){
 			doCustomActionOperation(operacion);
+		}else if(type == OperationType.BUSCAR){
+			System.out.println("por aqui");
+			doFindEntities();
 		}
 
 	}
 
-	public void doPrint() {
+	private void doFindEntities() throws InterruptedException {
+		
+		try {
+			System.out.println("doFindEntities");
+			String nombreMetodo = "doFindEntities";
+			Object[] args = new Object[] { };
+			Class[] types = new Class[] { };
+
+			executeZKFunction(nombreMetodo, types, args);
+
+		} catch (Exception e) {
+			showMessage(e.getMessage());
+		}
+	}
+
+	public void doPrint() throws InterruptedException {
+		try {
+
+			String nombreMetodo = "doPrintDocuments";
+			Object[] args = new Object[] {};
+			Class[] types = new Class[] {};
+
+			executeZKFunction(nombreMetodo, types, args);
+
+		} catch (Exception e) {
+			showMessage(e.getMessage());
+		}
 		// ShowFormat.execute(reportName, getEntityList());
 	}
+
+	
 
 	public Transaccion getTransaccion() {
 		return transaccion;

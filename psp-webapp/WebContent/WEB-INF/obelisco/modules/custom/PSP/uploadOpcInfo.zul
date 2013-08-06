@@ -7,6 +7,7 @@
 	xmlns:h="http://www.w3.org/1999/xhtml">
 
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
 
 	<zscript>
 		<![CDATA[
@@ -15,13 +16,16 @@
 ]]>
 	</zscript>
 
-	<window id="uploadOpc" title="Carga de Variables en Lote"
+	<window id="uploadOpc" title="Carga de Variables en Lote" use="com.obelisco.vista.zk.components.GenericWindowList"
 		closable="true" height="100%" width="100%" border="normal">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
 		<panel border="normal" width="100%" collapsible="false">
 			<panelchildren>
-				<toolbar mold="panel" style="background:#c5e6ef">
+				<toolbar id="tool"  mold="panel" 
+					use="com.obelisco.vista.zk.controls.Toolbar">
+				</toolbar>
+				<toolbar mold="panel" style="background:#c5e6ef" visible="false">
 					<button label="Subir Archivo CSV" mold="os"
 						style="background-color:#fff000; border: 1px solid; font-size: 9px;">
 						<attribute name="onClick">
@@ -70,12 +74,9 @@
 
 			</panelchildren>
 		</panel>
-<!--		<panel title="Variables Cargadas" border="normal" width="100%"-->
-<!--			collapsible="true">-->
-<!---->
-<!--			<panelchildren>-->
-<!--				 Informacion ITEM -->
-
+		<panel title="Variables Cargadas" border="normal" width="100%"
+			collapsible="true">
+			<panelchildren>
 				<listbox preloadSize="10" model="@{items}" mold="paging"
 					pageSize="20" checkmark="false">
 					<listhead sizable="true">
@@ -105,8 +106,52 @@
 					</listitem>
 				</listbox>
 
-<!--			</panelchildren>-->
-		<!--		</panel>-->
+				</panelchildren>
+			</panel>
+			<zscript>
+			<![CDATA[
+			        void doCustomOperation(Operacion o){
+			        	
+			        	if(o.getCodigo().equals("C")){
+			        		m = Fileupload.get();
+
+			        		if (m != null) {
+			        			if (importarArchivo.extensionDocumento(m.getName()).equals(".csv")) {
+
+			        				items = importarArchivo.getListaVariables(m.getByteData());
+			        				alert("Archivo Cargado Satisfactoriamente !!!");
+			        				if (items.size() < 1) {
+			        					alert("El archivo no tiene datos !!!");
+			        					btnGuardar.setDisabled(true);
+			        					binder.loadAll();
+			        				} else {
+			        					binder.loadAll();
+			        					btnGuardar.setDisabled(false);
+
+			        				}
+			        			} else {
+			        				alert("Extension de Archivo Incorrecta");
+			        			}
+			        		}
+			        	}else if(o.getCodigo().equals("G")){
+			        		if(items == null || items.size() == 0){
+			        			alert("No se han cargado las variables!");
+			        		}else{
+			        			itemsGuardar = itemService.saveItems(items);
+				        		if (itemsGuardar.size() == items.size()) {
+				        			alert("Las Variables han sido almacenadas satisfactoriamente");
+				        			items.clear();
+				        			binder.loadAll();
+				        		}
+			        		}
+			        		
+			        	}
+			        }
+			        
+			         
+]]>
+			
+			</zscript>
 	</window>
 
 </zk>
