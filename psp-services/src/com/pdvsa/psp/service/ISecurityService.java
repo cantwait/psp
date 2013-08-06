@@ -9,6 +9,7 @@ import javax.jws.WebService;
 
 import com.pdvsa.psp.model.Operacion;
 import com.pdvsa.psp.model.Transaccion;
+import com.pdvsa.psp.model.Transaccion.TipoTransaccion;
 import com.pdvsa.psp.model.TransaccionOperacionUsuario;
 import com.pdvsa.psp.model.Usuario;
 
@@ -61,5 +62,9 @@ public interface ISecurityService {
 	@WebMethod
 	@WebResult(name="usuarios")
 	List<Usuario> getUsuariosByOperacionAndTransaccion(@WebParam(name="transaccionId") Integer transaccionId, @WebParam(name="operacionId") String operacionId);
+	
+	@WebMethod
+	@WebResult(name="tipotransacciones")
+	List<TipoTransaccion> getTipoTransacciones();
 
 }

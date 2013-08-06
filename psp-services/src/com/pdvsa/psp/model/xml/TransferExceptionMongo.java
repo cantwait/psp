@@ -3,7 +3,10 @@ package com.pdvsa.psp.model.xml;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+@XmlRootElement(name="Error")
 public class TransferExceptionMongo implements Serializable{
 
 	private static final long serialVersionUID = 6243639081989351350L;
@@ -27,7 +30,8 @@ public class TransferExceptionMongo implements Serializable{
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
+	
+	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)
 	public Date getFecha() {
 		return fecha;
 	}

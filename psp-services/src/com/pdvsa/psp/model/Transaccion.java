@@ -37,7 +37,7 @@ public class Transaccion implements Serializable{
 
 	private static final long serialVersionUID = -5588301895436470044L;
 	@Id
-	@SequenceGenerator(name = "TRANSACCION_ID_GENERATOR", sequenceName = "TRANSACCION_CODIGO_SEQ", allocationSize = 1)
+	@SequenceGenerator(name = "TRANSACCION_ID_GENERATOR", sequenceName = "TRANSACCIONES_CODIGO_SEQ", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRANSACCION_ID_GENERATOR")
 	@Column(name = "codigo", unique = true, nullable = false)
 	private Integer codigo;

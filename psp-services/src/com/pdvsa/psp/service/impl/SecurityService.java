@@ -24,8 +24,8 @@ import com.pdvsa.psp.service.ISecurityService;
 
 @WebService(serviceName = "manageSecurityService", endpointInterface = "com.pdvsa.psp.service.ISecurityService")
 @Service("securityService")
-public class SecurityService implements ISecurityService{
-	
+public class SecurityService implements ISecurityService {
+
 	@Autowired
 	private ITransaccionDAO transaccionDAO;
 	@Autowired
@@ -35,10 +35,12 @@ public class SecurityService implements ISecurityService{
 
 	@Override
 	public Transaccion saveTransaccion(Transaccion t) {
-		if(t != null){
+		if (t != null) {
 			System.out.println("Guardando Transaccion");
-			if(t.getTransaccionOperaciones() != null && t.getTransaccionOperaciones().size() > 0){
-				System.out.println("Hijos: " + t.getTransaccionOperaciones().size());
+			if (t.getTransaccionOperaciones() != null
+					&& t.getTransaccionOperaciones().size() > 0) {
+				System.out.println("Hijos: "
+						+ t.getTransaccionOperaciones().size());
 			}
 			return transaccionDAO.save(t);
 		}
@@ -46,43 +48,47 @@ public class SecurityService implements ISecurityService{
 	}
 
 	@Override
-	public Transaccion saveTransaccionOperacionUsuario(Transaccion t, List<TransaccionOperacionUsuario> operacionUsuarios) {
-		
-		if(operacionUsuarios != null && operacionUsuarios.size() > 0){
-			System.out.println("Cantidad de hijos: " + operacionUsuarios.size());
+	public Transaccion saveTransaccionOperacionUsuario(Transaccion t,
+			List<TransaccionOperacionUsuario> operacionUsuarios) {
+
+		if (operacionUsuarios != null && operacionUsuarios.size() > 0) {
+			System.out
+					.println("Cantidad de hijos: " + operacionUsuarios.size());
 			for (TransaccionOperacionUsuario transaccionOperacionUsuario : operacionUsuarios) {
 				System.out.println("esta entrando por aqui!!");
 				transaccionOperacionUsuario.setTransaccion(t);
 				t.getTransaccionOperaciones().add(transaccionOperacionUsuario);
 			}
-//			t.getTransaccionOperaciones().addAll(operacionUsuarios);
+			// t.getTransaccionOperaciones().addAll(operacionUsuarios);
 		}
 		return this.saveTransaccion(t);
 	}
 
 	@Override
 	public Operacion saveOperacion(Operacion o) {
-		
+
 		return operacionDAO.save(o);
 	}
 
 	@Override
 	public Boolean removeOperacion(Operacion o) {
-		if(o != null){
+		if (o != null) {
 			return operacionDAO.remove(o);
 		}
 		return false;
 	}
 
 	@Override
-	public List<Operacion> getOperacionesByUsersTransactions(Integer transaccionId, Long usuarioId) {
-		
-		return transaccionOperacionUsuarioDAO.getOperacionesByTransaccionAndUsuario(transaccionId, usuarioId);
+	public List<Operacion> getOperacionesByUsersTransactions(
+			Integer transaccionId, Long usuarioId) {
+
+		return transaccionOperacionUsuarioDAO
+				.getOperacionesByTransaccionAndUsuario(transaccionId, usuarioId);
 	}
 
 	@Override
 	public Boolean removeTransaccion(Transaccion t) {
-		if(t != null && t.getCodigo() > 0){
+		if (t != null && t.getCodigo() > 0) {
 			return transaccionDAO.remove(t);
 		}
 		return false;
@@ -96,8 +102,9 @@ public class SecurityService implements ISecurityService{
 	}
 
 	@Override
-	public List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(Long transaccionId) {
-		List<TransaccionOperacionUsuario> ops =  new ArrayList<TransaccionOperacionUsuario>();
+	public List<TransaccionOperacionUsuario> getOperacionesTransaccionUsuarioByTransaccion(
+			Long transaccionId) {
+		List<TransaccionOperacionUsuario> ops = new ArrayList<TransaccionOperacionUsuario>();
 		Search s = new Search();
 		s.addFilterEqual("transaccion.codigo", transaccionId);
 		ops = transaccionOperacionUsuarioDAO.search(s);
@@ -109,42 +116,60 @@ public class SecurityService implements ISecurityService{
 	@WebResult(name = "raiz")
 	public Transaccion getRootTransaction() {
 		Search s = new Search();
-		s.addFilterEqual("tipoTransaccion", TipoTransaccion.ROOT);		
-		Transaccion raiz = transaccionDAO.searchUnique(s);		
+		s.addFilterEqual("tipoTransaccion", TipoTransaccion.ROOT);
+		Transaccion raiz = transaccionDAO.searchUnique(s);
 		return raiz;
-	}	
-	
+	}
 
-	@Override	
+	@Override
 	public List<Transaccion> getTransactionLikeNombre(String nombre) {
-		
+
 		Search s = new Search();
-		s.addFilterILike("nombre", nombre);		
+		s.addFilterILike("nombre", nombre);
 		return transaccionDAO.search(s);
 	}
 
-	@Override	
+	@Override
 	public List<Operacion> getAllOperaciones() {
-		
+
 		return operacionDAO.findAll();
 	}
 
-	
-	public List<TransaccionOperacionUsuario> getOperacionesUsuariosByTransaccionId(Integer transaccionId) {		
-		return transaccionOperacionUsuarioDAO.getOperacionesUsuarioByTransaccion(transaccionId);
+	public List<TransaccionOperacionUsuario> getOperacionesUsuariosByTransaccionId(
+			Integer transaccionId) {
+		return transaccionOperacionUsuarioDAO
+				.getOperacionesUsuarioByTransaccion(transaccionId);
 	}
 
 	@Override
 	public List<Operacion> getOperacionesByTransaccionId(Integer transaccionId) {
-		
-		
-		return transaccionOperacionUsuarioDAO.getOperacionByTransaccion(transaccionId);
+
+		return transaccionOperacionUsuarioDAO
+				.getOperacionByTransaccion(transaccionId);
 	}
 
 	@Override
-	public List<Usuario> getUsuariosByOperacionAndTransaccion(Integer transaccionId, String operacionId) {
-		
-		return transaccionOperacionUsuarioDAO.getUsuariosByTransaccionAndOperacion(transaccionId, operacionId);
+	public List<Usuario> getUsuariosByOperacionAndTransaccion(
+			Integer transaccionId, String operacionId) {
+
+		return transaccionOperacionUsuarioDAO
+				.getUsuariosByTransaccionAndOperacion(transaccionId,
+						operacionId);
+	}
+
+	@Override
+	@WebMethod
+	@WebResult(name = "tipotransacciones")
+	public List<TipoTransaccion> getTipoTransacciones() {
+
+		List<TipoTransaccion> tipos = new ArrayList<TipoTransaccion>();
+
+		for (TipoTransaccion tipoTransaccion : TipoTransaccion.values()) {
+			tipos.add(tipoTransaccion);
+		}
+
+		return tipos;
+
 	}
 
 }
