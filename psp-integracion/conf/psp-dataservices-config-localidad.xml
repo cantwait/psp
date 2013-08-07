@@ -42,7 +42,7 @@
     
    <flow name="DeleteHistoricRegistryLocalidad">
 	     <quartz:inbound-endpoint jobName="poll-delete-historic-localidad-service"
-			cronExpression="0 0 * * 0" repeatCount="-1" connector-ref="Quartz-Connector"
+			cronExpression="0 5 8 ? * 1" repeatCount="-1" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
 			<quartz:event-generator-job />
 		</quartz:inbound-endpoint>

@@ -232,6 +232,18 @@
 			<spring-object bean="securityService"/>
 		</component>
 	</flow>
+	
+	<flow name="DeleteHistoricRegistryLocalidad">
+	     <quartz:inbound-endpoint jobName="poll-delete-historic-localidad-service"
+			cronExpression="0 5 8 ? * 1" repeatCount="-1" connector-ref="Quartz-Connector"
+			doc:name="Quartz">
+			<quartz:event-generator-job />
+		</quartz:inbound-endpoint>
+		<logger level="INFO" message="Se Borraran todo los registros de la Colección Historicos"/>
+		<component>
+			<spring-object bean="mongoDeleteHistoricComponent"/>
+		</component>
+	</flow>
 	<!--
 	<flow name="ConsultarErroresBus" doc:name="ConsultarErroresBus">
 	    <http:inbound-endpoint exchange-pattern="request-response" method="POST" host="localhost" port="8810" path="query-errors" doc:name="HTTP" />
