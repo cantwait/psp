@@ -232,7 +232,7 @@
 			<spring-object bean="securityService"/>
 		</component>
 	</flow>
-	
+	<!--
 	<flow name="ConsultarErroresBus" doc:name="ConsultarErroresBus">
 	    <http:inbound-endpoint exchange-pattern="request-response" method="POST" host="localhost" port="8810" path="query-errors" doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
@@ -298,7 +298,7 @@
 	
 	
 	
-	<!-- 
+	 
 	
 	
 	
