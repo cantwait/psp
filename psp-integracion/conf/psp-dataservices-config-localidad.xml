@@ -180,7 +180,7 @@
 		<component>
 	    	<spring-object bean="mongoFindLastRecordInsertedComponent"/>
 		</component>
-		<expression-filter expression="#[payload != null]" evaluator="payload-type" />
+		<expression-filter expression="payload != null" evaluator="groovy" />
 		<set-variable variableName="fechaUltimoRegistro" value="#[payload.timestamp]" />
 		<scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[
@@ -230,7 +230,7 @@
        			 <enricher source="#[payload]" target="#[flowVars['addresses']]">
 		        	<flow-ref name="LookupEmailAddressesSubflow" doc:name="LookupEmailAddressesSubflow" />
 		    	 </enricher>
-                 <smtp:outbound-endpoint to="#[flowVars['addresses']]" user="${smtp.username}" password="${smtp.password}" host="${smtp.host}" port="${smtp.port}" connector-ref="emailConnector" subject="${email.subjectPrefix} N O T I F I C A C I O N" responseTimeout="10000"  doc:name="SMTP" />
+                 <smtp:outbound-endpoint to="#[flowVars['addresses']]" user="${smtp.username}" password="${smtp.password}" host="${smtp.host}" port="${smtp.port}" connector-ref="emailConnector" subject="${email.subjectPrefix} N O T I F I C A C I O N" responseTimeout="10000" doc:name="SMTP" />
             </when>
             <otherwise>
                 <logger level="INFO" message="NO CUMPLE CONDICION"/>
