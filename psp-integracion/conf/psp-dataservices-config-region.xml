@@ -227,7 +227,7 @@
 		<component>
 	    	<spring-object bean="mongoFindLastRecordInsertedComponent"/>
 		</component>
-		<expression-filter expression="#[payload != null]" evaluator="payload-type" />
+		<expression-filter expression="payload != null" evaluator="groovy" />
 		<set-variable variableName="fechaUltimoRegistro" value="#[payload.timestamp]" />
 		<scripting:transformer doc:name="Groovy">
             <scripting:script engine="Groovy"><![CDATA[
