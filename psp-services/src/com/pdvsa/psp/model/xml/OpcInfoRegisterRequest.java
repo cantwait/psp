@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlRootElement(name="Opc.Request")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -15,7 +16,8 @@ public class OpcInfoRegisterRequest {
 	private Date hasta;
 	
 	public OpcInfoRegisterRequest(){}
-		
+	
+//	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)	
 	public Date getDesde() {
 		return desde;
 	}
@@ -23,7 +25,7 @@ public class OpcInfoRegisterRequest {
 	public void setDesde(Date desde) {
 		this.desde = desde;
 	}	
-	
+//	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)
 	public Date getHasta() {
 		return hasta;
 	}

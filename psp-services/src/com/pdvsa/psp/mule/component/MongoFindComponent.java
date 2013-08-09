@@ -52,21 +52,30 @@ public class MongoFindComponent {
 	@SuppressWarnings("unused")
 	private Date changeDateFormat(Date d){
 		Date newDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(d);
 		String ano = String.valueOf(cal.get(Calendar.YEAR));
-		String dia = String.valueOf(cal.get(Calendar.DATE));
+		String hora = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+		String minuto = String.valueOf(cal.get(Calendar.MINUTE));
+		String segundo = String.valueOf(cal.get(Calendar.SECOND));
 		int mes = 0;
+		int dia = 0;
 		String mesStr = new String();
+		String diaStr = new String();
+		if((dia = cal.get(Calendar.DATE)) < 10){
+			diaStr = "0"+dia;
+		}else{
+			diaStr = String.valueOf(cal.get(Calendar.DATE));
+		}
 		if((mes = cal.get(Calendar.MONTH) + 1) < 10){
 			mesStr = "0" + String.valueOf(cal.get(Calendar.MONTH) + 1);
 		}else{
 			mesStr = String.valueOf(cal.get(Calendar.MONTH) + 1);
 		}
 		
-		String formatedDate = ano + "-" + mesStr + "-" +dia; 
+		String formatedDate = ano + "-" + mesStr + "-" +dia + " " +hora+":"+minuto+":"+segundo; 
 		System.out.println("formatedDate : " + formatedDate);  
 		
 		try {

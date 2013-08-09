@@ -3,11 +3,9 @@ package com.obelisco.modelo.servicios.rest.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.obelisco.modelo.servicios.rest.IServiciosMongo;
@@ -15,7 +13,6 @@ import com.pdvsa.psp.model.xml.OpcErrorMongoRequest;
 import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
-import com.pdvsa.psp.model.xml.TransferExceptionMongo;
 
 
 public class ServicioMongo implements IServiciosMongo{
@@ -31,7 +28,7 @@ public class ServicioMongo implements IServiciosMongo{
 			url = new URI("http://localhost:8801/query-vars/find-items");
 			HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.TEXT_XML);
-		    HttpEntity request= new HttpEntity(req, headers);
+		    HttpEntity<OpcInfoRegisterRequest> request= new HttpEntity<OpcInfoRegisterRequest>(req, headers);
 		
 		    response = restTemplate.postForObject(url, request, OpcInfoRegisterListResponse.class);		
 			
@@ -52,7 +49,7 @@ public class ServicioMongo implements IServiciosMongo{
 			
 			HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.TEXT_XML);
-		    HttpEntity request= new HttpEntity(req, headers);
+		    HttpEntity<OpcInfoRegisterRequest> request= new HttpEntity<OpcInfoRegisterRequest>(req, headers);
 		
 		    response = restTemplate.postForObject(url, request, OpcInfoRegisterListResponse.class);		
 			
@@ -75,7 +72,7 @@ public class ServicioMongo implements IServiciosMongo{
 		
 			 HttpHeaders headers = new HttpHeaders();
 		     headers.setContentType(MediaType.TEXT_XML);
-		     HttpEntity request= new HttpEntity(req, headers);
+		     HttpEntity<OpcErrorMongoRequest> request= new HttpEntity<OpcErrorMongoRequest>(req, headers);
 		
 		     response = restTemplate.postForObject(url, request, OpcErrorResponse.class);
 		     

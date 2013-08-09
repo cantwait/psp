@@ -23,7 +23,7 @@ public class DateConverterMapper implements Converter{
 	public void marshal(Object value, HierarchicalStreamWriter writer,
 			MarshallingContext arg2) {
 		 Date fecha = (Date) value; 
-         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
          writer.setValue(formatter.format(fecha));  
 		
 	}
@@ -33,7 +33,7 @@ public class DateConverterMapper implements Converter{
 			UnmarshallingContext arg1) {
 		 Date date = null; 
 	     try { 
-	         date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(reader.getValue()); 
+	         date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(reader.getValue()); 
 	     } catch (ParseException e) { 
 	         throw new ConversionException(e.getMessage(), e); 
 	     } 
