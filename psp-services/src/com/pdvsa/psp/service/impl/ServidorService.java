@@ -10,6 +10,8 @@ import javax.jws.WebService;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.annotation.Reference;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.genericdao.search.Search;
@@ -26,21 +28,27 @@ import com.pdvsa.psp.service.IServidorService;
 @Service("servidorService")
 public class ServidorService implements IServidorService{
 	
+	@Autowired
+	@Qualifier("opcControllerService")
 	private IOpcControllerService controllerService;
+	
+	@Autowired
 	private IServidorOpcDAO servidorDAO;
+
+	@Autowired
 	private ITanqueDAO tanqueDAO;
+
+	@Autowired
 	private IServidorGrupoDAO servidorGrupoDAO;
 
 	public IServidorGrupoDAO getServidorGrupoDAO() {
 		return servidorGrupoDAO;
 	}
 
-	@Autowired
 	public void setServidorGrupoDAO(IServidorGrupoDAO servidorGrupoDAO) {
 		this.servidorGrupoDAO = servidorGrupoDAO;
 	}
 
-	@Autowired
 	public void setServidorDAO(IServidorOpcDAO servidorDAO) {
 		this.servidorDAO = servidorDAO;
 	}
@@ -131,7 +139,6 @@ public class ServidorService implements IServidorService{
 
 	}
 
-	@Autowired
 	public void setTanqueDAO(ITanqueDAO tanqueDAO) {
 		this.tanqueDAO = tanqueDAO;
 	}
@@ -145,8 +152,6 @@ public class ServidorService implements IServidorService{
 	public List<ServidorGrupo> getServidorGrupoByServidor(Long idServidorGrupo) {
 		return servidorGrupoDAO.findServidorGrupoByServidor(idServidorGrupo);
 	}
-
-	
 
 	public IOpcControllerService getControllerService() {
 		return controllerService;
