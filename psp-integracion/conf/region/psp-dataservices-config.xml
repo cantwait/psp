@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps"
+	xmlns:pop3="http://www.mulesoft.org/schema/mule/pop3" xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp"
+	xmlns:pop3s="http://www.mulesoft.org/schema/mule/pop3s" xmlns:imap="http://www.mulesoft.org/schema/mule/imap"
+	xmlns:imaps="http://www.mulesoft.org/schema/mule/imaps" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:https="http://www.mulesoft.org/schema/mule/https"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:management="http://www.mulesoft.org/schema/mule/management"
+	xmlns:ognl="http://www.mulesoft.org/schema/mule/ognl" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:mule-xml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey"
+	xsi:schemaLocation="
+          http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+          http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
+          http://www.mulesoft.org/schema/mule/pop3 http://www.mulesoft.org/schema/mule/pop3/3.1/mule-pop3.xsd
+          http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/3.3/mule-smtp.xsd
+          http://www.mulesoft.org/schema/mule/pop3s http://www.mulesoft.org/schema/mule/pop3s/current/mule-pop3s.xsd
+          http://www.mulesoft.org/schema/mule/imap http://www.mulesoft.org/schema/mule/imap/current/mule-imap.xsd
+          http://www.mulesoft.org/schema/mule/imaps http://www.mulesoft.org/schema/mule/imaps/current/mule-imaps.xsd
+          http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/3.2/mule-email.xsd
+          http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.1/mule-file.xsd
+          http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+          http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+          http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/3.2/mule-jdbc.xsd
+          http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+          http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+          http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.3/mule-scripting.xsd
+          http://www.mulesoft.org/schema/mule/management http://www.mulesoft.org/schema/mule/management/3.2/mule-management.xsd
+          http://www.mulesoft.org/schema/mule/ognl http://www.mulesoft.org/schema/mule/ognl/current/mule-ognl.xsd
+          http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
+          http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+          http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.1/mule-vm.xsd
+          http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+          http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
+          http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
+
+	<flow name="ManageRegionService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Regiones.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/region"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IRegionService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="regionService" />
+		</component>
+	</flow>
+
+	<flow name="ManageLocalidadService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Localidades.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/localidad"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.ILocalidadService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="localidadService" />
+		</component>
+	</flow>
+
+	<flow name="ManageServidorOpcService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la Administración de
+			Servidores OPC.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/servidoropc"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IServidorService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="servidorService" />
+		</component>
+	</flow>
+
+	<flow name="ManageTanqueService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Tanques.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/tanque"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.ITanqueService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="tanqueService" />
+		</component>
+	</flow>
+
+	<flow name="ManageItemService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Items OPC.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/itemopc"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IItemService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="itemService" />
+		</component>
+	</flow>
+
+	<flow name="ManageProductoService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Productos.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/producto"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IProductoService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="productoService" />
+		</component>
+	</flow>
+
+	<flow name="ManageGrupoService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Grupos de Items.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/grupo"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IGrupoService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="grupoService" />
+		</component>
+	</flow>
+
+	<flow name="ManagePaisService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Paises.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/pais"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IPaisService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="paisService" />
+		</component>
+	</flow>
+
+	<flow name="ManageRolService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Roles de Usuario.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/rol"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IRolService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="rolService" />
+		</component>
+	</flow>
+
+	<flow name="ManageUsuarioService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Usuarios.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/usuario"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IUserService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="userService" />
+		</component>
+	</flow>
+
+	<flow name="ManageUnidadMedidaService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Unidades de medida.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/unidadmedida"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IUnidadMedidaService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="unidadService" />
+		</component>
+	</flow>
+
+	<flow name="ManageTipoUnidadMedidaService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			tipos de unidad de medida.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/tipounidadmedida"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.ITipoUnidadMedidaService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="tipoUnidadService" />
+		</component>
+	</flow>
+	
+	<flow name="ManageSecurityService">
+		<description>
+			Servicio Que permite Via CXF-SOAP la administracion del modulo de seguridad: Operaciones y Transacciones
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/security" exchange-pattern="request-response">
+			<cxf:jaxws-service  serviceClass="com.pdvsa.psp.service.ISecurityService"/>
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="securityService"/>
+		</component>
+	</flow>
+
+</mule>

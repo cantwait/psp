@@ -28,13 +28,10 @@ public class MongoFindComponent {
 		List<OpcInfoRegisterMongo> items = new ArrayList<OpcInfoRegisterMongo>();
 //		BasicQuery bq;
 		if(request.getStationId() != null && request.getDesde() != null && request.getHasta() != null && !request.getDesde().after(request.getHasta())){			
-			
-			items = getMongoTemplate().find(new Query().addCriteria(Criteria.where("stationId").is(request.getStationId()).and("timestamp").gte(request.getDesde()).lte(request.getHasta())), OpcInfoRegisterMongo.class, "opcInfoRegister");
+			items = getMongoTemplate().find(new Query().addCriteria(Criteria.where("stationId").is(request.getStationId()).and("timestamp").gte(request.getDesde()).lte(request.getHasta())), OpcInfoRegisterMongo.class, "opcInfoRegisterHistoric");
 		}else if(request.getDesde() != null && request.getHasta() != null && !request.getDesde().after(request.getHasta())){
-			
-			items = getMongoTemplate().find(new Query().addCriteria(Criteria.where("timestamp").gte(changeDateFormat(request.getDesde())).lte(changeDateFormat(request.getHasta()))), OpcInfoRegisterMongo.class, "opcInfoRegister");
+			items = getMongoTemplate().find(new Query().addCriteria(Criteria.where("timestamp").gte(changeDateFormat(request.getDesde())).lte(changeDateFormat(request.getHasta()))), OpcInfoRegisterMongo.class, "opcInfoRegisterHistoric");
 		}
-		
 		response.getListaopc().addAll(items);
 		
 		return response;

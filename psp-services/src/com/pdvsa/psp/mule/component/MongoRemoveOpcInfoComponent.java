@@ -14,7 +14,6 @@ public class MongoRemoveOpcInfoComponent {
 	public void removeItems(@Payload OpcItemsTransfer request){
 		
 		for (OpcInfoRegisterMongo opc : request.getOpcItems()) {
-			System.out.println("quitando objeto: " + opc.getTimestamp());
 			getMongoTemplate().remove(opc, "opcInfoRegister");
 		}
 		

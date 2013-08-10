@@ -40,38 +40,40 @@
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
 
 	 
-    <flow name="ExposeOpcInfoPaisService" doc:name=""ExposeOpcInfoPaisService"">
-		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9000" doc:name="http-save-opc-endpoint" encoding="UTF-8" path="opc-info" mimeType="text/xml" />
+    <flow name="ExposeOpcInfoPaisService" doc:name="ExposeOpcInfoPaisService">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}"  path="${rest.pathBase}/opc-info" doc:name="http-save-opc-endpoint" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
-		<logger level="INFO" message="#[payload]"/>
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
 		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
 		   <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />				    
 		</mule-xml:xml-to-object-transformer>		
+		<logger level="INFO" message="#[payload]"/>
+		<!-- Debe validarse la correctitud y consistencia de los datos, comprobando que efectivamente son la region del servidor y de localidades subordinadas -->
+		<!-- Almacene en Historico y en Cache paralelamente, pues como estaba antes solo lo hacia cuando estaba arriba el pais  -->
+		<!-- Estos datos de campo deben estar disponibles para el servicio de Pentaho  -->
+		<component>
+	    	<spring-object bean="mongoSaveHistoricItemsComponent"/>
+		</component>							
 		<component>
 	    	<spring-object bean="mongoInsertComponent"/>
 		</component> 
+		<!-- Debe almacenarse en una estructura de memoria la ultimas lecturas de las diversas variables que vienen de la localidad -->
+		<!-- Pues es esta la que se mostrara en el portal de administracion -->
+		
+		<!-- Lo unico que debe darse es un mensaje de OK, indicando la cantidad de lecturas que almacenaste, igualmente es posible que exista --> 
+		<!-- un error al almacenar en ese caso debe enviarse un xml con un tag de error, indicando el problema --> 		
+		<!-- Este enfoque va a generar mucho trafico hacia la localidad por que reenvias de nuevo el XML  -->				
 		<mule-xml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml">
 		    <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		    <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>
 		    <mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />		    
 		</mule-xml:object-to-xml-transformer>
-		<logger level="INFO" message="RETORNANDO DATOS A LOCALIDAD: #[payload]"/>
-	</flow>
-    
-    
-	
-	<flow name="ReplicationOpcConfigurationRestFlow" doc:name="ReplicationOpcConfigurationRestFlow">
-		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9000" doc:name="http-synchronize-vars-endpoint" encoding="UTF-8" path="replication-opc" mimeType="text/xml" />
-		<jersey:resources doc:name="REST">
-			<component>
-			    <spring-object bean="opcReplicationRestService" />			    
-			</component>
-		</jersey:resources>
+		<logger level="INFO" message="RETORNANDO DATOS A REGION: #[payload]"/>
 	</flow>
 	
 	<flow name="ConsultarDatosOpcPentahoFlow" doc:name="ConsultarDatosOpcPentahoFlow">
@@ -80,7 +82,7 @@
 			presenta
 			en dos modalidades,filtra por fecha desde-hasta y tambien por stationId
 		</description>
-		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8810" path="query-vars" doc:name="HTTP" />
+		<http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-vars" doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
 		</jersey:resources>
@@ -89,6 +91,7 @@
 			<mule-xml:alias name="Opc.Request"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
+		<!-- Modifique el Componente para que Almacene en Historic, como esta planteado leia de Cache -->
 		<component>
 	    	<spring-object bean="mongoFindComponent"/>
 		</component>		
@@ -96,10 +99,12 @@
 			<mule-xml:alias name="Opc.Response"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
 			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 		</mule-xml:object-to-xml-transformer>
+		<!-- Debe enviarse un xml con un tag de error para indicar que no hay conexion a la base de datos -->		
 	</flow>
 	
+	<!-- Este ultimo registro debe leerse memoria, se deposita en una estructura compartida en la que almacena ExposePaisFlow -->
 	<flow name="ConsultarUltimoRegistroFlow" doc:name="ConsultarUltimoRegistroFlow">		
-		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8810" path="query-last" doc:name="HTTP" />
+		<http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-last" doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
 		</jersey:resources>
@@ -114,6 +119,24 @@
 		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
 			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 		</mule-xml:object-to-xml-transformer>
+		<!-- Debe enviarse un XML con un Tag de error para indicar que no hay Conexion a la Base de Datos -->				
 	</flow>
+	
+	<!-- ******* I M P O R T A N T E ******* -->
+	<!-- Falta un flujo que determine si hay regiones que no esta transmitiendo, esto es una condicion de error a tomar en cuenta -->
+	<!-- Generar notificacion via Correo Electronico -->
+		
+	
+	<!-- 
+	<flow name="ReplicationOpcConfigurationRestFlow" doc:name="ReplicationOpcConfigurationRestFlow">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9000" doc:name="http-synchronize-vars-endpoint" encoding="UTF-8" path="replication-opc" mimeType="text/xml" />
+		<jersey:resources doc:name="REST">
+			<component>
+			    <spring-object bean="opcReplicationRestService" />			    
+			</component>
+		</jersey:resources>
+	</flow>
+ 	-->	
+	
 
 </mule>

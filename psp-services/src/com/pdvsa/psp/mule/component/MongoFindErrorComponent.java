@@ -32,7 +32,7 @@ public class MongoFindErrorComponent {
 	public OpcErrorResponse findErrores(@Payload OpcErrorMongoRequest payload){
 		List<TransferExceptionMongo> errores = new ArrayList<TransferExceptionMongo>();
 		OpcErrorResponse respuesta = new OpcErrorResponse();
-		getMongoTemplate().find(new Query(), TransferExceptionMongo.class, "OpcErrorTransaction");
+		getMongoTemplate().find(new Query(), TransferExceptionMongo.class, "opcErrorTransaction");
 		errores = getMongoTemplate().find(new Query().addCriteria(Criteria.where("fecha").gte(changeDateFormat(payload.getDesde())).lte(changeDateFormat(payload.getHasta()))), TransferExceptionMongo.class, "OpcErrorTransaction");
 		
 		if(errores.size() > 0){

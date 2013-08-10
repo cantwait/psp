@@ -22,7 +22,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryPais" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IPaisService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/pais/ManagePaisService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/pais/ManagePaisService" />
 	</bean>
 
 	<bean id="tanqueService" class="com.pdvsa.psp.service.ITanqueService"
@@ -31,7 +31,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryTanque" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.ITanqueService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/tanque/ManageTanqueService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/tanque/ManageTanqueService" />
 	</bean>
 
 
@@ -41,7 +41,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryRegion" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IRegionService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/region/ManageRegionService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/region/ManageRegionService" />
 	</bean>
 
 
@@ -51,7 +51,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryServidor" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IServidorService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/servidoropc/ManageServidorOpcService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/servidoropc/ManageServidorOpcService" />
 	</bean>
 
 	<bean id="localidadService" class="com.pdvsa.psp.service.ILocalidadService"
@@ -60,7 +60,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryLocalidad" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.ILocalidadService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/localidad/ManageLocalidadService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/localidad/ManageLocalidadService" />
 	</bean>
 
 
@@ -70,7 +70,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryGrupo" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IGrupoService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/grupo/ManageGrupoService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/grupo/ManageGrupoService" />
 	</bean>
 
 	<bean id="rolService" class="com.pdvsa.psp.service.IRolService"
@@ -79,7 +79,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryRol" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IRolService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/rol/ManageRolService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/rol/ManageRolService" />
 	</bean>
 
 
@@ -89,7 +89,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryItem" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IItemService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/itemopc/ManageItemService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/itemopc/ManageItemService" />
 	</bean>
 
 	<bean id="productoService" class="com.pdvsa.psp.service.IProductoService"
@@ -98,7 +98,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryProducto" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IProductoService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/producto/ManageProductoService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/producto/ManageProductoService" />
 	</bean>
 
 	<bean id="unidadMedidaService" class="com.pdvsa.psp.service.IUnidadMedidaService"
@@ -107,7 +107,7 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryUnidadMedida" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IUnidadMedidaService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/unidadmedida/ManageUnidadMedidaService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/unidadmedida/ManageUnidadMedidaService" />
 	</bean>
 
 	<bean id="userService" class="com.pdvsa.psp.service.IUserService" scope="prototype"
@@ -116,16 +116,17 @@ http://www.springframework.org/schema/security
 	<bean id="clientFactoryUser" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" scope="prototype">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IUserService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/usuario/ManageUsuarioService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/usuario/ManageUsuarioService" />
 	</bean>
 
+	<!-- Este Servicio NO Se encuentra disponible a Nivel Region y Pais -->
 	<bean id="opcInfoService" class="com.pdvsa.psp.service.IOpcControllerService"
 		factory-bean="opcInfoFactory" factory-method="create" />
 
 	<bean id="opcInfoFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.IOpcControllerService" />
 		<property name="address"
-			value="http://${ws-address}:${ws-port}/psp/services/opcinfo/ManageOpcInfoRegisterService" />
+			value="http://${ws-address}:${ws-port}${ws-pathBase}/opcinfo/ManageOpcInfoRegisterService" />
 	</bean>
 	
 	<bean id="securityService" class="com.pdvsa.psp.service.ISecurityService"
@@ -133,7 +134,7 @@ http://www.springframework.org/schema/security
 
 	<bean id="securityFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
 		<property name="serviceClass" value="com.pdvsa.psp.service.ISecurityService" />
-		<property name="address" value="http://${ws-address}:${ws-port}/psp/services/security/ManageSecurityService" />
+		<property name="address" value="http://${ws-address}:${ws-port}${ws-pathBase}/security/ManageSecurityService" />
 	</bean>
 	
 	<bean id="importarArchivo" class="com.obelisco.herramientas.ImportarArchivo">
@@ -163,6 +164,7 @@ http://www.springframework.org/schema/security
     
 	<bean id="servicioMongo" class="com.obelisco.modelo.servicios.rest.impl.ServicioMongo">
 	    <property name="restTemplate" ref="restTemplate"></property>
+		<property name="address" value="http://${rest-address}:${rest-port}${rest-pathBase}" />	    
 	</bean>
 
 </beans>

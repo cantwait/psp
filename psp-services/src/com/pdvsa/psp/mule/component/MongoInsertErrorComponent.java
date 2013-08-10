@@ -12,7 +12,7 @@ public class MongoInsertErrorComponent {
 	
 	public TransferExceptionMongo insertError(@Payload TransferExceptionMongo payload){
 		
-		mongoTemplate.insert(payload, "OpcErrorTransaction");
+		mongoTemplate.insert(payload, "opcErrorTransaction");
 		
 		return payload;
 	}

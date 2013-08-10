@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+        <constructor-arg name="username" value="${mongo.user}"/>
+        <constructor-arg name="password" value="${mongo.password}"/>
+    </bean>
+
+    <bean class="com.mongodb.Mongo" id="mongo">
+        <constructor-arg name="host" value="${mongo.host}" />
+        <constructor-arg name="port" value="${mongo.port}" />
+    </bean>
+	
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongo" ref="mongo" />
+        <constructor-arg name="databaseName" value="${mongo.database}" />
+<!--         <constructor-arg name="userCredentials" ref="mongoCredentials" /> -->
+    </bean>    
+    
+    <bean id="mongoInsertComponent" class="com.pdvsa.psp.mule.component.MongoInsertComponent">
+        <property name="mongoTemplate" ref="mongoTemplate"/>
+    </bean>
+    
+    <bean id="mongoFindComponent" class="com.pdvsa.psp.mule.component.MongoFindComponent">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+    
+    <bean id="mongoFindComponentTransfer" class="com.pdvsa.psp.mule.component.MongoFindOpcTransferComponent">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+    
+    <bean id="mongoRemoveItemsComponent" class="com.pdvsa.psp.mule.component.MongoRemoveOpcInfoComponent">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+    
+    <bean id="mongoSaveHistoricItemsComponent" class="com.pdvsa.psp.mule.component.MongoSaveHistoricItemsComponent">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+    
+     <bean id="mongoFindLastOpcItem" class="com.pdvsa.psp.mule.component.MongoFindLastRecordComponent">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+    
+     <bean id="mongoInsertErrorComponent" class="com.pdvsa.psp.mule.component.MongoInsertErrorComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+     <bean id="mongoFindLastRecordInsertedComponent" class="com.pdvsa.psp.mule.component.MongoFindLastRecordInsertedComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"/>
+     </bean>
+     
+     <bean id="mongoDeleteHistoricComponent" class="com.pdvsa.psp.mule.component.MongoDeleteHistoricComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+     <bean id="mongoFindErrorComponent" class="com.pdvsa.psp.mule.component.MongoFindErrorComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+	
+	
+</beans>

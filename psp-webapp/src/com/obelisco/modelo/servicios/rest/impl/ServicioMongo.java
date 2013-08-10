@@ -17,15 +17,15 @@ import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 
 public class ServicioMongo implements IServiciosMongo{
 	
-	
 	private RestTemplate restTemplate;
+	private String address;
 	
 	@Override
 	public OpcInfoRegisterListResponse findDataPentaho(OpcInfoRegisterRequest req) {
 		URI url;
 		OpcInfoRegisterListResponse response = new OpcInfoRegisterListResponse();
 		try {
-			url = new URI("http://localhost:8801/query-vars/find-items");
+			url = new URI(address + "/query-vars/find-items");
 			HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.TEXT_XML);
 		    HttpEntity<OpcInfoRegisterRequest> request= new HttpEntity<OpcInfoRegisterRequest>(req, headers);
@@ -45,7 +45,7 @@ public class ServicioMongo implements IServiciosMongo{
 		URI url;
 		OpcInfoRegisterListResponse response = new OpcInfoRegisterListResponse();
 		try {
-			url = new URI("http://localhost:8801/query-vars/find-last-record");
+			url = new URI(address + "/query-vars/find-last-record");
 			
 			HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.TEXT_XML);
@@ -68,7 +68,7 @@ public class ServicioMongo implements IServiciosMongo{
 		URI url;
 		OpcErrorResponse response = new OpcErrorResponse();
 		try {
-			url = new URI("http://localhost:8810/query-errors/get-log");
+			url = new URI(address+ "/query-errors/get-log");
 		
 			 HttpHeaders headers = new HttpHeaders();
 		     headers.setContentType(MediaType.TEXT_XML);
@@ -90,6 +90,14 @@ public class ServicioMongo implements IServiciosMongo{
 
 	public void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 	

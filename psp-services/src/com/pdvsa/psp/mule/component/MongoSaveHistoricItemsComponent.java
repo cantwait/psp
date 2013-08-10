@@ -11,9 +11,7 @@ public class MongoSaveHistoricItemsComponent {
 	
 	
 	public OpcItemsTransfer saveHistoricItems(@Payload OpcItemsTransfer request){
-		
 		getMongoTemplate().insert(request.getOpcItems(), "opcInfoRegisterHistoric");
-		
 		return request;
 	}
 	

@@ -28,7 +28,7 @@ import com.pdvsa.psp.service.IServidorService;
 @Service("servidorService")
 public class ServidorService implements IServidorService{
 	
-	@Autowired
+	@Autowired(required=false)
 	@Qualifier("opcControllerService")
 	private IOpcControllerService controllerService;
 	
@@ -80,7 +80,9 @@ public class ServidorService implements IServidorService{
 		if (servidor != null) {
 			remover = servidorDAO.remove(servidor);
 			if(remover){
-				controllerService.removeServer(servidor.getLocalidad().getRegion().getId(), servidor.getId());
+				if (controllerService != null) {
+					controllerService.removeServer(servidor.getLocalidad().getRegion().getId(), servidor.getId());
+				}
 			}
 		}
 		return remover;
@@ -131,7 +133,9 @@ public class ServidorService implements IServidorService{
 		
 		servidor = servidorDAO.save(servidor);
 		if(addOpcServer == true){
-			controllerService.addServer(servidor.getLocalidad().getRegion().getId(), servidor.getId());
+			if (controllerService != null) {
+				controllerService.addServer(servidor.getLocalidad().getRegion().getId(), servidor.getId());
+			}			
 		}
 
 

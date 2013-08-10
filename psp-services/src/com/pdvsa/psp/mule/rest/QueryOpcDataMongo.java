@@ -18,9 +18,7 @@ public class QueryOpcDataMongo {
 	@Consumes(MediaType.TEXT_XML)
 	@POST
 	public OpcInfoRegisterRequest findObjects(OpcInfoRegisterRequest xml){
-		
 		return xml;
-		
 	}
 	
 	@Path("/find-last-record")

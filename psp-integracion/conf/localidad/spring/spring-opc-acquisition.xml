@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="InitJInterop" class="com.pdvsa.psp.component.opc.UtilJInterop">
+		<constructor-arg value="${dcom.debug}" />	
+		<constructor-arg value="${dcom.disableAutoCollection}" />
+	</bean>
+
+	<bean id="OpcManagerBase" class="com.pdvsa.psp.component.opc.OpcManager" abstract="true">
+		<property name="adquisitionService" ref="opcAdquisitionService" />
+		<property name="serverReconnectDelay" value="${opc.serverReconnectDelay}" />
+		<property name="maxServerErrors" value="${opc.maxServerErrors}" />
+		<property name="stopServerForMaxError" value="${opc.stopServerForMaxError}" />
+		<property name="byteBigEndian" value="${tcp.modbus.bBigEndian}" />
+		<property name="wordBigEndian" value="${tcp.modbus.wBigEndian}" />
+		<property name="dwordBigEndian" value="${tcp.modbus.dwBigEndian}" />		
+	</bean>
+	
+	<!-- 
+	Beans que actuarán como módulos de adquisición OPC (uno por región) 
+	NOTA: Un valor de null para "regionId" implica el monitoreo a todas las regiones 
+	--> 
+	
+	<bean id="OpcManagerAllRegion" parent="OpcManagerBase">
+		<property name="regionId">
+			<null />
+		</property>
+	</bean>
+	
+	<bean id="opcControllerServiceTarget" class="com.pdvsa.psp.service.impl.OpcControllerService">
+		<property name="opcManagers">
+			<list>
+				<ref local="OpcManagerAllRegion" />
+			</list>
+		</property>	
+	</bean>	
+	
+	<bean id="opcControllerService" class="org.springframework.aop.framework.ProxyFactoryBean">
+	    <property name="proxyInterfaces">
+	        <value>com.pdvsa.psp.service.IOpcControllerService</value>
+	    </property>	    
+	    <property name="target" ref="opcControllerServiceTarget"></property>
+	    <property name="interceptorNames">
+	        <list>
+	            <value>txAdvice</value>
+	        </list>
+	    </property>
+	</bean>
+
+</beans>

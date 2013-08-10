@@ -10,9 +10,7 @@ public class MongoInsertComponent {
 	private MongoTemplate mongoTemplate;	
 	
 	public OpcItemsTransfer insertObject(@Payload OpcItemsTransfer payload) {	   
-		
 		getMongoTemplate().insert(payload.getOpcItems(), "opcInfoRegister");
-		
         return payload;
 	}
 	
