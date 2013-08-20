@@ -50,9 +50,9 @@
 										<label value="Fecha" />
 										<hbox>
 										 	<label value="Desde"></label>
-											<datebox id="dateDesde" format="dd/MM/yyyy" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>											
+											<datebox id="dateDesde" format="dd/MM/yyyy hh:mm:ss" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>											
 											<label value="Hasta"></label>
-											<datebox id="dateHasta" format="dd/MM/yyyy" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>
+											<datebox id="dateHasta" format="dd/MM/yyyy hh:mm:ss" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>
 											
 										</hbox>
 									</row>									

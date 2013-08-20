@@ -30,5 +30,9 @@ public interface ILocalidadService {
 	@WebMethod
 	@WebResult(name="localidades")
 	public List<Localidad> getLocalidadesByRegion(@WebParam(name="idregion")Long region,@WebParam(name="activo") Boolean activo);
+	
+	@WebMethod
+	@WebResult(name="localidades")
+	public List<Localidad> getAllLocalidades();
 
 }

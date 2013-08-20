@@ -102,4 +102,10 @@ public class RolService implements IRolService{
 		return "psdvsa-bus@pdvsa.com";
 	}
 
+	@Override
+	public List<Usuario> getUsuariosByRol(@WebParam(name = "rolId") Long rolId) {
+		
+		return roleUserDAO.getUsuariosByRolId(rolId);
+	}
+
 }

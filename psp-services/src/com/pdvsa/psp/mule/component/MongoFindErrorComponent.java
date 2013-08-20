@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.mongodb.CommandResult;
 import com.pdvsa.psp.model.xml.OpcErrorMongoRequest;
 import com.pdvsa.psp.model.xml.OpcErrorResponse;
-import com.pdvsa.psp.model.xml.TransferExceptionMongo;
+import com.pdvsa.psp.model.xml.MongoLogger;
 
 public class MongoFindErrorComponent {
 	
@@ -30,10 +30,10 @@ public class MongoFindErrorComponent {
 	}
 	
 	public OpcErrorResponse findErrores(@Payload OpcErrorMongoRequest payload){
-		List<TransferExceptionMongo> errores = new ArrayList<TransferExceptionMongo>();
+		List<MongoLogger> errores = new ArrayList<MongoLogger>();
 		OpcErrorResponse respuesta = new OpcErrorResponse();
-		getMongoTemplate().find(new Query(), TransferExceptionMongo.class, "opcErrorTransaction");
-		errores = getMongoTemplate().find(new Query().addCriteria(Criteria.where("fecha").gte(changeDateFormat(payload.getDesde())).lte(changeDateFormat(payload.getHasta()))), TransferExceptionMongo.class, "OpcErrorTransaction");
+		getMongoTemplate().find(new Query(), MongoLogger.class, "opcErrorTransaction");
+		errores = getMongoTemplate().find(new Query().addCriteria(Criteria.where("fecha").gte(payload.getDesde()).lte(payload.getHasta())), MongoLogger.class, "opcErrorTransaction");
 		
 		if(errores.size() > 0){
 			respuesta.getErrores().addAll(errores);
@@ -45,7 +45,7 @@ public class MongoFindErrorComponent {
 	@SuppressWarnings("unused")
 	private Date changeDateFormat(Date d){
 		Date newDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(d);

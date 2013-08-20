@@ -39,7 +39,7 @@
 				</rows>
 			</grid>
 		</div>
-		<div align="right" height="15%" style="background:#c5e6ef">
+		<div align="right" height="15%" >
 			<button id="btnAceptar" label="Aceptar"
 				image="/images/icons/disk_blue.png" orient="vertical">
 			</button>

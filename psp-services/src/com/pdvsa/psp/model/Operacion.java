@@ -25,8 +25,10 @@ public class Operacion implements Serializable{
 	private Integer orden = new Integer(0);
 	@OneToMany(mappedBy="operacion", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario = new HashSet<TransaccionOperacionUsuario>();
+//	@Transient
+//	private Set<Usuario> usuarios = new HashSet<Usuario>();
 	@Transient
-	private Set<Usuario> usuarios = new HashSet<Usuario>();
+	private Set<Rol> roles = new HashSet<Rol>();
 	
 	public Operacion(){}
 	
@@ -95,13 +97,22 @@ public class Operacion implements Serializable{
 	}
 	
 	@XmlTransient
-	public Set<Usuario> getUsuarios() {
-		return usuarios;
+	public Set<Rol> getRoles() {
+		return roles;
 	}
 
-	public void setUsuarios(Set<Usuario> usuarios) {
-		this.usuarios = usuarios;
+	public void setRoles(Set<Rol> roles) {
+		this.roles = roles;
 	}
+	
+//	@XmlTransient
+//	public Set<Usuario> getUsuarios() {
+//		return usuarios;
+//	}
+//
+//	public void setUsuarios(Set<Usuario> usuarios) {
+//		this.usuarios = usuarios;
+//	}
 
 	
 	

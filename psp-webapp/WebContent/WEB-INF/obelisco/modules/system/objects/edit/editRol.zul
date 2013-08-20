@@ -156,8 +156,7 @@
 				</borderlayout>
 			</center>
 			<south height="48px">
-				<div height="100%" align="right"
-					style="background:#c5e6ef">
+				<div height="100%" align="right" >
 					<button id="btnAceptar" label="Aceptar" mold="trendy"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>

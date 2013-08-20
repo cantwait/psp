@@ -80,20 +80,20 @@ if(operacionModificar != null){
 				<panel title="Usuario" collapsible="false"
 							height="299px">
 							<toolbar mold="panel">
-								<button label="Agregar Usuarios"
+								<button label="Agregar Roles"
 									mold="trendy">
 									<attribute name="onClick">
 									<![CDATA[
 	{
 
 		command1 = new ShowDialogCommand();
-		command1.parametros.put("aEntity", entidadCatalogoOpe.usuarios);
+		command1.parametros.put("aEntity", entidadCatalogoOpe.roles);
 
-		command1.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoUsuarios.zul";
+		command1.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/catalogoRoles.zul";
 
 		if (command1.execute(null) == ActionType.ACEPTAR) {
 			sel1 = command1.getReturnValue("CATALOG_RESULT");
-			entidadCatalogoOpe.usuarios.addAll(sel1);
+			entidadCatalogoOpe.roles.addAll(sel1);
 			binder.loadComponent(lstBoxUsuarios);
 		}
 
@@ -108,27 +108,27 @@ if(operacionModificar != null){
 								<borderlayout height="100%">
 									<center autoscroll="true">
 										<listbox id="lstBoxUsuarios" preloadSize="10" vflex="true"
-											model="@{entidadCatalogoOpe.usuarios}" mold="paging" pageSize="10" >
+											model="@{entidadCatalogoOpe.roles}" mold="paging" pageSize="10" >
 											<listhead sizable="true">
 												<listheader
-													label="Login" width="40%" />
+													label="Nombre" width="40%" />
 												<listheader
-													label="Nombre" width="40%" />	
+													label="Descripción" width="40%" />	
 												<listheader label="Operación" width="20%"/>											
 											</listhead>
 											<listitem
-												sclass="row-border item" self="@{each=usu}">
+												sclass="row-border item" self="@{each=rol}">
 												<listcell
-													label="@{usu.login}" />
+													label="@{rol.nombre}" />
 												<listcell
-													label="@{usu.nombre}" />
+													label="@{rol.descripcion}" />
 												
 												<listcell>
 													<hbox
 														spacing="5px">
 														<toolbarbutton
 															style="font-size: 9px; font-weight: normal;"
-															objeto="@{usu}"
+															objeto="@{rol}"
 															use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
 															image="/images/icons/16x16/delete2.png"
 															tooltiptext="Eliminar ...">
@@ -136,8 +136,8 @@ if(operacionModificar != null){
 											<![CDATA[
 	{
 		c = event.target;
-		it = (com.pdvsa.psp.model.Usuario) c.objeto;
-		entidadCatalogoOpe.usuarios.remove(it);
+		it = (com.pdvsa.psp.model.Rol) c.objeto;
+		entidadCatalogoOpe.roles.remove(it);
 		binder.loadComponent(lstBoxUsuarios);
 
 	}

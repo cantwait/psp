@@ -21,7 +21,7 @@
 			<panelchildren>
 				<borderlayout height="100%">
 					<west title="Arbol de Objetos" width="30%"
-						style="background:#c5e6ef;" collapsible="true"
+						 collapsible="true"
 						autoscroll="true">
 						<panel border="normal" collapsible="true">
 							<panelchildren>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditGrupos"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	itemsOpc = new ArrayList();
+	aRolGeneral = arg.get("aObjeto");
+	if (aRolGeneral.nombre != null) {
+		itemsOpc = itemService.getUsuariosByRolId(aRolGeneral.id);
+		if (itemsOpc == null) {
+			itemsOpc = new ArrayList();
+		}
+	}
+]]>
+</zscript>
+
+	<window id="dlgEditGrupos" title="Grupo" border="normal" width="97%"
+		closable="true" height="97%"
+		use="com.obelisco.vista.zk.components.GenericDialog">
+		<caption image="/images/icons/24x24/window.png" />
+		<style src="/css/estilo_zk.css" dynamic="true" />
+		<borderlayout>
+			<center autoscroll="true">
+				<borderlayout>
+					<north>
+						<grid>
+							<columns>
+								<column width="40%" />
+								<column width="60%" />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<label id="txtNombre"
+										value="@{aRolGeneral.nombre}" />
+								</row>
+								<row>
+									<label value="Descripción" />
+									<label id="txtDescripcion"
+										value="@{aRolGeneral.descripcion}" />
+								</row>
+								
+								<row spans="2" align="right">
+									<hbox>
+										<checkbox id="checkActivo"
+											label="Activo" checked="@{aRolGeneral.activo}" disabled="true">
+										</checkbox>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</north>
+					<center>
+						<panel title="Usuarios" collapsible="false"
+							height="299px">
+							<panelchildren>
+								<!-- Lista de grupos -->
+								<borderlayout height="100%">
+									<center autoscroll="true">
+
+										<listbox preloadSize="10" vflex="true"
+											model="@{itemsOpc}" mold="paging" pageSize="10">
+											<listhead sizable="true">
+												<listheader
+													label="Login" width="300px" />
+												<listheader
+													label="Nombre" width="150px" />
+												
+											</listhead>
+											<listitem
+												sclass="row-border item" self="@{each=e}">
+												<listcell
+													label="@{e.nombre}" />
+												
+												<listcell
+													label="@{e.descripcion}" />
+																								
+											</listitem>
+										</listbox>
+
+
+									</center>
+								</borderlayout>
+							</panelchildren>
+						</panel>
+					</center>
+				</borderlayout>
+			</center>
+			
+		</borderlayout>
+
+	</window>
+
+</zk>

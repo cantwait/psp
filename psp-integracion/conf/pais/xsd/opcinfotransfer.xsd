@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="opcItemsTransfer" type="opcItemsTransfer"/>
+
+
+  <xs:complexType name="opcInfoRegisterMongo">
+    <xs:sequence>
+      <xs:element name="hostModbusSlave" type="xs:string" minOccurs="0"/>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="localidadNombre" type="xs:string" />
+      <xs:element name="paisNombre" type="xs:string" />
+      <xs:element name="portModbusSlave" type="xs:int" minOccurs="0"/>
+      <xs:element name="quality" type="xs:short" />
+      <xs:element name="reference" type="xs:int" />
+      <xs:element name="regValue" type="xs:string" />
+      <xs:element name="regionNombre" type="xs:string" />
+      <xs:element name="stationId" type="xs:long" />
+      <xs:element name="tagName" type="xs:string" />
+      <xs:element name="tagOpc" type="xs:string" />
+      <xs:element name="tanqueNombre" type="xs:string" />
+      <xs:element name="timestamp"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="opcItemsTransfer">
+    <xs:sequence>
+      <xs:element name="opcItems" >
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="opc" type="opcInfoRegisterMongo" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

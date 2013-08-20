@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./viewItems"?>
+
+
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
+
+	<zscript>
+	<![CDATA[
+	         
+	         registers = new OpcItemsTransfer();
+	tanqueNombre = arg.get("tanqueNombre");
+	registers = servicioMongo.getLastItemsByTanque(tanqueNombre);
+]]>
+</zscript>
+
+	<panel id="viewItems" title="@{tanqueNombre}" height="100%"
+		width="100%">
+		<attribute name="onClose">
+		<![CDATA[
+	{
+		timer.stop();
+	}
+]]>
+		</attribute>
+		<caption image="/images/icons/24x24/window.png" />
+		<panelchildren>
+			<style src="/css/estilo_zk.css" dynamic="true" />
+			<borderlayout>				
+				<center autoscroll="true">
+					<panel title="Variables">
+						<toolbar mold="panel">
+							<button label="Refrescar" mold="trendy">
+								<attribute name="onClick">
+									<![CDATA[
+									     	registers = servicioMongo.getLastItemsByTanque(tanqueNombre);
+	binder.loadAll();
+]]>
+									</attribute>
+							</button>
+						</toolbar>
+						<panelchildren>
+							<listbox model="@{registers.opcItems}">
+								<listhead sizable="true">
+									<listheader label="Nombre"
+										valign="middle" width="100px" />
+									<listheader label="OPC"
+										valign="middle" width="200px" />
+									<listheader label="MODBUS"
+										valign="middle" width="80px" />
+									<listheader label="Valor"
+										align="right" valign="middle" width="100px"/>
+									<listheader label="Calidad" valign="middle" width="80px"/>
+									<listheader label="Fecha de adquisicion" valign="middle" width="200px"/>
+								</listhead>
+								<listitem self="@{each=reg}">
+									<listcell label="@{reg.tagName}" />
+									<listcell label="@{reg.tagOpc}" />
+									<listcell label="@{reg.reference}" />
+									<listcell label="@{reg.regValue}" />
+									<listcell label="@{reg.quality}"/>
+									<listcell label="@{reg.timestamp}"/>
+								</listitem>
+							</listbox>
+						</panelchildren>
+					</panel>
+
+				</center>
+			</borderlayout>
+
+			<timer id="timer" delay="20000" repeats="true">
+				<attribute name="onTimer">
+			<![CDATA[
+	{
+
+		registers = opcInfoService.getDumpRegistersByServer(servidor.id);
+		binder.loadAll();
+
+	}
+]]>
+			</attribute>
+			</timer>
+
+		</panelchildren>
+	</panel>
+
+</zk>

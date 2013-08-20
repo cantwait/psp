@@ -6,21 +6,27 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-@XmlRootElement(name="Error")
-public class TransferExceptionMongo implements Serializable{
+//@XmlRootElement(name="log")
+public class MongoLogger implements Serializable{
 
 	private static final long serialVersionUID = 6243639081989351350L;
 	private String descripcion;
 	private Date fecha;
 	private String causa;
+	private Evento tipoEvento;
 	
+	public enum Evento{
+		TRANSACCION, CONEXION, VALIDACION, DESCONOCIDO, EXITO
+	}
 	
-	public TransferExceptionMongo(){}
+	public MongoLogger(){}
 	
-	public TransferExceptionMongo(String descripcion, Date fecha, String causa){
+	public MongoLogger(String descripcion, Date fecha, String causa, Evento movimiento){
 		this.descripcion = descripcion;
 		this.fecha = fecha;
 		this.causa = causa;
+		this.tipoEvento = movimiento;
+		
 	}
 	
 	public String getDescripcion() {
@@ -46,6 +52,14 @@ public class TransferExceptionMongo implements Serializable{
 
 	public void setCausa(String causa) {
 		this.causa = causa;
+	}
+
+	public Evento getTipoMovimiento() {
+		return tipoEvento;
+	}
+
+	public void setTipoMovimiento(Evento tipoMovimiento) {
+		this.tipoEvento = tipoEvento;
 	}
 	
 	

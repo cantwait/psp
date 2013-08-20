@@ -42,9 +42,9 @@ public class Usuario implements Serializable, BizEntity {
 	private Integer version = 0;
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<UsuarioRol> usuarioRoles = new HashSet<UsuarioRol>(0);
-	@OneToMany(mappedBy="usuario", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@XmlTransient
-	private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario = new HashSet<TransaccionOperacionUsuario>();	
+//	@OneToMany(mappedBy="usuario", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	@XmlTransient
+//	private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario = new HashSet<TransaccionOperacionUsuario>();	
 
 	public Usuario() {
 	}
@@ -159,15 +159,15 @@ public class Usuario implements Serializable, BizEntity {
 		this.usuarioRoles = usuarioRoles;
 	}	
 
-	@XmlTransient	
-	public Set<TransaccionOperacionUsuario> getTransaccionOperacionUsuario() {
-		return transaccionOperacionUsuario;
-	}
-
-	public void setTransaccionOperacionUsuario(
-			Set<TransaccionOperacionUsuario> transaccionOperacionUsuario) {
-		this.transaccionOperacionUsuario = transaccionOperacionUsuario;
-	}
+//	@XmlTransient	
+//	public Set<TransaccionOperacionUsuario> getTransaccionOperacionUsuario() {
+//		return transaccionOperacionUsuario;
+//	}
+//
+//	public void setTransaccionOperacionUsuario(
+//			Set<TransaccionOperacionUsuario> transaccionOperacionUsuario) {
+//		this.transaccionOperacionUsuario = transaccionOperacionUsuario;
+//	}
 
 	@Transient
 	public boolean isNew() {

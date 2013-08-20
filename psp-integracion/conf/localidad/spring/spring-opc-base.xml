@@ -20,7 +20,7 @@
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongo" ref="mongo" />
         <constructor-arg name="databaseName" value="${mongo.database}" />
-<!--         <constructor-arg name="userCredentials" ref="mongoCredentials" /> -->
+        <constructor-arg name="userCredentials" ref="mongoCredentials" />
     </bean>    
     
     <bean id="mongoInsertComponent" class="com.pdvsa.psp.mule.component.MongoInsertComponent">
@@ -47,20 +47,33 @@
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
     
-     <bean id="mongoInsertErrorComponent" class="com.pdvsa.psp.mule.component.MongoInsertErrorComponent">
+     <bean id="mongoInsertLogComponent" class="com.pdvsa.psp.mule.component.MongoInsertErrorComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+      <bean id="mongoInsertValidationDataComponent" class="com.pdvsa.psp.mule.component.MongoInsertValidationDataComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+      <bean id="mongoDeleteValidationDataComponent" class="com.pdvsa.psp.mule.component.MongoDeleteValidationDataComponent">
          <property name="mongoTemplate" ref="mongoTemplate"></property>
      </bean>
      
      <bean id="mongoFindLastRecordInsertedComponent" class="com.pdvsa.psp.mule.component.MongoFindLastRecordInsertedComponent">
          <property name="mongoTemplate" ref="mongoTemplate"/>
-     </bean>
-     
-     <bean id="mongoDeleteHistoricComponent" class="com.pdvsa.psp.mule.component.MongoDeleteHistoricComponent">
-         <property name="mongoTemplate" ref="mongoTemplate"></property>
-     </bean>
+     </bean>    
+    
      
      <bean id="mongoFindErrorComponent" class="com.pdvsa.psp.mule.component.MongoFindErrorComponent">
          <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+     <bean id="storeTankOpcDataCache" class="com.pdvsa.psp.mule.component.StoreTankOpcDataCache">
+         <property name="tanqueService" ref="tanqueService"/>
+     </bean>
+     
+     <bean id="itemsFromCache" class="com.pdvsa.psp.mule.rest.CacheItemsRest">
+         <property name="cacheItem" ref="storeTankOpcDataCache" />
      </bean>
 	
 	

@@ -24,7 +24,7 @@
 				<h:td style="padding : 0px;">
 					<borderlayout height="640px" width="100%">
 						<west title="Transacciones" width="30%"
-							style="background:#c5e6ef;" collapsible="true"
+							collapsible="true"
 							autoscroll="true">
 							<panel border="normal" collapsible="true">
 								<panelchildren>

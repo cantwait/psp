@@ -46,10 +46,14 @@
 		<spring:import resource="classpath:psp-dataservices-config-localidad.xml" />
 	</spring:beans>
 	
+	
 	<!-- PROPIEDADES GLOBALES -->
 	
 	<global-property name="contador" value="5" />
 	<global-property name="sumaContador" value="25"/>
+	
+	<mule-xml:schema-validation-filter schemaLocations="conf/localidad/xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
+	
 	
 	<quartz:connector name="Quartz-Connector"
 		validateConnections="true" doc:name="Quartz">

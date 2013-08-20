@@ -17,7 +17,7 @@ public class OpcInfoRegisterRequest {
 	
 	public OpcInfoRegisterRequest(){}
 	
-//	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)	
+	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)	
 	public Date getDesde() {
 		return desde;
 	}
@@ -25,7 +25,7 @@ public class OpcInfoRegisterRequest {
 	public void setDesde(Date desde) {
 		this.desde = desde;
 	}	
-//	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)
+	@XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)
 	public Date getHasta() {
 		return hasta;
 	}

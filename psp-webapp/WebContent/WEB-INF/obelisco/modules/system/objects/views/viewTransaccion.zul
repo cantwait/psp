@@ -9,7 +9,7 @@
 	<![CDATA[
 	objeto = arg.get("aObjeto");
 	operacionSelected = null;	
-	usuarios = new ArrayList();
+	roles = new ArrayList();
 	operaciones = new ArrayList();
 	if(objeto != null){
 		operaciones = securityService.getOperacionesByTransaccionId(objeto.codigo);
@@ -27,7 +27,7 @@
 			<tabbox orient="horizontal" height="100%" tabscroll="true">
 				<tabs width="120px">
 					<tab label="Datos Generales" />
-					<tab label="Operaciones / Usuarios" />
+					<tab label="Operaciones / Roles" />
 					<tab label="Seguridad" visible="false" />
 				</tabs>
 				<tabpanels>
@@ -88,7 +88,7 @@
 											<attribute name="onSelect">
 												<![CDATA[
 												         if(operacionSelected != null){
-												        	 usuarios = securityService.getUsuariosByOperacionAndTransaccion(objeto.codigo, operacionSelected.codigo);
+												        	 roles = securityService.getRolesByOperacionAndTransaccion(objeto.codigo, operacionSelected.codigo);
 												        	 binder.loadComponent(lstboxUsuarios);
 												         }
 ]]>
@@ -98,10 +98,10 @@
 								</panel>
 							</north>
 							<south height="70%">
-								<panel title="Usuarios">
+								<panel title="Roles">
 									<panelchildren>
 										<listbox id="lstboxUsuarios" rows="5"
-											model="@{usuarios}" height="400px" mold="paging">
+											model="@{roles}" height="400px" mold="paging">
 											<listhead sizable="true">
 												<listheader width="20%"
 													label="Login" />
@@ -109,11 +109,11 @@
 													label="Nombre" />												
 											</listhead>
 											<listitem
-												sclass="row-border item" self="@{each=u}">
+												sclass="row-border item" self="@{each=rol}">
 												<listcell
-													label="@{u.login}" />
+													label="@{rol.nombre}" />
 												<listcell
-													label="@{u.nombre}" />
+													label="@{rol.descripcion}" />
 												
 											</listitem>
 										</listbox>

@@ -1,10 +1,15 @@
 package com.pdvsa.psp.service.impl;
 
 import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.IRegionDAO;
 import com.pdvsa.psp.model.Region;
 import com.pdvsa.psp.model.Localidad;
@@ -74,6 +79,13 @@ public class RegionService implements IRegionService{
 	@Override
 	public List<Region> getRegionByPais(Long pais, boolean activo) {
 		return regionDAO.findRegionesByPais(pais, activo);
+	}
+
+	@Override
+	public List<Region> getAllRegiones() {
+		Search s = new Search();
+		s.addFilterEqual("activo", Boolean.TRUE);
+		return getRegionDAO().search(s);
 	}
 	
 }

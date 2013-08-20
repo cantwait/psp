@@ -39,4 +39,8 @@ public interface IRegionService {
 	@WebResult(name="region")
 	public List<Region> getRegionByPais(@WebParam(name="idpais") Long idPais,@WebParam(name="activo") boolean activo);
 	
+	@WebMethod
+	@WebResult(name="regiones")
+	public List<Region> getAllRegiones();
+	
 }

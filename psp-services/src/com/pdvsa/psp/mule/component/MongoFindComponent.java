@@ -21,7 +21,7 @@ import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 public class MongoFindComponent {
 	
 	private MongoTemplate mongoTemplate;
-	
+	 private static final SimpleDateFormat xmlFormater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 	
 	public OpcInfoRegisterListResponse findItems(@Payload OpcInfoRegisterRequest request){
 		OpcInfoRegisterListResponse response = new OpcInfoRegisterListResponse();
@@ -47,9 +47,12 @@ public class MongoFindComponent {
 	}
 	
 	@SuppressWarnings("unused")
-	private Date changeDateFormat(Date d){
+	private static Date changeDateFormat(Date d){
 		Date newDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//		Calendar newDate = Calendar.getInstance();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(d);
@@ -72,16 +75,53 @@ public class MongoFindComponent {
 			mesStr = String.valueOf(cal.get(Calendar.MONTH) + 1);
 		}
 		
-		String formatedDate = ano + "-" + mesStr + "-" +dia + " " +hora+":"+minuto+":"+segundo; 
+		System.out.println(cal.getTime());
+		
+		String formatedDate = ano + "-" + mesStr + "-" +dia + "'T'" +hora+":"+minuto+":"+segundo+"'Z'"; 
+//		String formatedDate = "2013-08-19 09:10:58";
 		System.out.println("formatedDate : " + formatedDate);  
 		
-		try {
-			newDate =  sdf.parse(formatedDate);
-		} catch (ParseException e) {			
-			e.printStackTrace();
-		}
+					try {
+						newDate =  sdf.parse(formatedDate);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+//		newDate = javax.xml.bind.DatatypeConverter.parseDateTime(cal.getTime().toString());
 		
 		return newDate;
 	}
+	
+	public static void main(String... args){
+		Date d = Calendar.getInstance().getTime();
+		
+//		Date newDate = changeDateFormat(d);
+		
+		
+		
+		System.out.println(formatXMLDate(d));
+	}
+	
+	 //Use the JAXB data type conversion, since it already know the xml valid date format
+    private static java.util.Date parseXMLDate(final String date) {
+        Calendar cal = javax.xml.bind.DatatypeConverter.parseDateTime(date);
+        
+        return cal.getTime();
+    }
+     
+    //convert to the string representation of the datetime format
+    //NOTES: this should be the same as formatDate() but keep 
+    // and preferred to use this one instead.  Just in case the JAXB
+    // document DatetypeConverter change in the future.
+    public static String formatXMLDate(final java.util.Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return javax.xml.bind.DatatypeConverter.printDateTime(cal);
+    }
+     
+    // should yield the same results as formatXMLDate() method above.
+    public static String formatDate(final java.util.Date date) {
+        return xmlFormater.format(date);
+    }
 
 }

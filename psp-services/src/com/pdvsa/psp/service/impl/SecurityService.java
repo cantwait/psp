@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.IOperacionDAO;
+import com.pdvsa.psp.dao.IRolDAO;
 import com.pdvsa.psp.dao.ITransaccionDAO;
 import com.pdvsa.psp.dao.ITransaccionOperacionUsuarioDAO;
+import com.pdvsa.psp.dao.IUserRoleDAO;
 import com.pdvsa.psp.model.Operacion;
+import com.pdvsa.psp.model.Rol;
 import com.pdvsa.psp.model.Transaccion;
 import com.pdvsa.psp.model.Transaccion.TipoTransaccion;
 import com.pdvsa.psp.model.TransaccionOperacionUsuario;
@@ -32,6 +35,8 @@ public class SecurityService implements ISecurityService {
 	private ITransaccionOperacionUsuarioDAO transaccionOperacionUsuarioDAO;
 	@Autowired
 	private IOperacionDAO operacionDAO;
+	@Autowired
+	private IUserRoleDAO userRolDAO;
 
 	@Override
 	public Transaccion saveTransaccion(Transaccion t) {
@@ -79,11 +84,17 @@ public class SecurityService implements ISecurityService {
 	}
 
 	@Override
-	public List<Operacion> getOperacionesByUsersTransactions(
-			Integer transaccionId, Long usuarioId) {
-
-		return transaccionOperacionUsuarioDAO
-				.getOperacionesByTransaccionAndUsuario(transaccionId, usuarioId);
+	public List<Operacion> getOperacionesByUsersTransactions(Integer transaccionId, Long usuarioId) {
+		
+		List<Rol> rolesXUsuario = new ArrayList<Rol>();
+		List<Long> ids = new ArrayList<Long>();
+		rolesXUsuario = userRolDAO.getRolesByUser(usuarioId);
+		
+		for (Rol rol : rolesXUsuario) {
+			ids.add(rol.getId());
+		}
+		
+		return transaccionOperacionUsuarioDAO.getOperacionesByTransaccionAndUsuario(transaccionId, ids);
 	}
 
 	@Override
@@ -149,11 +160,11 @@ public class SecurityService implements ISecurityService {
 	}
 
 	@Override
-	public List<Usuario> getUsuariosByOperacionAndTransaccion(
+	public List<Rol> getRolesByOperacionAndTransaccion(
 			Integer transaccionId, String operacionId) {
 
 		return transaccionOperacionUsuarioDAO
-				.getUsuariosByTransaccionAndOperacion(transaccionId,
+				.getRolesByTransaccionAndOperacion(transaccionId,
 						operacionId);
 	}
 

@@ -90,8 +90,7 @@
 							</row>
 							<row spans="4">
 								<hbox spacing="5">
-									<button label="Iniciar" mold="os"
-										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+									<button label="Iniciar" mold="trendy">
 										<attribute name="onClick">
 										<![CDATA[
 	//disponibilidad = opcInfoService.getServerState(servidor.id);
@@ -111,8 +110,7 @@
 ]]>
 					</attribute>
 									</button>
-									<button label="Detener" mold="os"
-										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+									<button label="Detener" mold="trendy">
 										<attribute name="onClick">
 										<![CDATA[
 	//disponibilidad = opcInfoService.getServerState(servidor.id);
@@ -133,8 +131,7 @@
 									</button>
 
 									<button label="Ver Actividad"
-										mold="os"
-										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+										mold="trendy">
 										<attribute name="onClick">
 										<![CDATA[
 	command = new ObjectCommand();
@@ -146,9 +143,7 @@
 									</button>
 
 
-									<button label="Ver Detalles"
-										mold="os"
-										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+									<button label="Ver Detalles" mold="trendy">
 										<attribute name="onClick">
 									<![CDATA[
 	command = new ObjectCommand();
@@ -158,8 +153,7 @@
 					</attribute>
 									</button>
 
-									<button label="Refrescar" mold="os"
-										style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+									<button label="Refrescar" mold="trendy">
 										<attribute name="onClick">
 										<![CDATA[
 	disponibilidad = opcInfoService.getServerState(servidor.id);

@@ -11,7 +11,7 @@
 	<zscript> 
 	
 		<![CDATA[
-		         alert("entro al dialogo");
+		         
 		         
 		         
 					transaccion = arg.get("aEntity");
@@ -24,7 +24,7 @@
 					
 					operacionSelected = null;
 					
-					alert(transaccion == null);
+					
 					
 					if(transaccion != null && transaccion.codigo != null){
 						
@@ -33,7 +33,7 @@
 						if(operaciones != null && operaciones.size() > 0){
 							
 							for(o : operaciones){
-								o.usuarios.addAll(securityService.getUsuariosByOperacionAndTransaccion(transaccion.codigo, o.codigo));
+								o.roles.addAll(securityService.getRolesByOperacionAndTransaccion(transaccion.codigo, o.codigo));
 							}
 						}else{
 							
@@ -120,7 +120,7 @@
 			if (seleccion.size() > 0) {
 				operaciones.add(seleccion.get(0));
 				binder.loadComponent(lstboxOperaciones);
-				binder.loadComponent(lstboxUsuarios);
+				binder.loadComponent(lstboxRoles);
 			}
 		}
 
@@ -179,7 +179,7 @@
 				operaciones.remove(opera);
 				operaciones.add(seleccion.get(0));
 				binder.loadComponent(lstboxOperaciones);
-				binder.loadComponent(lstboxUsuarios);
+				binder.loadComponent(lstboxRoles);
 			}
 
 		}
@@ -216,9 +216,9 @@
 												<![CDATA[
 	if (operacionSelected != null) {
 		//												        	 usuarios = securityService.getUsuariosByOperacionAndTransaccion(transaccion.codigo, operacionSelected.codigo);
-		usuarios = operacionSelected.usuarios;
+		roles = operacionSelected.roles;
 
-		binder.loadComponent(lstboxUsuarios);
+		binder.loadComponent(lstboxRoles);
 	}
 ]]>
 											</attribute>
@@ -227,26 +227,26 @@
 										</panel>
 									</north>
 									<south height="60%">
-										<panel title="Usuarios">
+										<panel title="Roles">
 											<panelchildren>
 												<listbox
-													id="lstboxUsuarios" rows="5" model="@{usuarios}"
+													id="lstboxRoles" rows="5" model="@{roles}"
 													height="400px" mold="paging">
 													<listhead
 														sizable="true">
 														<listheader
-															width="20%" label="Login" />
+															width="20%" label="Nombre" />
 														<listheader
-															width="60%" label="Nombre" />
+															width="60%" label="Descripcion" />
 														<listheader
 															width="20%" label="Operaciones" />
 													</listhead>
 													<listitem
-														sclass="row-border item" self="@{each=u}">
+														sclass="row-border item" self="@{each=r}">
 														<listcell
-															label="@{u.login}" />
+															label="@{r.nombre}" />
 														<listcell
-															label="@{u.nombre}" />
+															label="@{r.descripcion}" />
 
 													</listitem>
 												</listbox>
@@ -264,7 +264,7 @@
 				</tabpanels>
 			</tabbox>
 		</div>
-		<div align="right" height="15%" style="background:#c5e6ef">
+		<div align="right" height="15%" >
 			<button id="btnAceptar" label="Aceptar" mold="trendy"
 				image="/images/icons/disk_blue.png" orient="vertical">
 			</button>
@@ -288,12 +288,12 @@
 				
 				for(op : operaciones){
 					
-					for(usu : op.usuarios){
+					for(ro : op.roles){
 						
 						tranOpeUsuario = new TransaccionOperacionUsuario();
 						tranOpeUsuario.transaccion = transaccion;
 						tranOpeUsuario.operacion = op;
-						tranOpeUsuario.usuario = usu;
+						tranOpeUsuario.rol = ro;
 						transaccionopeusuario.add(tranOpeUsuario);
 					}
 				}

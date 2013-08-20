@@ -16,7 +16,7 @@ public class MongoFindLastRecordInsertedComponent {
 	
 	public OpcInfoRegisterMongo findLastRecord(){
 		
-		return getMongoTemplate().findOne(new Query().with(new Sort(new Order(Direction.DESC, "timestamp"))).limit(1), OpcInfoRegisterMongo.class, "opcInfoRegisterHistoric");
+		return getMongoTemplate().findOne(new Query().with(new Sort(new Order(Direction.DESC, "timestamp"))).limit(1), OpcInfoRegisterMongo.class, "opcInfoRegisterValidation");
 	}
 	
 	public MongoTemplate getMongoTemplate() {

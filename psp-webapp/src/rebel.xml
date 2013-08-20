@@ -2,13 +2,13 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
 
 	<classpath>
-		<dir name="C:/Users/rapena/workspace/maven.1372162387854/psp-webapp/target/classes">
+		<dir name="C:/Users/rapena/bus/maven.1376913384191/psp-webapp/target/classes">
 		</dir>
 	</classpath>
 
 	<web>
 		<link target="/">
-			<dir name="C:/Users/rapena/workspace/maven.1372162387854/psp-webapp/WebContent">
+			<dir name="C:/Users/rapena/bus/maven.1376913384191/psp-webapp/WebContent">
 			</dir>
 		</link>
 	</web>

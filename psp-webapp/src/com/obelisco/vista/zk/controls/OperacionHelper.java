@@ -90,6 +90,8 @@ public class OperacionHelper {
 			tipo = OperationType.BUSCAR;
 		} else if (o.getCodigo().trim().equals("P")) {
 			tipo = OperationType.IMPRIMIR;
+		}else if(o.getCodigo().trim().equals("V")){
+			tipo = OperationType.VISUALIZAR;
 		}
 
 		return tipo;

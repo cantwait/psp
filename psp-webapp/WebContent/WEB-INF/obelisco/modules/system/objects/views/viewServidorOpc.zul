@@ -157,6 +157,7 @@
 
 												<column label="Activo"
 													align="center" valign="middle" />
+												<column label="Operación" valign="middle" align="center" />
 
 											</columns>
 											<rows>
@@ -168,10 +169,31 @@
 
 													<label
 														value="@{tanque.producto.nombre}" />
+													<checkbox
+															checked="@{tanque.activo}" disabled="true" />													
+													<hbox spacing="5px">
 
-													<hbox>
-														<checkbox
-															checked="@{tanque.activo}" disabled="true" />
+															<toolbarbutton
+																use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+																objeto="@{tanque}" tooltiptext="Ver ..."
+																image="/images/icons/16x16/edit.png">
+																<attribute name="onClick">
+											<![CDATA[
+	{
+		c = event.target;
+		tanq = (com.pdvsa.psp.model.Tanque) c.objeto;
+		params = new HashMap();
+		params.put("tanqueNombre", tanq.nombre);
+		command = new com.obelisco.vista.zk.command.ShowCommand();
+		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/viewItems.zul";
+		command.parametros = params;
+		command.execute();
+	}
+]]>
+											</attribute>
+
+															</toolbarbutton>
+														
 													</hbox>
 
 												</row>

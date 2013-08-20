@@ -2,10 +2,14 @@ package com.obelisco.modelo.servicios.rest.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.obelisco.modelo.servicios.rest.IServiciosMongo;
@@ -13,6 +17,7 @@ import com.pdvsa.psp.model.xml.OpcErrorMongoRequest;
 import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
+import com.pdvsa.psp.model.xml.OpcItemsTransfer;
 
 
 public class ServicioMongo implements IServiciosMongo{
@@ -83,6 +88,25 @@ public class ServicioMongo implements IServiciosMongo{
 		
 		return response;
 	}
+	
+	@Override
+	public OpcItemsTransfer getLastItemsByTanque(String tanqueNombre) {
+			
+		
+		String url = new String(address + "/cache/get-items-by-tank?nombre={nombre}");
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.TEXT_XML);
+	    HttpEntity<?> request= new HttpEntity<Object>(headers);
+	    
+	    Map<String, Object> uriVariables = new HashMap<String, Object>();
+	    uriVariables.put("nombre", tanqueNombre);
+
+			
+		ResponseEntity<OpcItemsTransfer> response = restTemplate.exchange(url,HttpMethod.GET, request, OpcItemsTransfer.class, uriVariables);
+		
+		return response.getBody();
+	}
 
 	public RestTemplate getRestTemplate() {
 		return restTemplate;
@@ -99,6 +123,8 @@ public class ServicioMongo implements IServiciosMongo{
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	
 	
 	
 

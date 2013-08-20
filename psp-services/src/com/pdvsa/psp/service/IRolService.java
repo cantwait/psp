@@ -8,6 +8,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import com.pdvsa.psp.model.Rol;
+import com.pdvsa.psp.model.Usuario;
 import com.pdvsa.psp.model.UsuarioRol;
 
 @WebService
@@ -43,5 +44,9 @@ public interface IRolService {
 	@WebMethod
 	@WebResult(name="correos")
 	public String getEmailAdressesByRole(@WebParam(name="roleName")String roleName);
+	
+	@WebMethod
+	@WebResult(name="usuarios")
+	public List<Usuario> getUsuariosByRol(@WebParam(name="rolId") Long rolId);
 
 }

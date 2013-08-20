@@ -30,16 +30,20 @@ public class TransaccionOperacionUsuario implements Serializable{
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	@JoinColumn(name="operacion")
 	private Operacion operacion;
-	@ManyToOne(optional=false, fetch=FetchType.EAGER)
-	@JoinColumn(name="usuario")
-	private Usuario usuario;
+//	@ManyToOne(optional=false, fetch=FetchType.EAGER)
+//	@JoinColumn(name="usuario")
+//	private Usuario usuario;
+	@ManyToOne(optional=false, fetch= FetchType.EAGER)
+	@JoinColumn(name="rol")
+	private Rol rol;
 	
 	public TransaccionOperacionUsuario(){}
 	
-	public TransaccionOperacionUsuario(Transaccion transaccion, Operacion operacion, Usuario usuario){
+	public TransaccionOperacionUsuario(Transaccion transaccion, Operacion operacion, Rol rol){
 		this.transaccion = transaccion;
 		this.operacion = operacion;
-		this.usuario = usuario;
+		this.rol = rol;
+//		this.usuario = usuario;
 	}
 
 	public Long getId() {
@@ -68,12 +72,20 @@ public class TransaccionOperacionUsuario implements Serializable{
 	
 
 
-	public Usuario getUsuario() {
-		return usuario;
+//	public Usuario getUsuario() {
+//		return usuario;
+//	}
+//
+//	public void setUsuario(Usuario usuario) {
+//		this.usuario = usuario;
+//	}
+
+	public Rol getRol() {
+		return rol;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 
 	@Override
@@ -85,7 +97,7 @@ public class TransaccionOperacionUsuario implements Serializable{
 				+ ((operacion == null) ? 0 : operacion.hashCode());
 		result = prime * result
 				+ ((transaccion == null) ? 0 : transaccion.hashCode());
-		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+		result = prime * result + ((rol == null) ? 0 : rol.hashCode());
 		return result;
 	}
 
@@ -113,10 +125,10 @@ public class TransaccionOperacionUsuario implements Serializable{
 				return false;
 		} else if (!transaccion.equals(other.transaccion))
 			return false;
-		if (usuario == null) {
-			if (other.usuario != null)
+		if (rol == null) {
+			if (other.rol != null)
 				return false;
-		} else if (!usuario.equals(other.usuario))
+		} else if (!rol.equals(other.rol))
 			return false;
 		return true;
 	}

@@ -11,85 +11,95 @@
 
 	<zscript>
 		<![CDATA[
-		         rolAEditar = null;
+	rolAEditar = null;
 	roles = rolService.getRolesLikeNombre("");
 ]]>
 	</zscript>
 
-	<window id="lstroles" title="Roles" closable="true"
-		height="100%" width="100%" border="normal" entity="@{rolAEditar}" entityList="@{roles}"
-		transaccion="@{transaccion}" 
+	<window id="lstroles" title="Roles" closable="true" height="100%"
+		width="100%" border="normal" entity="@{rolAEditar}"
+		entityList="@{roles}" transaccion="@{transaccion}"
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />	
-			
-		<panel border="normal" width="100%" >
-			<toolbar id="tool"  mold="panel"  width="100%"
+		<style src="/css/estilo_zk.css" dynamic="true" />
+
+		<panel border="normal" width="100%">
+			<toolbar id="tool" mold="panel" width="100%"
 				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
-			
+
 			<panelchildren>
-			
+
 				<!-- Lista de roles -->
-				
-				<listbox id="lstbox" rows="5" model="@{roles}" height="400px" mold="paging"
-					selectedItem="@{rolAEditar}">
+
+				<listbox id="lstbox" rows="5" model="@{roles}"
+					height="400px" mold="paging" selectedItem="@{rolAEditar}">
 					<listhead sizable="true">
-						<listheader width="30%" label="Nombre" />						
+						<listheader width="30%" label="Nombre" />
 						<listheader width="50%" label="Descripcion" />
-						<listheader label="Activo" width="20%"/>
+						<listheader label="Activo" width="20%" />
 					</listhead>
 					<listitem sclass="row-border item"
 						self="@{each=r}">
 						<listcell label="@{r.nombre}" />
-						<listcell label="@{r.descripcion}"/>
-						<listcell  >
-							<checkbox checked="@{r.activo}" disabled="true" />
-						</listcell>					
+						<listcell label="@{r.descripcion}" />
+						<listcell>
+							<checkbox checked="@{r.activo}"
+								disabled="true" />
+						</listcell>
 					</listitem>
 				</listbox>
 
-				
+
 
 			</panelchildren>
 		</panel>
 		<zscript>
 			<![CDATA[
-void doNewEntity() {
-	
-	command = new ObjectCommand();
-	rol = new com.pdvsa.psp.model.Rol();
-	command.objeto = rol;
-	command.dialogo = true;
-	command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
-	if (command.execute(null) == ActionType.ACEPTAR) {
-		//Se refresca el Arbol
-		//tree.refreshTree(OperationType.MODIFICAR, tanque);
-		roles = rolService.getRolesLikeNombre("");
+	void doViewEntity(Object o) {
+		
+		if(rolAEditar == null){
+			alert("Debe Seleccionar una entidad para Visualizar!");
+		}else{
+			command = new ObjectCommand();
+			command.objeto = o;
+			command.dialogo = true;
+			command.operacion = OperacionHelper.getOperacion(OperationType.VISUALIZAR);
+			command.execute();
+		}
+	}
+	void doNewEntity() {
+
+		command = new ObjectCommand();
+		rol = new com.pdvsa.psp.model.Rol();
+		command.objeto = rol;
+		command.dialogo = true;
+		command.operacion = OperacionHelper.getOperacion(OperationType.INCLUIR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			//Se refresca el Arbol
+			//tree.refreshTree(OperationType.MODIFICAR, tanque);
+			roles = rolService.getRolesLikeNombre("");
+			binder.loadComponent(lstbox);
+
+		}
+
+	}
+	void doEditEntity(Object o) {
+		command = new ObjectCommand();
+		command.objeto = o;
+		command.dialogo = true;
+		command.operacion = OperacionHelper
+				.getOperacion(OperationType.MODIFICAR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			roles = rolService.getRolesLikeNombre("");
+			binder.loadAll();
+		}
+	}
+	void doDeleteEntity(Object o) {
+		rolService.removeRol(rol.id);
+		roles.remove(rol);
 		binder.loadComponent(lstbox);
-
 	}
-
-
-}
-
-void doEditEntity(Object o){
-	command = new ObjectCommand();
-	command.objeto = o;
-	command.dialogo = true;
-	command.operacion = OperacionHelper.getOperacion(OperationType.MODIFICAR);
-	if (command.execute(null) == ActionType.ACEPTAR) {
-		roles = rolService.getRolesLikeNombre("");
-		binder.loadAll();
-	}
-}
-
-void doDeleteEntity(Object o) {
-	rolService.removeRol(rol.id);
-	roles.remove(rol);
-	binder.loadComponent(lstbox);
-}
-	
 ]]>
 	
 		</zscript>

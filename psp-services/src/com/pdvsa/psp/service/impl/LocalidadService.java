@@ -1,10 +1,15 @@
 package com.pdvsa.psp.service.impl;
 
 import java.util.List;
+
+import javax.jws.WebMethod;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.ILocalidadDAO;
 import com.pdvsa.psp.model.Localidad;
 import com.pdvsa.psp.service.ILocalidadService;
@@ -58,5 +63,14 @@ public class LocalidadService implements ILocalidadService{
 	public List<Localidad> getLocalidadesByRegion(Long region, Boolean activo) {
 		return localidadDAO.findLocalidadesByRegion(region, activo);
 	}
+
+	@Override
+	public List<Localidad> getAllLocalidades() {
+		Search s = new Search();		
+		s.addFilterEqual("activo", Boolean.TRUE);		
+		return getLocalidadDAO().search(s);
+	}
+	
+	
 
 }

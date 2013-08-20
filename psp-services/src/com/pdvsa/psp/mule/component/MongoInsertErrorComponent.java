@@ -3,14 +3,14 @@ package com.pdvsa.psp.mule.component;
 import org.mule.api.annotations.param.Payload;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.pdvsa.psp.model.xml.TransferExceptionMongo;
+import com.pdvsa.psp.model.xml.MongoLogger;
 
 public class MongoInsertErrorComponent {
 	
 	private MongoTemplate mongoTemplate;
 	
 	
-	public TransferExceptionMongo insertError(@Payload TransferExceptionMongo payload){
+	public MongoLogger insertError(@Payload MongoLogger payload){
 		
 		mongoTemplate.insert(payload, "opcErrorTransaction");
 		

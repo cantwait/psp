@@ -211,7 +211,7 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 
 	protected void executeOperation(Operacion operacion) throws InterruptedException {
 		OperationType type = com.obelisco.vista.zk.controls.OperacionHelper.getType(operacion);
-		
+	
 		if (type == OperationType.MODIFICAR) {
 			if (getCurrentEntity() != null) {
 				doEditEntity(getCurrentEntity());
@@ -249,8 +249,26 @@ public class GenericWindowList extends GenericWindow implements AfterCompose{
 			doCustomActionOperation(operacion);
 		}else if(type == OperationType.BUSCAR){
 			doFindEntities();
+		}else if(type == OperationType.VISUALIZAR){
+			doViewEntity(entity);
 		}
 
+	}
+
+	private void doViewEntity(Object entity2) throws InterruptedException {
+		try {
+
+			String nombreMetodo = "doViewEntity";
+			Object[] args = new Object[] { entity2 };
+			Class[] types = new Class[] { Object.class };
+
+			executeZKFunction(nombreMetodo, types, args);
+
+		} catch (Exception e) {
+			showMessage(e.getMessage());
+		}
+
+		
 	}
 
 	private void doFindEntities() throws InterruptedException {

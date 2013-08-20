@@ -39,15 +39,23 @@
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
     
-    <bean id="mongoSaveHistoricItemsComponent" class="com.pdvsa.psp.mule.component.MongoSaveHistoricItemsComponent">
+      <bean id="mongoSaveHistoricItemsComponent" class="com.pdvsa.psp.mule.component.MongoSaveHistoricItemsComponent">
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
+    
+    <bean id="mongoInsertValidationDataComponent" class="com.pdvsa.psp.mule.component.MongoInsertValidationDataComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
+     
+      <bean id="mongoDeleteValidationDataComponent" class="com.pdvsa.psp.mule.component.MongoDeleteValidationDataComponent">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>
     
      <bean id="mongoFindLastOpcItem" class="com.pdvsa.psp.mule.component.MongoFindLastRecordComponent">
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
     
-     <bean id="mongoInsertErrorComponent" class="com.pdvsa.psp.mule.component.MongoInsertErrorComponent">
+     <bean id="mongoInsertLogComponent" class="com.pdvsa.psp.mule.component.MongoInsertErrorComponent">
          <property name="mongoTemplate" ref="mongoTemplate"></property>
      </bean>
      
@@ -55,13 +63,20 @@
          <property name="mongoTemplate" ref="mongoTemplate"/>
      </bean>
      
-     <bean id="mongoDeleteHistoricComponent" class="com.pdvsa.psp.mule.component.MongoDeleteHistoricComponent">
-         <property name="mongoTemplate" ref="mongoTemplate"></property>
-     </bean>
-     
      <bean id="mongoFindErrorComponent" class="com.pdvsa.psp.mule.component.MongoFindErrorComponent">
          <property name="mongoTemplate" ref="mongoTemplate"></property>
      </bean>
 	
+     <bean id="storeTankOpcDataCache" class="com.pdvsa.psp.mule.component.StoreTankOpcDataCache">
+         <property name="tanqueService" ref="tanqueService"/>
+     </bean>
+     
+     <bean id="itemsFromCache" class="com.pdvsa.psp.mule.rest.CacheItemsRest">
+         <property name="cacheItem" ref="storeTankOpcDataCache" />
+     </bean>
+     
+     <bean id="mongoFindLastTranasctionLocation" class="com.pdvsa.psp.mule.component.MongoFindLastTransactionLocation">
+     	<property name="mongoTemplate" ref="mongoTemplate" />
+     </bean>
 	
 </beans>

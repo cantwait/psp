@@ -47,8 +47,7 @@
 				</grid>
 			</center>
 			<south height="48px">
-				<div align="right" style="background:#c5e6ef"
-					height="100%">
+				<div align="right" height="100%">
 					<button id="btnAceptar" label="Aceptar"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>

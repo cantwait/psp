@@ -9,6 +9,8 @@ import javax.jws.WebService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.googlecode.genericdao.search.Search;
 import com.pdvsa.psp.dao.ITanqueDAO;
 import com.pdvsa.psp.model.Tanque;
 import com.pdvsa.psp.service.ITanqueService;
@@ -66,6 +68,14 @@ public class TanqueService implements ITanqueService {
 	@Override	
 	public List<Tanque> getTanquesByServidorActivo(Long servidor) {		
 		return getTanquesByServidor(servidor, Boolean.TRUE);
+	}
+
+	@Override
+	public List<Tanque> getAllTanques() {
+		Search s = new Search();
+		s.addFilterEqual("activo", Boolean.TRUE);
+		return getTanqueDAO().search(s);
+		
 	}
 
 

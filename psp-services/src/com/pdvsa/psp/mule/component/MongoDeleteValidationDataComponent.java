@@ -2,12 +2,12 @@ package com.pdvsa.psp.mule.component;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-public class MongoDeleteHistoricComponent {
+public class MongoDeleteValidationDataComponent {
 	
 	private MongoTemplate mongoTemplate;
 
 	public void deleteAllHistoricRegisters(){
-		getMongoTemplate().dropCollection("opcInfoRegisterHistoric");
+		getMongoTemplate().dropCollection("opcInfoRegisterValidation");
 	}
 
 	public MongoTemplate getMongoTemplate() {

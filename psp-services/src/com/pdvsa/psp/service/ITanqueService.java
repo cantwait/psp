@@ -42,5 +42,9 @@ public interface ITanqueService {
 	@WebResult(name="tanques")
 	List<Tanque> getTanquesByServidorActivo(Long servidor);
 	
+	@WebMethod
+	@WebResult(name="tanques")
+	public List<Tanque> getAllTanques();
+	
 
 }
