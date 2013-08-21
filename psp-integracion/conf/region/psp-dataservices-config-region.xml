@@ -81,8 +81,9 @@
 					class="com.pdvsa.psp.model.xml.MongoLogger" />
 			</mule-xml:object-to-xml-transformer>
 		</catch-exception-strategy>
-		<catch-exception-strategy when="#[exception.causedBy(java.net.ConnectException)]">
-		    <scripting:transformer doc:name="Groovy">
+		<catch-exception-strategy
+			when="#[exception.causedBy(java.net.ConnectException)]">
+			<scripting:transformer doc:name="Groovy">
 				<scripting:script engine="Groovy"><![CDATA[
 				    	import java.text.SimpleDateFormat;
 		                import java.util.Date;
@@ -113,9 +114,8 @@
 				<vm:outbound-endpoint path="vm.error.transmision" />
 			</all>
 		</catch-exception-strategy>
-		
-		<catch-exception-strategy		
-			doc:name="Catch Exception Strategy">
+
+		<catch-exception-strategy doc:name="Catch Exception Strategy">
 			<scripting:transformer doc:name="Groovy">
 				<scripting:script engine="Groovy"><![CDATA[
 				    	import java.text.SimpleDateFormat;
@@ -149,170 +149,211 @@
 			</mule-xml:object-to-xml-transformer>
 		</catch-exception-strategy>
 	</choice-exception-strategy>
-	
-	 <!-- Para Borrar la Data No Transmitida Almacenada en Mongo  --> 
-   <flow name="DeleteHistoricRegistryLocalidad">
-	     <quartz:inbound-endpoint jobName="poll-delete-historic-localidad-service"
+
+	<!-- Para Borrar la Data No Transmitida Almacenada en Mongo -->
+	<flow name="DeleteHistoricRegistryLocalidad">
+		<quartz:inbound-endpoint jobName="poll-delete-historic-localidad-service"
 			cronExpression="0 5 8 ? * 1" repeatCount="-1" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
 			<quartz:event-generator-job />
 		</quartz:inbound-endpoint>
-		<logger level="INFO" message="Se Borraran todo los registros de la Colección Historicos"/>
+		<logger level="INFO"
+			message="Se Borraran todo los registros de la Colección Historicos" />
 		<component>
-			<spring-object bean="mongoDeleteValidationDataComponent"/>
+			<spring-object bean="mongoDeleteValidationDataComponent" />
 		</component>
 	</flow>
 
-	
-
 	<flow name="ConsultarBitacoraBus" doc:name="ConsultarBitacoraBus">
-		<http:inbound-endpoint exchange-pattern="request-response"	host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-errors" doc:name="HTTP" />
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-errors"
+			doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.QueryErrorLogDataMongo" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
-		
+
 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">
 			<filter ref="opc-error-request-schema-validation" />
 		</message-filter>
-		<mule-xml:dom-to-xml-transformer name="DomToXml" />
-		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" encoding="UTF-8"	mimeType="text/xml" doc:name="XML to Object">
-			<mule-xml:alias name="OpcErrorRequest"	class="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" />
+		<mule-xml:dom-to-xml-transformer />
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" encoding="UTF-8"
+			mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="OpcErrorRequest"
+				class="com.pdvsa.psp.model.xml.OpcErrorMongoRequest" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
 		<component>
 			<spring-object bean="mongoFindErrorComponent" />
 		</component>
-		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-			<mule-xml:alias name="OpcErrorResponse"	class="com.pdvsa.psp.model.xml.OpcErrorResponse" />
-			<mule-xml:alias name="log" class="com.pdvsa.psp.model.xml.MongoLogger" />
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="OpcErrorResponse"
+				class="com.pdvsa.psp.model.xml.OpcErrorResponse" />
+			<mule-xml:alias name="log"
+				class="com.pdvsa.psp.model.xml.MongoLogger" />
 		</mule-xml:object-to-xml-transformer>
-		
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+
+
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 
 	<flow name="ExposeOpcInfoRegionService" doc:name="ExposeOpcServiceRegion">
-		<http:inbound-endpoint exchange-pattern="request-response"	host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/opc-info" doc:name="http-save-opc-endpoint" />
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/opc-info"
+			doc:name="http-save-opc-endpoint" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
 		<logger level="INFO" message="#[payload]" />
-		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">
-			<filter ref="opc-request-schema-validation" />
-		</message-filter>
-		<mule-xml:dom-to-xml-transformer name="DomToXml" />
-		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8"	mimeType="text/xml">
-			<mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
-			<mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		<!-- <message-filter throwOnUnaccepted="true" doc:name="validation-filter"> 
+			<filter ref="opc-request-schema-validation" /> </message-filter> -->
+		<mule-xml:dom-to-xml-transformer />
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8"
+			mimeType="text/xml">
+			<mule-xml:alias name="opcItemsTransfer"
+				class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
+			<mule-xml:alias name="opc"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
-				
+
 		<all>
 			<component>
-	    		<spring-object bean="mongoInsertComponent">
+				<spring-object bean="mongoInsertComponent" />
 			</component>
 			<component>
-			    <spring-object bean="storeTankOpcDataCache"/>
+				<spring-object bean="storeTankOpcDataCache" />
 			</component>
 			<component>
-			    <spring-object bean="mongoSaveHistoricItemsComponent"/>
+				<spring-object bean="mongoSaveHistoricItemsComponent" />
 			</component>
-			    
+
 		</all>
 		<scripting:transformer doc:name="Groovy">
-				<scripting:script engine="Groovy"><![CDATA[
-				    	import java.text.SimpleDateFormat;
-		                import java.util.Date;
-		                import java.text.DateFormat;
-		                import java.util.Calendar;
-		                import com.pdvsa.psp.model.xml.MongoLogger;
-		                
-						//org.mule.api.routing.filter.FilterUnacceptedException
-						 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		                String dateStr = dateFormat.format(Calendar.getInstance().getTime());
-		                
-		                Date currentTime = dateFormat.parse(dateStr);
-		                
-		                def log = new MongoLogger();
-		                log.tipoEvento = MongoLogger.TipoEvento.EXITO;	
-						log.descripcion = "Se ha completado la transaccion de manera Exitosa";
-						log.fecha = currentTime;				
-						
-						return log;
-						]]></scripting:script>
-			</scripting:transformer>
+			<scripting:script engine="Groovy">
+				<![CDATA[
+         			import java.text.SimpleDateFormat;
+         			import java.util.Date;
+         			import java.text.DateFormat;
+         			import java.util.Calendar;
+         			import com.pdvsa.psp.model.xml.MongoLogger;
+                  
+      	 			//org.mule.api.routing.filter.FilterUnacceptedException
+       				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        			String dateStr = dateFormat.format(Calendar.getInstance().getTime());
+                  
+					Date currentTime = dateFormat.parse(dateStr);
+                  
+	        		def log = new MongoLogger();
+        			log.tipoEvento = MongoLogger.Evento.EXITO; 
+      				log.descripcion = "Se ha completado la transaccion de manera Exitosa";
+      				log.fecha = currentTime;    
+      
+      				return log;
+      			]]>
+			</scripting:script>
+		</scripting:transformer>
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="response"
+				class="com.pdvsa.psp.model.xml.MongoLogger" />
+		</mule-xml:object-to-xml-transformer>
 		<logger level="INFO" message="RETORNANDO RESPUESTA A LOCALIDAD" />
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
-	
+
 	<flow name="ItemsFromCacheFlow">
-   	    <http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/cache" doc:name="HTTP" method="GET"/>
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/cache"
+			doc:name="HTTP" method="GET" />
 		<jersey:resources doc:name="REST">
 			<component>
-			    <spring-object bean="itemsFromCache" />
+				<spring-object bean="itemsFromCache" />
 			</component>
 		</jersey:resources>
-   	</flow>
+	</flow>
 
 	<flow name="OpcDataSendToPais" doc:name="OpcDataSendToPais">
-		<quartz:inbound-endpoint jobName="mongodb-query" repeatInterval="20000" responseTimeout="10000" doc:name="QuartzEnviarData"	repeatCount="-1">
+	    <quartz:inbound-endpoint jobName="poll-data-sender-mongo-region-to-pais-service" repeatInterval="20000" repeatCount="-1" connector-ref="Quartz-Connector" doc:name="Quartz">
 			<quartz:event-generator-job />
-		</quartz:inbound-endpoint>
+		</quartz:inbound-endpoint>		
+	
 		<component>
 			<spring-object bean="mongoFindComponentTransfer" />
 		</component>
-		
-		<expression-filter expression="payload.opcItems.size() == 0" evaluator="groovy" />
-				
+		<expression-filter expression="payload.opcItems.size() > 0"
+			evaluator="groovy" />
 		<set-variable variableName="originalPayload" value="#[payload.opcItems.size()]" />
-		
-		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml">
-			<mule-xml:alias name="opcItemsTransfer"	class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
-			<mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml">
+			<mule-xml:alias name="opcItemsTransfer"
+				class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
+			<mule-xml:alias name="opc"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:object-to-xml-transformer>
-		<set-variable variableName="xmlPayload" value="#[payload]"/>
-		<logger level="INFO" message="Datos para Pais: #[payload]" />
-		<http:outbound-endpoint exchange-pattern="request-response"	host="${rest.pais.host}" port="${rest.pais.port}" path="${rest.pais.pathBase}/opc-info/transfer-opc-item" method="POST"	doc:name="HTTP-ED" />		
+		<set-variable variableName="xmlPayload" value="#[payload]" />
+		<logger level="INFO" message="#[payload]" />
+		<http:outbound-endpoint exchange-pattern="request-response"
+			host="${rest.pais.host}" port="${rest.pais.port}"
+			path="${rest.pais.pathBase}/opc-info/transfer-opc-item" method="POST" 
+			doc:name="HTTP-ED" />
 		<object-to-string-transformer doc:name="Object to String" />
-		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.MongoLogger" encoding="UTF-8" mimeType="text/xml">
-		     <mule-xml:alias name="log" class="com.pdvsa.psp.model.xml.MongoLogger"/>
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.MongoLogger" encoding="UTF-8"
+			mimeType="text/xml">
+			<mule-xml:alias name="response"
+				class="com.pdvsa.psp.model.xml.MongoLogger" />
 		</mule-xml:xml-to-object-transformer>
 		<choice>
-		    <when expression="#[payload.tipoEvento != com.pdvsa.psp.model.xml.MongoLogger.TipoEvento.EXITO]" evaluator="groovy">		       
-		        <component>
+			<when
+				expression="payload.tipoEvento != com.pdvsa.psp.model.xml.MongoLogger.Evento.EXITO"
+				evaluator="groovy">
+				<component>
 					<spring-object bean="mongoInsertLogComponent" />
 				</component>
-		    </when>
-		    <otherwise>
-		        <all>
-		            <component>
+			</when>
+			<otherwise>
+<!-- 				<all> -->
+					<component>
 						<spring-object bean="mongoInsertLogComponent" />
 					</component>
-					<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
-		        </all>		        
-		    </otherwise>
-		</choice>		
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+					<set-payload value="#[flowVars['xmlPayload']]" />
+					<vm:outbound-endpoint exchange-pattern="one-way"
+						path="update-opc-endpoint" doc:name="VM" />
+<!-- 				</all> -->
+			</otherwise>
+		</choice>
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 
-	<flow name="UpdateOpcItemRegion" doc:name="UpdateOpcItemRegion"	processingStrategy="synchronous">
-		<vm:inbound-endpoint exchange-pattern="one-way"	path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />		
-		<set-payload value="#[flowVars['xmlPayload']]" />
-		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8"	mimeType="text/xml">
-			<mule-xml:alias name="opcItemsTransfer"	class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
-			<mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+	<flow name="UpdateOpcItemRegion" doc:name="UpdateOpcItemRegion"
+		processingStrategy="synchronous">
+		<vm:inbound-endpoint exchange-pattern="one-way"
+			path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
+		<!-- <set-payload value="#[flowVars['xmlPayload']]" /> -->
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8"
+			mimeType="text/xml">
+			<mule-xml:alias name="opcItemsTransfer"
+				class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
+			<mule-xml:alias name="opc"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
 		<all doc:name="All">
 			<!-- Esto fue movido para que se almacena en historico una vez lleguen 
 				los datos de las localidades -->
 			<component>
-				<spring-object bean="mongoInsertValidationDataComponent"/>
+				<spring-object bean="mongoInsertValidationDataComponent" />
 			</component>
 			<component>
 				<spring-object bean="mongoRemoveItemsComponent" />
@@ -324,8 +365,9 @@
 				app.registry['contador'] = 5;
 			</expression-component>
 		</all>
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 
 	<flow name="ConsultarDatosOpcPentahoFlow" doc:name="ConsultarDatosOpcPentahoFlow">
@@ -336,56 +378,84 @@
 			en dos modalidades,filtra por fecha
 			desde-hasta y tambien por stationId
 		</description>
-		<http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-vars" doc:name="HTTP" />
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-vars"
+			doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
-		
+
 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">
 			<filter ref="opc-request-schema-validation" />
 		</message-filter>
-		<mule-xml:dom-to-xml-transformer name="DomToXml" />
-		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
-			<mule-xml:alias name="Opc.Request" class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
+		<mule-xml:dom-to-xml-transformer />
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest"
+			encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="Opc.Request"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
 		<component>
 			<spring-object bean="mongoFindComponent" />
 		</component>
-		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-			<mule-xml:alias name="Opc.Response"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
-			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="Opc.Response"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
+			<mule-xml:alias name="Opc.Item"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 		</mule-xml:object-to-xml-transformer>
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
+	</flow>
+
+	<flow name="ConsultarDataPentahoGet">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/pentaho"
+			doc:name="HTTP" method="GET" />
+		<jersey:resources doc:name="REST">
+			<component>
+				<spring-object bean="mongoFindItemsPentahoRest" />
+			</component>
+		</jersey:resources>
 	</flow>
 
 	<!-- Este ultimo registro debe leerse memoria, se deposita en una estructura 
 		compartida en la que almacena ExposeRegionFlow -->
 	<flow name="ConsultarUltimoRegistroFlow" doc:name="ConsultarUltimoRegistroFlow">
-		<http:inbound-endpoint exchange-pattern="request-response"	host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-last"	doc:name="HTTP" />
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-last"
+			doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
-		
+
 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">
 			<filter ref="opc-request-schema-validation" />
 		</message-filter>
-		<mule-xml:dom-to-xml-transformer name="DomToXml" />
-		<mule-xml:xml-to-object-transformer	returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
-			<mule-xml:alias name="Opc.Request" class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
+		<mule-xml:dom-to-xml-transformer />
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest"
+			encoding="UTF-8" mimeType="text/xml" doc:name="XML to Object">
+			<mule-xml:alias name="Opc.Request"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
 		<component>
 			<spring-object bean="mongoFindLastOpcItem" />
 		</component>
-		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="Opc.Item"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 		</mule-xml:object-to-xml-transformer>
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 
 	<sub-flow name="LookupEmailAddressesSubflow">
@@ -409,7 +479,7 @@
 		<component>
 			<spring-object bean="mongoFindLastRecordInsertedComponent" />
 		</component>
-		<payload-type-filter expectedType="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>	
+		<payload-type-filter expectedType="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 		<set-variable variableName="fechaUltimoRegistro" value="#[payload.timestamp]" />
 		<!-- Guardar esto en una clase Groovy -->
 		<scripting:transformer doc:name="Groovy">
@@ -453,7 +523,8 @@
 		<choice doc:name="Choice">
 			<when expression="#[payload > app.registry.contador]">
 				<expression-component>
-					app.registry['contador'] = java.lang.Integer.valueOf(app.registry['contador']) +
+					app.registry['contador'] =
+					java.lang.Integer.valueOf(app.registry['contador']) +
 					java.lang.Integer.valueOf(app.registry['sumaContador']);
 				</expression-component>
 				<set-payload
@@ -472,22 +543,24 @@
 				<logger level="INFO" message="NO CUMPLE CONDICION" />
 			</otherwise>
 		</choice>
-		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
-	
+
 	<flow name="ValidateTimeWithoutRecievingFromLocation">
-		<quartz:inbound-endpoint jobName="validar-job" repeatInterval="6000000" responseTimeout="10000" doc:name="QuartzValidarRecepcion"	repeatCount="-1">
+		<quartz:inbound-endpoint jobName="validar-job"
+			repeatInterval="6000000" responseTimeout="10000" doc:name="QuartzValidarRecepcion"
+			repeatCount="-1">
 			<quartz:event-generator-job />
 		</quartz:inbound-endpoint>
-		<enricher  target="#[payload]">
-				<flow-ref name="LookupLocationsSubflow" doc:name="LookupLocationsSubflow" />
+		<enricher target="#[payload]">
+			<flow-ref name="LookupLocationsSubflow" doc:name="LookupLocationsSubflow" />
 		</enricher>
 		<component>
 			<spring-object bean="mongoFindLastTransactionLocation" />
 		</component>
 		<foreach>
-			<set-variable variableName="localidad" value="#[payload.localidadNombre]" />			
+			<set-variable variableName="localidad" value="#[payload.localidadNombre]" />
 			<scripting:transformer doc:name="Groovy">
 				<scripting:script engine="Groovy"><![CDATA[
 	                import java.text.SimpleDateFormat;
@@ -524,29 +597,30 @@
 	                
 					]]></scripting:script>
 			</scripting:transformer>
-		    <choice doc:name="Choice">
-			<when expression="#[payload > app.registry.contador]">				
-				<set-payload value="Han transcurrido #[payload] minutos desde que se recibio la ultima transmisión de DATOS Valida desde la localidad: #[flowVars['localidad']], por favor Consulte el Log del Sistema para más información"
-					doc:name="Set Payload" />
-				<logger level="INFO" message="#[app.registry.contador]" />
-				<enricher source="#[payload]" target="#[flowVars['addresses']]">
-					<flow-ref name="LookupEmailAddressesSubflow" doc:name="LookupEmailAddressesSubflow" />
-				</enricher>
-				<smtp:outbound-endpoint to="#[flowVars['addresses']]"
-					user="${smtp.username}" password="${smtp.password}" host="${smtp.host}"
-					port="${smtp.port}" subject="${email.subjectPrefix} N O T I F I C A C I O N"
-					responseTimeout="10000" connector-ref="emailConnector" doc:name="SMTP" />
-			</when>
-			<otherwise>
-				<logger level="INFO" message="NO CUMPLE CONDICION" />
-			</otherwise>
-		</choice>
+			<choice doc:name="Choice">
+				<when expression="#[payload > app.registry.contador]">
+					<set-payload
+						value="Han transcurrido #[payload] minutos desde que se recibio la ultima transmisión de DATOS Valida desde la localidad: #[flowVars['localidad']], por favor Consulte el Log del Sistema para más información"
+						doc:name="Set Payload" />
+					<logger level="INFO" message="#[app.registry.contador]" />
+					<enricher source="#[payload]" target="#[flowVars['addresses']]">
+						<flow-ref name="LookupEmailAddressesSubflow" doc:name="LookupEmailAddressesSubflow" />
+					</enricher>
+					<smtp:outbound-endpoint to="#[flowVars['addresses']]"
+						user="${smtp.username}" password="${smtp.password}" host="${smtp.host}"
+						port="${smtp.port}" subject="${email.subjectPrefix} N O T I F I C A C I O N"
+						responseTimeout="10000" connector-ref="emailConnector" doc:name="SMTP" />
+				</when>
+				<otherwise>
+					<logger level="INFO" message="NO CUMPLE CONDICION" />
+				</otherwise>
+			</choice>
 		</foreach>
 	</flow>
-	
+
 	<sub-flow name="LookupLocationsSubflow">
 		<http:outbound-endpoint exchange-pattern="request-response"
-			address="${soap.urlBase}/localidad"	 method="POST" doc:name="/psp/services/localidad"
+			address="${soap.urlBase}/localidad" method="POST" doc:name="/psp/services/localidad">
 			<cxf:jaxws-client doc:name="getEmailAdressesByRole"
 				operation="getAllLocalidades" serviceClass="com.pdvsa.psp.service.ILocalidadService" />
 		</http:outbound-endpoint>

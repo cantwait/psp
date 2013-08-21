@@ -49,8 +49,8 @@
 	<global-property name="contador" value="5" />
 	<global-property name="sumaContador" value="25"/>
 	
-	<mule-xml:schema-validation-filter schemaLocations="conf/localidad/xsd/opcinforequest.xsd" returnResult="true" name="opc-request-schema-validation" doc:name="Schema Validation"/>
-	<mule-xml:schema-validation-filter schemaLocations="conf/localidad/xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
+	<mule-xml:schema-validation-filter schemaLocations="conf/pais/xsd/opcinforequest.xsd" returnResult="true" name="opc-request-schema-validation" doc:name="Schema Validation"/>
+	<mule-xml:schema-validation-filter schemaLocations="conf/pais/xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
 	
 
 	<!-- NUEVO -->

@@ -215,8 +215,6 @@
 			    <spring-object bean="storeTankOpcDataCache"/>
 			</component>    
 		</all>	
-		 
-		
 		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 	
@@ -229,9 +227,6 @@
 			</component>
 		</jersey:resources>
    	</flow>
-   	
-   	
-   	
    	
 	
    
@@ -254,22 +249,26 @@
 		<set-variable variableName="xmlPayload" value="#[payload]"/>
 		<http:outbound-endpoint exchange-pattern="request-response"	host="${rest.region.host}" port="${rest.region.port}" path="${rest.region.pathBase}/opc-info/transfer-opc-item" method="POST" doc:name="HTTP-ED" />
 		<object-to-string-transformer doc:name="Object to String" />
+		<logger level="INFO" message="#[payload]"/>
+		
+		
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.MongoLogger" encoding="UTF-8" mimeType="text/xml">
-		     <mule-xml:alias name="log" class="com.pdvsa.psp.model.xml.MongoLogger"/>
+		     <mule-xml:alias name="response" class="com.pdvsa.psp.model.xml.MongoLogger"/>
 		</mule-xml:xml-to-object-transformer>
 		<choice>
-		    <when expression="#[payload.tipoEvento != com.pdvsa.psp.model.xml.MongoLogger.TipoEvento.EXITO]" evaluator="groovy">		       
+		    <when expression="payload.tipoEvento != com.pdvsa.psp.model.xml.MongoLogger.Evento.EXITO" evaluator="groovy">		       
 		        <component>
 					<spring-object bean="mongoInsertLogComponent" />
 				</component>
 		    </when>
 		    <otherwise>
-		        <all>
+<!-- 		        <all> -->
 		            <component>
 						<spring-object bean="mongoInsertLogComponent" />
 					</component>
+					<set-payload value="#[flowVars['xmlPayload']]"/>    					
 					<vm:outbound-endpoint exchange-pattern="one-way" path="update-opc-endpoint" doc:name="VM" />
-		        </all>		        
+<!-- 		        </all>		         -->
 		    </otherwise>
 		</choice>		
 		
@@ -278,7 +277,7 @@
 
 	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemRegion">
 		<vm:inbound-endpoint exchange-pattern="one-way"	path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
-		<set-payload value="#[flowVars['xmlPayload']]"/>
+<!-- 		<set-payload value="#[flowVars['xmlPayload']]"/> -->
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
 		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
 		   <mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo"/>

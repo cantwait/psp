@@ -151,11 +151,13 @@
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
 		
+		<!-- 
 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">
 			<filter ref="opc-request-schema-validation" />
 		</message-filter>
-		
-		<mule-xml:dom-to-xml-transformer name="DomToXml" />
+		 -->
+		 
+		<mule-xml:dom-to-xml-transformer />
 		
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
 		   <mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer"/>
@@ -188,7 +190,7 @@
 		                Date currentTime = dateFormat.parse(dateStr);
 		                
 		                def log = new MongoLogger();
-		                log.tipoEvento = MongoLogger.TipoEvento.EXITO;	
+		                log.tipoEvento = MongoLogger.Evento.EXITO;	
 						log.descripcion = "Se ha completado la transaccion de manera Exitosa";
 						log.fecha = currentTime;				
 						
@@ -243,8 +245,6 @@
 		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 	
-	
-	
 	<flow name="ConsultarDataPentahoGet">
 	    <http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/pentaho" doc:name="HTTP" method="GET"/>
 		<jersey:resources doc:name="REST">
@@ -254,7 +254,17 @@
 		</jersey:resources>
 	</flow>
 	
-	
+	<sub-flow name="LookupEmailAddressesSubflow">
+		<set-payload value="ADMIN" doc:name="ROLE NAME" />
+		<http:outbound-endpoint exchange-pattern="request-response"
+			address="${soap.urlBase}/rol">
+			<!-- host="localhost" port="8801" method="POST" doc:name="/psp/services/rol" 
+				path="psp/services/rol" -->
+			<cxf:jaxws-client doc:name="getEmailAdressesByRole"
+				operation="getEmailAdressesByRole" serviceClass="com.pdvsa.psp.service.IRolService" />
+		</http:outbound-endpoint>
+	</sub-flow>
+		
 	<flow name="ValidateTimeWithoutRecievingFromLocation">
 		<quartz:inbound-endpoint jobName="validar-job" repeatInterval="6000000" responseTimeout="10000" doc:name="QuartzValidarRecepcion"	repeatCount="-1">
 			<quartz:event-generator-job />
@@ -322,10 +332,11 @@
 		</choice>
 		</foreach>
 	</flow>
-	
+
+		
 	<sub-flow name="LookupRegionsSubflow">
 		<http:outbound-endpoint exchange-pattern="request-response"
-			address="${soap.urlBase}/region" method="POST" doc:name="/psp/services/region" 
+			address="${soap.urlBase}/region" method="POST" doc:name="/psp/services/region"> 
 			<cxf:jaxws-client doc:name="getAllRegiones"
 				operation="getAllRegiones" serviceClass="com.pdvsa.psp.service.IRegionService" />
 		</http:outbound-endpoint>

@@ -63,10 +63,21 @@
          <property name="mongoTemplate" ref="mongoTemplate"/>
      </bean>    
     
+     <bean id="mongoFindLastTransactionLocation" class="com.pdvsa.psp.mule.component.MongoFindLastTransactionLocation" >
+     	<property name="mongoTemplate" ref="mongoTemplate"/>
+     </bean>    
      
      <bean id="mongoFindErrorComponent" class="com.pdvsa.psp.mule.component.MongoFindErrorComponent">
          <property name="mongoTemplate" ref="mongoTemplate"></property>
      </bean>
+     
+     <bean id="mongoFindItemsPentahoRest" class="com.pdvsa.psp.mule.rest.MongoFindItemsPentahoRest">
+         <property name="mongoTemplate" ref="mongoTemplate"></property>
+     </bean>     
+     
+	 <bean id="mongoFindLastTransactionRegion" class="com.pdvsa.psp.mule.component.MongoFindLastTransactionRegion">
+      	<property name="mongoTemplate" ref="mongoTemplate" />
+     </bean>     
      
      <bean id="storeTankOpcDataCache" class="com.pdvsa.psp.mule.component.StoreTankOpcDataCache">
          <property name="tanqueService" ref="tanqueService"/>
@@ -75,6 +86,8 @@
      <bean id="itemsFromCache" class="com.pdvsa.psp.mule.rest.CacheItemsRest">
          <property name="cacheItem" ref="storeTankOpcDataCache" />
      </bean>
-	
+     
+
+     	
 	
 </beans>
