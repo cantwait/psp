@@ -40,7 +40,7 @@
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
 	
     
-    <choice-exception-strategy name="Choice_Exception_Strategy">
+	<choice-exception-strategy name="Choice_Exception_Strategy">
 		<catch-exception-strategy
 			when="#[exception.causedBy(org.mule.api.routing.filter.FilterUnacceptedException)]"
 			doc:name="Catch Exception Strategy">
@@ -76,8 +76,9 @@
 					class="com.pdvsa.psp.model.xml.MongoLogger" />
 			</mule-xml:object-to-xml-transformer>
 		</catch-exception-strategy>
-		<catch-exception-strategy when="#[exception.causedBy(java.net.ConnectException)]">
-		    <scripting:transformer doc:name="Groovy">
+		<catch-exception-strategy
+			when="#[exception.causedBy(java.net.ConnectException)]">
+			<scripting:transformer doc:name="Groovy">
 				<scripting:script engine="Groovy"><![CDATA[
 				    	import java.text.SimpleDateFormat;
 		                import java.util.Date;
@@ -105,12 +106,11 @@
 				<component>
 					<spring-object bean="mongoInsertLogComponent" />
 				</component>
-				<vm:outbound-endpoint path="vm.error.transmision" />
+<!-- 				<vm:outbound-endpoint path="vm.error.transmision" /> -->
 			</all>
 		</catch-exception-strategy>
-		
-		<catch-exception-strategy		
-			doc:name="Catch Exception Strategy">
+
+		<catch-exception-strategy doc:name="Catch Exception Strategy">
 			<scripting:transformer doc:name="Groovy">
 				<scripting:script engine="Groovy"><![CDATA[
 				    	import java.text.SimpleDateFormat;
@@ -137,8 +137,10 @@
 			<component>
 				<spring-object bean="mongoInsertLogComponent" />
 			</component>
-			<mule-xml:object-to-xml-transformer	doc:name="Object to XML">
-				<mule-xml:alias name="response"	class="com.pdvsa.psp.model.xml.MongoLogger" />
+			<mule-xml:object-to-xml-transformer
+				doc:name="Object to XML">
+				<mule-xml:alias name="response"
+					class="com.pdvsa.psp.model.xml.MongoLogger" />
 			</mule-xml:object-to-xml-transformer>
 		</catch-exception-strategy>
 	</choice-exception-strategy>
@@ -168,38 +170,47 @@
 		
 		<all>
 			<component>
-	    		<spring-object bean="mongoInsertComponent"/>
+				<spring-object bean="storeTankOpcDataCache" />
 			</component>
 			<component>
-			    <spring-object bean="storeTankOpcDataCache"/>
-			</component>    
-		</all>							
+				<spring-object bean="mongoSaveHistoricItemsComponent" />
+			</component>
+		</all>
 		
 		<scripting:transformer doc:name="Groovy">
-				<scripting:script engine="Groovy"><![CDATA[
-				    	import java.text.SimpleDateFormat;
-		                import java.util.Date;
-		                import java.text.DateFormat;
-		                import java.util.Calendar;
-		                import com.pdvsa.psp.model.xml.MongoLogger;
-		                
-						//org.mule.api.routing.filter.FilterUnacceptedException
-						 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		                String dateStr = dateFormat.format(Calendar.getInstance().getTime());
-		                
-		                Date currentTime = dateFormat.parse(dateStr);
-		                
-		                def log = new MongoLogger();
-		                log.tipoEvento = MongoLogger.Evento.EXITO;	
-						log.descripcion = "Se ha completado la transaccion de manera Exitosa";
-						log.fecha = currentTime;				
-						
-						return log;
-						]]></scripting:script>
-			</scripting:transformer>
+			<scripting:script engine="Groovy">
+				<![CDATA[
+         			import java.text.SimpleDateFormat;
+         			import java.util.Date;
+         			import java.text.DateFormat;
+         			import java.util.Calendar;
+         			import com.pdvsa.psp.model.xml.MongoLogger;
+                  
+      	 			//org.mule.api.routing.filter.FilterUnacceptedException
+       				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        			String dateStr = dateFormat.format(Calendar.getInstance().getTime());
+                  
+					Date currentTime = dateFormat.parse(dateStr);
+                  
+	        		def log = new MongoLogger();
+        			log.tipoEvento = MongoLogger.Evento.EXITO; 
+      				log.descripcion = "Se ha completado la transaccion de manera Exitosa";
+      				log.fecha = currentTime;    
+      
+      				return log;
+      			]]>
+			</scripting:script>
+		</scripting:transformer>
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+			<mule-xml:alias name="response"
+				class="com.pdvsa.psp.model.xml.MongoLogger" />
+		</mule-xml:object-to-xml-transformer>
 		<logger level="INFO" message="RETORNANDO RESPUESTA A LOCALIDAD" />
+
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
 		
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 	
     <flow name="ItemsFromCacheFlow">
@@ -218,9 +229,11 @@
 			en dos modalidades,filtra por fecha desde-hasta y tambien por stationId
 		</description>
 		<http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/query-vars" doc:name="HTTP" />
+
 		<jersey:resources doc:name="REST">
 			<component class="com.pdvsa.psp.mule.rest.QueryOpcDataMongo" />
 		</jersey:resources>
+		
 		<object-to-string-transformer doc:name="Object to String" />
 		
 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">
@@ -232,7 +245,7 @@
 			<mule-xml:alias name="Opc.Request"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterRequest" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
-		<!-- Modifique el Componente para que Almacene en Historic, como esta planteado leia de Cache -->
+		
 		<component>
 	    	<spring-object bean="mongoFindComponent"/>
 		</component>		
@@ -240,11 +253,10 @@
 			<mule-xml:alias name="Opc.Response"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse" />
 			<mule-xml:alias name="Opc.Item"	class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 		</mule-xml:object-to-xml-transformer>
-		<!-- Debe enviarse un xml con un tag de error para indicar que no hay conexion a la base de datos -->		
 		
 		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
-	
+
 	<flow name="ConsultarDataPentahoGet">
 	    <http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/pentaho" doc:name="HTTP" method="GET"/>
 		<jersey:resources doc:name="REST">
@@ -258,8 +270,6 @@
 		<set-payload value="ADMIN" doc:name="ROLE NAME" />
 		<http:outbound-endpoint exchange-pattern="request-response"
 			address="${soap.urlBase}/rol">
-			<!-- host="localhost" port="8801" method="POST" doc:name="/psp/services/rol" 
-				path="psp/services/rol" -->
 			<cxf:jaxws-client doc:name="getEmailAdressesByRole"
 				operation="getEmailAdressesByRole" serviceClass="com.pdvsa.psp.service.IRolService" />
 		</http:outbound-endpoint>
@@ -332,7 +342,6 @@
 		</choice>
 		</foreach>
 	</flow>
-
 		
 	<sub-flow name="LookupRegionsSubflow">
 		<http:outbound-endpoint exchange-pattern="request-response"

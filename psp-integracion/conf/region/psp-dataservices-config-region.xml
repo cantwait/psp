@@ -306,16 +306,11 @@
 			path="${rest.pais.pathBase}/opc-info/transfer-opc-item" method="POST" 
 			doc:name="HTTP-ED" />
 		<object-to-string-transformer doc:name="Object to String" />
-		<mule-xml:xml-to-object-transformer
-			returnClass="com.pdvsa.psp.model.xml.MongoLogger" encoding="UTF-8"
-			mimeType="text/xml">
-			<mule-xml:alias name="response"
-				class="com.pdvsa.psp.model.xml.MongoLogger" />
+		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.MongoLogger" encoding="UTF-8" mimeType="text/xml">
+		     <mule-xml:alias name="response" class="com.pdvsa.psp.model.xml.MongoLogger"/>
 		</mule-xml:xml-to-object-transformer>
 		<choice>
-			<when
-				expression="payload.tipoEvento != com.pdvsa.psp.model.xml.MongoLogger.Evento.EXITO"
-				evaluator="groovy">
+		    <when expression="payload.tipoEvento != com.pdvsa.psp.model.xml.MongoLogger.Evento.EXITO" evaluator="groovy">		       
 				<component>
 					<spring-object bean="mongoInsertLogComponent" />
 				</component>
