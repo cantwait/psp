@@ -195,5 +195,15 @@ public class ServidorService implements IServidorService{
 		servidor.setActivo(Boolean.FALSE);
 		return saveServidor(servidor);
 	}
+
+	@Override
+	public List<ServidorOpc> getAllServers() {
+		Search s = new Search();
+		
+		s.addFilterEqual("activo", Boolean.TRUE);
+		
+		
+		return servidorDAO.search(s);
+	}
 	
 }

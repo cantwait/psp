@@ -19,5 +19,7 @@ public interface ITanqueDAO extends GenericDAO<Tanque, Long>{
 	public List<Tanque> findTanquesByServidor(Long servidor, Boolean activo);
 	
 	public HashMap<String, Object> findValuesFromTankName(String namePrefix);
+	
+	
 
 }

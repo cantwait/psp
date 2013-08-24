@@ -125,6 +125,8 @@ public class ServidorOpcDAO extends BaseDAO<ServidorOpc, Long> implements IServi
 		valores.put("regionNombre", o[3]);
 		valores.put("paisId", o[4]);
 		valores.put("paisNombre", o[5]);
+		valores.put("servidorId", o[6]);
+		valores.put("servidorNombre", o[7]);
 		
 		
 		return valores;

@@ -36,6 +36,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private String tanqueNombre;	
 	private String regionNombre;	
 	private String paisNombre;
+	private String nombreServidor;
 	
 	public OpcInfoRegisterMongo() {
 		
@@ -178,6 +179,14 @@ public class OpcInfoRegisterMongo implements Serializable{
 
 	public void setTanqueNombre(String tankeNombre) {
 		this.tanqueNombre = tankeNombre;
+	}
+
+	public String getNombreServidor() {
+		return nombreServidor;
+	}
+
+	public void setNombreServidor(String nombreServidor) {
+		this.nombreServidor = nombreServidor;
 	}
 
 	

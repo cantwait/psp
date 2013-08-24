@@ -52,6 +52,8 @@ public class ServidorOpc implements Serializable, BizEntity {
 	private Set<Tanque> tanques = new HashSet<Tanque>(0);
 	private Set<ServidorGrupo> servidorGrupos = new HashSet<ServidorGrupo>(0);
 	
+	private Set<Tanque> tanquesAux = new HashSet<Tanque>();
+	
 	private Boolean transferred = Boolean.FALSE;
 
 	public ServidorOpc() {
@@ -314,6 +316,16 @@ public class ServidorOpc implements Serializable, BizEntity {
 	@Override
 	public String toString() {
 		return nombre;
+	}
+	
+	@XmlTransient
+	@Transient
+	public Set<Tanque> getTanquesAux() {
+		return tanquesAux;
+	}
+
+	public void setTanquesAux(Set<Tanque> tanquesAux) {
+		this.tanquesAux = tanquesAux;
 	}
 	
 }

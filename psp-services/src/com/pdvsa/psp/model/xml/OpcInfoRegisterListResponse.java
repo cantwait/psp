@@ -3,35 +3,32 @@ package com.pdvsa.psp.model.xml;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement(name="Opc.Response")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OpcInfoRegisterListResponse {
-	
-	public List<OpcInfoRegisterMongo> listaopc = new ArrayList<OpcInfoRegisterMongo>();
-	
-	public OpcInfoRegisterListResponse(){}
-	
-	public OpcInfoRegisterListResponse(List<OpcInfoRegisterMongo> collection){
-		this.listaopc = collection;
-	}
 	
 	@XmlElementWrapper(name="items")
 	@XmlElement(name="Opc.Item")
-	public List<OpcInfoRegisterMongo> getListaopc() {
-		return listaopc;
+	public List<OpcInfoRegisterMongo> items = new ArrayList<OpcInfoRegisterMongo>();
+	
+	public OpcInfoRegisterListResponse(){}
+	
+	
+	public List<OpcInfoRegisterMongo> getItems() {
+		return items;
 	}
 
-	public void setListaopc(List<OpcInfoRegisterMongo> listaopc) {
-		this.listaopc = listaopc;
-	}
+	public void setItems(List<OpcInfoRegisterMongo> items) {
+		this.items = items;
+	}	
 
-	public void add(OpcInfoRegisterMongo opc){
-		this.listaopc.add(opc);
-	}
 	
 	
 

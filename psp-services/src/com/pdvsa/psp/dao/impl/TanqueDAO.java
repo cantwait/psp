@@ -44,6 +44,8 @@ public class TanqueDAO extends BaseDAO<Tanque, Long> implements ITanqueDAO {
 		}
 		return search(s);
 	}
+	
+	
 
 	@Override
 	public HashMap<String, Object> findValuesFromTankName(String namePrefix) {

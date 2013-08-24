@@ -61,6 +61,14 @@ public class MongoLogger implements Serializable{
 	public void setTipoMovimiento(Evento tipoMovimiento) {
 		this.tipoEvento = tipoEvento;
 	}
+
+	public Evento getTipoEvento() {
+		return tipoEvento;
+	}
+
+	public void setTipoEvento(Evento tipoEvento) {
+		this.tipoEvento = tipoEvento;
+	}
 	
 	
 		

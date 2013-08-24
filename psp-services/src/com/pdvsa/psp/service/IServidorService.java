@@ -14,7 +14,7 @@ import com.pdvsa.psp.model.ServidorOpc;
 import com.pdvsa.psp.model.Tanque;
 
 @WebService
-@Service
+@Service(value="servidorService")
 public interface IServidorService {
 
 	@WebMethod
@@ -74,5 +74,9 @@ public interface IServidorService {
 	@WebMethod
 	@WebResult(name="servidor")
 	public ServidorOpc deleteLogically(ServidorOpc servidor);
+	
+	@WebMethod
+	@WebResult(name="servidores")
+	public List<ServidorOpc> getAllServers();
 
 }
