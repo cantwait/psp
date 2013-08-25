@@ -28,7 +28,7 @@ public class MongoQueryLogRest {
 	
 	@GET
 	@Produces("text/xml")
-	@Path("/find-log-ondemand")
+	@Path("/consultar")
 	public OpcErrorResponse getLogByPropertiesOnDemand(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta, @QueryParam("evento") String evento, @QueryParam("pagina") Integer pagina, @QueryParam("tamano")Integer tamano){
 		
 		OpcErrorResponse response = new OpcErrorResponse();
@@ -65,7 +65,7 @@ public class MongoQueryLogRest {
 	
 	@GET
 	@Produces("text/plain")
-	@Path("/count-log")
+	@Path("/contar")
 	public String countLogByProperties(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta, @QueryParam("evento") String evento){
 		Query qry = new Query();
 		

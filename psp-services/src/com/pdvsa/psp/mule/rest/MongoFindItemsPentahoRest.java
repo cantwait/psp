@@ -33,7 +33,7 @@ public class MongoFindItemsPentahoRest {
 
 	@GET
 	@Produces("text/xml")
-	@Path("/find-pentaho-onDemand")
+	@Path("/consultar")
 	public OpcInfoRegisterListResponse findHistoricOpcData(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta,  @QueryParam(value = "pais") String pais,	@QueryParam(value = "region") String region, @QueryParam(value = "localidad") String localidad, @QueryParam("pagina") Integer pagina, @QueryParam("tamano") Integer tamano) {
 
 		
@@ -62,16 +62,11 @@ public class MongoFindItemsPentahoRest {
 			criterias.add(Criteria.where("localidadNombre").regex(localidad));
 		}
 		
-		qry.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));
-		
-		
+		qry.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));		
 		
 		qry.with(new Sort(new Order(Direction.ASC, "timestamp")));
 		
 		qry.with(new PageRequest(pagina, tamano));
-		
-		System.out.println(qry.toString());
-		
 		
 		items = getMongoTemplate().find(qry, OpcInfoRegisterMongo.class, "opcInfoRegisterHistoric");
 		
@@ -79,8 +74,6 @@ public class MongoFindItemsPentahoRest {
 			list.getItems().addAll(items);
 		}
 		
-		System.out.println(items.size());
-				
 		return list;
 
 	}
@@ -88,7 +81,7 @@ public class MongoFindItemsPentahoRest {
 	
 	@GET
 	@Produces("text/plain")
-	@Path("/count-pentaho-onDemand")
+	@Path("/contar")
 	public String countHistoricData(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta,  @QueryParam(value = "pais") String pais,	@QueryParam(value = "region") String region, @QueryParam(value = "localidad") String localidad) {
 	
 		Query qry = new Query();

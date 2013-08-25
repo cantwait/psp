@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+	xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps" xmlns:pop3="http://www.mulesoft.org/schema/mule/pop3"
+	xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:pop3s="http://www.mulesoft.org/schema/mule/pop3s"
+	xmlns:imap="http://www.mulesoft.org/schema/mule/imap" xmlns:imaps="http://www.mulesoft.org/schema/mule/imaps"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:management="http://www.mulesoft.org/schema/mule/management"
+	xmlns:ognl="http://www.mulesoft.org/schema/mule/ognl" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:mule-xml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey"
+	xsi:schemaLocation="
+		  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd	
+          http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+          http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
+          http://www.mulesoft.org/schema/mule/pop3 http://www.mulesoft.org/schema/mule/pop3/3.1/mule-pop3.xsd
+          http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/3.3/mule-smtp.xsd
+          http://www.mulesoft.org/schema/mule/pop3s http://www.mulesoft.org/schema/mule/pop3s/current/mule-pop3s.xsd
+          http://www.mulesoft.org/schema/mule/imap http://www.mulesoft.org/schema/mule/imap/current/mule-imap.xsd
+          http://www.mulesoft.org/schema/mule/imaps http://www.mulesoft.org/schema/mule/imaps/current/mule-imaps.xsd
+          http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/3.2/mule-email.xsd
+          http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.1/mule-file.xsd
+          http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+          http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+          http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/3.2/mule-jdbc.xsd
+          http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+          http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+          http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.3/mule-scripting.xsd
+          http://www.mulesoft.org/schema/mule/management http://www.mulesoft.org/schema/mule/management/3.2/mule-management.xsd
+          http://www.mulesoft.org/schema/mule/ognl http://www.mulesoft.org/schema/mule/ognl/current/mule-ognl.xsd
+          http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
+          http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+          http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.1/mule-vm.xsd
+          http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+          http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
+          http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
+
+	<!-- Para Controlar el Estado de las Conexiones a los Servidores OPC -->
+	<flow name="ManageOpcInfoRegisterService">
+		<description>
+			Servicio que permite, vía CXF-SOAP, la administración de
+			Controladores OPC.
+		</description>
+		<http:inbound-endpoint address="${soap.urlBase}/opcinfo"
+			exchange-pattern="request-response">
+			<cxf:jaxws-service serviceClass="com.pdvsa.psp.service.IOpcControllerService" />
+		</http:inbound-endpoint>
+		<component>
+			<spring-object bean="opcControllerService" />
+		</component>
+	</flow>
+
+	<!-- Almacenamiento de Datos OPC en MongoDB -->
+	<custom-transformer
+		class="com.pdvsa.psp.mule.component.OpcInfoPollingService" name="OpcData">
+		<spring:property name="opcControllerService" ref="opcControllerService"></spring:property>
+	</custom-transformer>
+
+	<custom-transformer
+		class="com.pdvsa.psp.mule.transformer.ProcessOpcInfoTransformer" name="ProcessOpcData">
+		<spring:property name="servidorService" ref="servidorService"></spring:property>
+		<spring:property name="itemService" ref="itemService"></spring:property>		
+	</custom-transformer>	
+	
+	<flow name="GetOpcDataAdquisition">
+		<quartz:inbound-endpoint jobName="job-get-opcdata-from-adquisition"
+			repeatInterval="${psp.poolingFrecuency}" repeatCount="-1" connector-ref="Quartz-Connector">
+			<quartz:event-generator-job />
+		</quartz:inbound-endpoint>
+		<transformer ref="OpcData" />
+		<foreach collection="#[payload.opcItems]">
+			<transformer ref="ProcessOpcData" />
+		</foreach>
+		<all>
+			<component>
+				<spring-object bean="mongoInsertComponent" />
+			</component>
+			<component>
+				<spring-object bean="storeTankOpcDataCache" />
+			</component>
+		</all>
+		<exception-strategy ref="Choice_Exception_Strategy"
+			doc:name="Catch_Exception_Strategy_DEFAULT" />
+	</flow>
+
+</mule>

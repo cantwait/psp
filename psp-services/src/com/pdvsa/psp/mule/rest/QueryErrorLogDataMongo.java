@@ -11,7 +11,7 @@ import com.pdvsa.psp.model.xml.OpcErrorMongoRequest;
 @Path("/")
 public class QueryErrorLogDataMongo {
 
-	@Path("/get-log")
+	@Path("/consultar")
 	@Produces(MediaType.TEXT_XML)
 	@Consumes(MediaType.TEXT_XML)
 	@POST

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:xm="http://www.mulesoft.org/schema/mule/xml"
+	xmlns:script="http://www.mulesoft.org/schema/mule/scripting" xmlns:rss="http://www.mulesoft.org/schema/mule/rss"
+	xmlns:stdio="http://www.mulesoft.org/schema/mule/stdio" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc"
+	xmlns:management="http://www.mulesoft.org/schema/mule/management"
+	xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey"
+	xmlns:mule-xml="http://www.mulesoft.org/schema/mule/xml"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.3/mule.xsd
+	   http://www.mulesoft.org/schema/mule/stdio http://www.mulesoft.org/schema/mule/stdio/3.3/mule-stdio.xsd     
+	   http://www.mulesoft.org/schema/mule/rss http://www.mulesoft.org/schema/mule/rss/3.3/mule-rss.xsd   
+	   http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.3/mule-vm.xsd     
+	   http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.3/mule-http.xsd
+	   http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.3/mule-scripting.xsd
+       http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/3.3/mule-json.xsd	
+       http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.3/mule-jms.xsd
+       http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.3/mule-file.xsd
+       http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/3.3/mule-jdbc.xsd
+       http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/3.3/mule-quartz.xsd
+       http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/3.3/mule-xml.xsd
+       http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/3.3/mule-tcp.xsd
+       http://www.mulesoft.org/schema/mule/management http://www.mulesoft.org/schema/mule/management/3.3/mule-management.xsd
+       http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/3.3/mule-smtp.xsd
+       http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/3.3/mule-smtps.xsd
+       http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
+       http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
+       http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+    
+	<spring:beans>
+	    <spring:import resource="classpath:psp-dataservices.xml" />
+	    <spring:import resource="classpath:psp-exceptionhandlers.xml" />
+		<spring:import resource="classpath:psp-dataquery.xml" />
+	    <spring:import resource="classpath:psp-cachehandler.xml" />
+	    <spring:import resource="classpath:psp-datareceived.xml" />
+	</spring:beans>
+	 
+</mule>
