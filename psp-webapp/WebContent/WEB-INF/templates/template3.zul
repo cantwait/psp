@@ -5,9 +5,9 @@
 
 	<borderlayout height="100%" width="100%">
 		<north border="0" height="98%">
-			<borderlayout>
-				<west title="Arbol Transacciones" self="@{insert(barra)}" hflex="1" vflex="1" width="20%"></west>
-				<east title="Area de Trabajo" hflex="1" vflex="1" width="80%" self="@{insert(areatrabajo)}">
+			<borderlayout width="100%">
+				<west title="Arbol Transacciones" self="@{insert(barra)}" hflex="1" vflex="1" width="20%" ></west>
+				<east title="Area de Trabajo" hflex="1"  vflex="1" width="80%" self="@{insert(areatrabajo)}" >
 					
 				</east>
 			</borderlayout>

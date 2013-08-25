@@ -47,13 +47,13 @@ if(operacionModificar != null){
 </zscript>
 
 	<window id="catOperacionUsuario" title="Catalogo Operaciones" maximizable="false"
-		mode="modal" maximized="false" border="normal" width="90%"
-		height="80%" selectedEntity="@{entidadCatalogoOpe}"
+		mode="modal" maximized="false" border="normal" width="99%"
+		height="99%" selectedEntity="@{entidadCatalogoOpe}"
 		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
-			<north autoscroll="true">
+			<north height="50%">
 				<panel height="100%">
 					<panelchildren>
 						<listbox id="lstbox" model="@{operacionesActuales}"
@@ -63,8 +63,7 @@ if(operacionModificar != null){
 							<listhead sizable="true">
 								<listheader label="Codigo"
 									width="150px" /> 
-								<listheader label="Nombre"
-									width="350px" />
+								<listheader label="Nombre"/>
 							</listhead>
 							<listitem sclass="row-border item"
 								self="@{each=e}">
@@ -76,7 +75,7 @@ if(operacionModificar != null){
 					</panelchildren>
 				</panel>
 			</north>
-			<center>
+			<center autoscroll="true">
 				<panel title="Usuario" collapsible="false"
 							height="299px">
 							<toolbar mold="panel">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditServidor"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./viewItems"?>
 
 
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native"
@@ -9,13 +9,15 @@
 
 	<zscript>
 	<![CDATA[
-	servidor = arg.get("aObjeto");
-	// registers = opcInfoService.getDumpRegistersByServer(servidor.id);
-	registers = servicioMongo.getLastItemsByTanque(servidor.nombre, null);
+	         
+	registers = new OpcItemsTransfer();
+	tanque = arg.get("aObjeto");
+	registers = servicioMongo.getLastItemsByTanque(tanque.servidorOpc.nombre, tanque.nombre);
+	
 ]]>
 </zscript>
 
-	<panel id="dlgEditServidor" title="Servidor" height="100%"
+	<panel id="viewItems" title="@{tanque.nombre}" height="100%"
 		width="100%">
 		<attribute name="onClose">
 		<![CDATA[
@@ -27,48 +29,14 @@
 		<caption image="/images/icons/24x24/window.png" />
 		<panelchildren>
 			<style src="/css/estilo_zk.css" dynamic="true" />
-			<borderlayout>
-				<north>
-					<grid oddRowSclass="background-color: white;">
-						<columns>
-							<column width="25%" align="right" />
-							<column width="25%" />
-							<column width="25%" align="right" />
-							<column width="25%" />
-						</columns>
-						<rows>
-							<row>
-								<label value="Nombre" />
-								<label value="@{servidor.nombre}" />
-								<label value="Proveedor Opc" />
-								<label value="@{servidor.proveedorOpc}" />
-							</row>
-							<row>
-								<label value="Clsid" />
-								<label value="@{servidor.clsid}" />
-								<label value="Progid" />
-								<label value="@{servidor.progid}" />
-							</row>
-
-							<row>
-								<label value="Host" />
-								<label value="@{servidor.host}" />
-								<label value="Dominio" />
-								<label value="@{servidor.domain}" />
-							</row>
-						</rows>
-					</grid>
-				</north>
+			<borderlayout>				
 				<center autoscroll="true">
 					<panel title="Variables">
-						<toolbar mold="panel"
-							style="background:#c5e6ef">
-							<button label="Refrescar" mold="os"
-								style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+						<toolbar mold="panel">
+							<button label="Refrescar" mold="trendy">
 								<attribute name="onClick">
 									<![CDATA[
-	//registers = opcInfoService.getDumpRegistersByServer(servidor.id);
-    registers = servicioMongo.getLastItemsByTanque(servidor.nombre, null);	
+									     	registers = servicioMongo.getLastItemsByTanque(tanque.servidorOpc.nombre, tanque.nombre);
 	binder.loadAll();
 ]]>
 									</attribute>
@@ -105,8 +73,7 @@
 			<![CDATA[
 	{
 
-		//registers = opcInfoService.getDumpRegistersByServer(servidor.id);
- 		registers = servicioMongo.getLastItemsByTanque(servidor.nombre, null);			
+		registers = servicioMongo.getLastItemsByTanque(tanque.servidorOpc.nombre, tanque.nombre);
 		binder.loadAll();
 
 	}

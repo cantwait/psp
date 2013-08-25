@@ -159,6 +159,7 @@ http://www.springframework.org/schema/security
     			<value>com.pdvsa.psp.model.xml.OpcErrorMongoRequest</value>
     			<value>com.pdvsa.psp.model.xml.OpcErrorResponse</value>
     			<value>com.pdvsa.psp.model.xml.OpcItemsTransfer</value>
+    			<value>com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse</value>
     		</list>
     	</property>
     </bean>

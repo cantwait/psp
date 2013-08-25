@@ -11,6 +11,14 @@
 	<zscript>
 	<![CDATA[
 	region = arg.get("aObjeto");
+	
+	existeOPCPooling = false;
+	try {
+		opcInfoService.reloadServers(0l);		
+		existeOPCPooling =  true;
+	} catch (Exception e) {
+		// NO Existe Pooling debe procederse adecuadamente
+	}	
 ]]>
 </zscript>
 
@@ -45,7 +53,7 @@
 								</hbox>
 							</row>
 
-							<row spans="2" align="right">
+							<row spans="2" align="right" if="${existeOPCPooling}">
 								<hbox spacing="5">
 									<button label="Reniciar Servidores" mold="os"
 										style="background-color:#fff000; border: 1px solid; font-size: 9px;">

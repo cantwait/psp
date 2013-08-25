@@ -29,6 +29,7 @@ import com.pdvsa.psp.service.ILocalidadService;
 import com.pdvsa.psp.service.IPaisService;
 import com.pdvsa.psp.service.IRegionService;
 import com.pdvsa.psp.service.IServidorService;
+import com.pdvsa.psp.service.ITanqueService;
 
 public class PSPTree extends Tree implements AfterCompose {
 
@@ -52,11 +53,13 @@ public class PSPTree extends Tree implements AfterCompose {
 						.getValue();
 
 				if (value instanceof Tanque) {
-
+					Tanque tanque = (Tanque) value;					
+					sendEvent(tanque);
 
 				} else if (value instanceof ServidorOpc) {
 
 					ServidorOpc servidor = (ServidorOpc) value;
+					crearHijosServidor(servidor);
 					sendEvent(servidor);
 
 				} else if (value instanceof Localidad) {
@@ -89,8 +92,45 @@ public class PSPTree extends Tree implements AfterCompose {
 
 		}
 
+		
+
 	};
 
+	private void crearHijosServidor(ServidorOpc servidor) {
+		ITanqueService tanqueService = (ITanqueService) SpringUtil.getBean("tanqueService");
+
+		List<Tanque> tanques = tanqueService.getTanquesByServidorActivo(servidor.getId());
+		Treeitem padre = this.getSelectedItem();
+		crearTreeByServidor(padre, tanques);
+		
+	}
+
+	private void crearTreeByServidor(Treeitem padre, List<Tanque> tanques) {
+		if (tanques != null) {
+
+			Treechildren itemsTanques = padre.getTreechildren();
+
+			if (itemsTanques == null) {
+				itemsTanques = new Treechildren();
+			}
+			
+			itemsTanques.getChildren().clear();			
+			
+
+			for (Iterator<?> p = tanques.iterator(); p.hasNext();) {
+
+				Tanque itemTanque = (Tanque) p.next();
+
+				Treeitem itemHijoTanque = createItemTanque(itemTanque);
+
+				itemHijoTanque.setParent(itemsTanques);
+			}
+			itemsTanques.setParent(padre);
+		}
+		
+		
+	}	
+	
 	public void crearTreeByPais(Treeitem itemSeleccionado,
 			List<Region> itemsHijos) {
 

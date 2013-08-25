@@ -184,6 +184,7 @@
 		tanq = (com.pdvsa.psp.model.Tanque) c.objeto;
 		params = new HashMap();
 		params.put("tanqueNombre", tanq.nombre);
+		params.put("servidorNombre", servidor.nombre);
 		command = new com.obelisco.vista.zk.command.ShowCommand();
 		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/viewItems.zul";
 		command.parametros = params;

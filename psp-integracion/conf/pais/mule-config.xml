@@ -37,24 +37,18 @@
 
 	<spring:beans>
 		<spring:import resource="classpath:spring/spring-base.xml" />
-		<spring:import resource="classpath:spring/spring-opc-base.xml" />
+		<spring:import resource="classpath:spring/spring-base-mongodb.xml" />
+		<spring:import resource="classpath:spring/spring-opc-cache.xml" />
 		<spring:import resource="classpath:spring/spring-replication.xml" />
-		<spring:import resource="classpath:mule-template-config.xml" />	
-		<spring:import resource="classpath:psp-dataservices-config.xml" />
-		<spring:import resource="classpath:psp-dataservices-config-pais.xml" />
+		<spring:import resource="classpath:mule-template.xml" />	
+		<spring:import resource="classpath:psp-config-level.xml" />
 	</spring:beans>
+	
 	
 	<!-- PROPIEDADES GLOBALES -->
 	
-	<global-property name="contador" value="5" />
-	<global-property name="sumaContador" value="25"/>
+	<mule-xml:schema-validation-filter schemaLocations="xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
 	
-	<mule-xml:schema-validation-filter schemaLocations="conf/pais/xsd/opcinforequest.xsd" returnResult="true" name="opc-request-schema-validation" doc:name="Schema Validation"/>
-	<mule-xml:schema-validation-filter schemaLocations="conf/pais/xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
-	
-
-	<!-- NUEVO -->
-
 	<quartz:connector name="Quartz-Connector"
 		validateConnections="true" doc:name="Quartz">
 		<quartz:factory-property key="rg.quartz.scheduler.instanceName"
@@ -71,28 +65,9 @@
 			value="org.quartz.simpl.RAMJobStore" />
 	</quartz:connector>
 
-<!-- 	<mongo:config name="Mongo_DB" host="localhost" doc:name="Mongo DB" 		 -->
-<!-- 		username="admin" password="admin"> -->
-<!-- 		<mongo:connection-pooling-profile exhaustedAction="WHEN_EXHAUSTED_GROW"/> -->
-<!-- 		<reconnect count="5" /> -->
-<!-- 	</mongo:config>	 -->
-
 	<custom-transformer
 		class="com.pdvsa.psp.mule.transformer.JSONArrayToOpcInfoArray" name="Java"
 		doc:name="Java" />
-
-	<custom-transformer
-		class="com.pdvsa.psp.mule.component.OpcInfoPollingService" name="OpcData">
-		<spring:property name="opcControllerService" ref="opcControllerService"></spring:property>
-	</custom-transformer>
-
-	<custom-transformer
-		class="com.pdvsa.psp.mule.transformer.ProcessOpcInfoTransformer" name="ProcessOpcData">
-		<spring:property name="servidorService" ref="servidorService"></spring:property>
-	</custom-transformer>	
-
-	<!-- HASTA AQUI NUEVO -->
-
 
 	<flow name="PingFlow">
 		<http:inbound-endpoint host="localhost" port="8084"
@@ -130,5 +105,6 @@
 	<smtp:endpoint name="smtpNotification" user="${smtp.username}" 
 		password="${smtp.password}" host="${smtp.host}" port="${smtp.port}"
 		connector-ref="emailConnector" subject="${email.subjectPrefix} N O T I F I C A C I O N" />
+
 
 </mule>

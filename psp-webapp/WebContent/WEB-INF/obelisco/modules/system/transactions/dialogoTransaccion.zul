@@ -41,9 +41,9 @@
 						}
 					}
 					
-]]>						
-		
-		
+]]>
+
+
 
 	</zscript>
 
@@ -63,31 +63,26 @@
 				<tabpanels>
 					<tabpanel>
 						<borderlayout>
-							<north height="20%">
+							<north height="30%">
 								<grid>
 									<columns>
-										<column width="30%"
-											align="left" />
-										<column width="70%"
-											align="left" />
+										<column width="30%" align="left" />
+										<column width="70%" align="left" />
 									</columns>
 									<rows>
 										<row>
 											<label value="Nombre" />
-											<textbox id="txtNombre"
-												readonly="${executeReadOnly}" maxlength="100"
-												value="@{transaccion.nombre}" />
+											<textbox id="txtNombre" readonly="${executeReadOnly}"
+												maxlength="100" value="@{transaccion.nombre}" />
 										</row>
 										<row>
 											<label value="Descripcion" />
-											<textbox id="txtDescripcion"
-												maxlength="100" value="@{transaccion.descripcion}" />
+											<textbox id="txtDescripcion" maxlength="100"
+												value="@{transaccion.descripcion}" />
 										</row>
 										<row>
-											<label
-												value="Tipo Transaccion" />
-											<textbox id="txtAcceso"
-												readonly="true" maxlength="100"
+											<label value="Tipo Transaccion" />
+											<textbox id="txtAcceso" readonly="true" maxlength="100"
 												value="@{transaccion.tipoTransaccion}" />
 										</row>
 										<row>
@@ -98,13 +93,10 @@
 									</rows>
 								</grid>
 							</north>
-							<south height="80%">
-								<borderlayout >
-									<north height="40%">
-										<panel title="Operaciones">
+							<center autoscroll="true">
+										<panel title="Operaciones" height="100%">
 											<toolbar mold="panel">
-												<button label="Agregar"
-													mold="trendy">
+												<button label="Agregar" mold="trendy">
 													<attribute name="onClick">
 									<![CDATA[
 	{
@@ -126,38 +118,27 @@
 
 	}
 ]]>
-											</attribute>
+													</attribute>
 												</button>
 											</toolbar>
 											<panelchildren>
-												<listbox 
-													id="lstboxOperaciones" rows="3" model="@{operaciones}"
-													height="150px" mold="paging"
+												<listbox id="lstboxOperaciones" rows="3"
+													model="@{operaciones}" mold="paging"
 													selectedItem="@{operacionSelected}">
-													<listhead
-														sizable="true">
-														<listheader
-															width="20%" label="codigo" />
-														<listheader
-															width="60%" label="Nombre" />
-														<listheader
-															width="20%" label="Operaciones" />
+													<listhead sizable="true">
+														<listheader width="20%" label="Codigo" />
+														<listheader width="60%" label="Nombre" />
+														<listheader width="20%" label="Operaciones" />
 													</listhead>
-													<listitem
-														sclass="row-border item" self="@{each=op}">
-														<listcell
-															label="@{op.codigo}" />
-														<listcell
-															label="@{op.nombre}" />
+													<listitem sclass="row-border item" self="@{each=op}">
+														<listcell label="@{op.codigo}" />
+														<listcell label="@{op.nombre}" />
 														<listcell>
-															<hbox
-																spacing="5px">
-																<toolbarbutton
-																	style="font-size: 9px; font-weight: normal;"
+															<hbox spacing="5px">
+																<toolbarbutton style="font-size: 9px; font-weight: normal;"
 																	objeto="@{op}"
 																	use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-																	image="/images/icons/16x16/edit.png"
-																	tooltiptext="Modificar...">
+																	image="/images/icons/16x16/edit.png" tooltiptext="Modificar...">
 																	<attribute name="onClick">
 											<![CDATA[
 	{
@@ -186,14 +167,12 @@
 
 	}
 ]]>
-											</attribute>
+																	</attribute>
 																</toolbarbutton>
-																<toolbarbutton
-																	style="font-size: 9px; font-weight: normal;"
+																<toolbarbutton style="font-size: 9px; font-weight: normal;"
 																	objeto="@{op}"
 																	use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-																	image="/images/icons/16x16/delete2.png"
-																	tooltiptext="Eliminar...">
+																	image="/images/icons/16x16/delete2.png" tooltiptext="Eliminar...">
 																	<attribute name="onClick">
 											<![CDATA[
 	{
@@ -205,9 +184,9 @@
 
 	}
 ]]>
-											</attribute>
+																	</attribute>
 																</toolbarbutton>
-																
+
 															</hbox>
 														</listcell>
 
@@ -221,40 +200,27 @@
 		binder.loadComponent(lstboxRoles);
 	}
 ]]>
-											</attribute>
+													</attribute>
 												</listbox>
-											</panelchildren>
-										</panel>
-									</north>
-									<south height="60%">
-										<panel title="Roles">
-											<panelchildren>
-												<listbox
-													id="lstboxRoles" rows="5" model="@{roles}"
+												
+												<listbox id="lstboxRoles" rows="5" model="@{roles}"
 													height="400px" mold="paging">
-													<listhead
-														sizable="true">
-														<listheader
-															width="20%" label="Nombre" />
-														<listheader
-															width="60%" label="Descripcion" />
-														<listheader
-															width="20%" label="Operaciones" />
+													<listhead sizable="true">
+														<listheader width="20%" label="Nombre" />
+														<listheader width="60%" label="Descripcion" />
+														<listheader width="20%" label="Operaciones" />
 													</listhead>
-													<listitem
-														sclass="row-border item" self="@{each=r}">
-														<listcell
-															label="@{r.nombre}" />
-														<listcell
-															label="@{r.descripcion}" />
+													<listitem sclass="row-border item" self="@{each=r}">
+														<listcell label="@{r.nombre}" />
+														<listcell label="@{r.descripcion}" />
 
 													</listitem>
 												</listbox>
+												
 											</panelchildren>
 										</panel>
-									</south>
-								</borderlayout>
-							</south>
+
+							</center>
 						</borderlayout>
 
 					</tabpanel>
@@ -264,7 +230,7 @@
 				</tabpanels>
 			</tabbox>
 		</div>
-		<div align="right" height="15%" >
+		<div align="right" height="15%">
 			<button id="btnAceptar" label="Aceptar" mold="trendy"
 				image="/images/icons/disk_blue.png" orient="vertical">
 			</button>

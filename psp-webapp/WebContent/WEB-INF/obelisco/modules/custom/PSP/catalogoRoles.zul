@@ -32,7 +32,7 @@
 </zscript>
 
 	<window id="dlgCatalogoRoles" title="Roles" maximizable="true"
-		border="normal" width="90%" height="95%"
+		border="normal" width="95%" height="95%"
 		selectedEntity="@{entidadCatalogo}"
 		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
 		<caption image="/images/icons/24x24/window.png" />
@@ -47,13 +47,13 @@
 							pageSize="10" preloadSize="10" multiple="true" checkmark="true"
 							vflex="true">
 							<listhead sizable="true">
-								<listheader width="15px" align="center" />
+								<listheader width="30px" align="center" />
 								<listheader label="Nombre" />
 								<listheader label="Descripcion" />
 							</listhead>
 							<listitem sclass="row-border item"
 								self="@{each=e}">
-								<listcell label="" />
+								<listcell  />
 								<listcell label="@{e.nombre}" />
 								<listcell label="@{e.descripcion}" />
 							</listitem>

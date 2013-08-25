@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:spring="http://www.springframework.org/schema/beans"
 	xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
@@ -38,22 +37,17 @@
 
 	<spring:beans>
 		<spring:import resource="classpath:spring/spring-base.xml" />
-		<spring:import resource="classpath:spring/spring-opc-base.xml" />
-		<spring:import resource="classpath:spring/spring-opc-acquisition.xml" />
+		<spring:import resource="classpath:spring/spring-base-mongodb.xml" />
+		<spring:import resource="classpath:spring/spring-opc-cache.xml" />
 		<spring:import resource="classpath:spring/spring-replication.xml" />
-		<spring:import resource="classpath:mule-template-config.xml" />	
-		<spring:import resource="classpath:psp-dataservices-config.xml" />
-		<spring:import resource="classpath:psp-dataservices-config-localidad.xml" />
+		<spring:import resource="classpath:mule-template.xml" />	
+		<spring:import resource="classpath:psp-config-level.xml" />
 	</spring:beans>
 	
 	
 	<!-- PROPIEDADES GLOBALES -->
 	
-	<global-property name="contador" value="5" />
-	<global-property name="sumaContador" value="25"/>
-	
-	<mule-xml:schema-validation-filter schemaLocations="conf/localidad/xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
-	
+	<mule-xml:schema-validation-filter schemaLocations="xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
 	
 	<quartz:connector name="Quartz-Connector"
 		validateConnections="true" doc:name="Quartz">
@@ -74,16 +68,6 @@
 	<custom-transformer
 		class="com.pdvsa.psp.mule.transformer.JSONArrayToOpcInfoArray" name="Java"
 		doc:name="Java" />
-
-	<custom-transformer
-		class="com.pdvsa.psp.mule.component.OpcInfoPollingService" name="OpcData">
-		<spring:property name="opcControllerService" ref="opcControllerService"></spring:property>
-	</custom-transformer>
-
-	<custom-transformer
-		class="com.pdvsa.psp.mule.transformer.ProcessOpcInfoTransformer" name="ProcessOpcData">
-		<spring:property name="servidorService" ref="servidorService"></spring:property>
-	</custom-transformer>	
 
 	<flow name="PingFlow">
 		<http:inbound-endpoint host="localhost" port="8084"

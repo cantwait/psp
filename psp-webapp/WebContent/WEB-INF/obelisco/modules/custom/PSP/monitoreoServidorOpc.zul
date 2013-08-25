@@ -11,7 +11,13 @@
 	<zscript>
 	<![CDATA[
 	servidor = arg.get("aObjeto");
-	disponibilidad = opcInfoService.getServerState(servidor.id);
+	existeOPCPooling = false;
+	try {
+		disponibilidad = opcInfoService.getServerState(servidor.id);
+		existeOPCPooling = true;
+	} catch (Exception e) {
+		// NO Existe Pooling debe procederse adecuadamente
+	}
 ]]>
 </zscript>
 
@@ -81,7 +87,7 @@
 									value="@{servidor.refAddressBase}"
 									constraint="no negative, no zero, no empty" readonly="true" />
 							</row>
-							<row>
+							<row if="${existeOPCPooling}">
 								<label value="Metodo de Acceso" />
 								<textbox
 									value="@{servidor.accessMethod}" readonly="true" />
@@ -90,7 +96,7 @@
 							</row>
 							<row spans="4">
 								<hbox spacing="5">
-									<button label="Iniciar" mold="trendy">
+									<button label="Iniciar" mold="trendy" if="${existeOPCPooling}">
 										<attribute name="onClick">
 										<![CDATA[
 	//disponibilidad = opcInfoService.getServerState(servidor.id);
@@ -110,7 +116,7 @@
 ]]>
 					</attribute>
 									</button>
-									<button label="Detener" mold="trendy">
+									<button label="Detener" mold="trendy" if="${existeOPCPooling}">
 										<attribute name="onClick">
 										<![CDATA[
 	//disponibilidad = opcInfoService.getServerState(servidor.id);
@@ -153,7 +159,7 @@
 					</attribute>
 									</button>
 
-									<button label="Refrescar" mold="trendy">
+									<button label="Refrescar" mold="trendy" if="${existeOPCPooling}">
 										<attribute name="onClick">
 										<![CDATA[
 	disponibilidad = opcInfoService.getServerState(servidor.id);

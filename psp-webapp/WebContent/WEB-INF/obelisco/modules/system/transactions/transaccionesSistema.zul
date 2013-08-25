@@ -115,14 +115,13 @@
 		}
 
 		void doDeleteEntity(Object o) {
-			servicioAdministrarSeguridad.eliminarNodo(o);
+			securityService.removeTransaccion(o);
 			tree.refreshTree(OperationType.ELIMINAR,o);			
 		}
 
 		void doCustomAction(Object object, Operacion operacion) {
-
-			servicioAdministrarSeguridad.guardarCarpeta(tree.getRootValue());
-			alert("Los Datos se han Guardado Satisfactoriamente");		
+			//servicioAdministrarSeguridad.guardarCarpeta(tree.getRootValue());
+			//alert("Los Datos se han Guardado Satisfactoriamente");		
 		}
 
 		</zscript>

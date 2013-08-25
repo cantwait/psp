@@ -1,5 +1,7 @@
 package com.obelisco.modelo.servicios.rest;
 
+import java.util.Date;
+
 import com.pdvsa.psp.model.xml.OpcErrorMongoRequest;
 import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
@@ -8,12 +10,14 @@ import com.pdvsa.psp.model.xml.OpcItemsTransfer;
 
 public interface IServiciosMongo {
 	
-	public OpcInfoRegisterListResponse findDataPentaho(OpcInfoRegisterRequest req);
+	public OpcItemsTransfer getLastItemsByTanque(String nombreServidor, String tanqueNombre);
 	
-	public OpcInfoRegisterListResponse findLastRecord(OpcInfoRegisterRequest req);
+	public String getCantidadItemsInQuery(String desde, String hasta, String pais, String region, String localidad);
 	
-	public OpcErrorResponse findErrors(OpcErrorMongoRequest req);
+	public OpcInfoRegisterListResponse getDataPentaho(String desde, String hasta, String pais, String region, String localidad, Integer pagina, Integer tamano);
 	
-	public OpcItemsTransfer getLastItemsByTanque(String tanqueNombre);
+	public OpcErrorResponse findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano);
+	
+	public String countLogByProperties(String desde, String hasta, String tipoEvento);
 
 }

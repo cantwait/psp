@@ -11,107 +11,132 @@
 
 	<zscript>
 		<![CDATA[
-		         
-		         usuarioAEditar = null;
-		         errores = new ArrayList();
-		         response = new OpcErrorResponse();
-				 
-				 
+	usuarioAEditar = null;
+	errores = new ArrayList();
+	response = new OpcErrorResponse();
+
+	eventos = MongoLogger.Evento.values();
+
+	
+
+	eventoSeleccionado = null;
 ]]>
 	</zscript>
- 
-	<window id="lstErrors" title="Errores Bus" closable="true" height="100%"
-		width="100%" border="normal" entityList="@{errores}"
-		transaccion="@{transaccion}" 
+
+	<window id="lstErrors" title="Errores Bus" closable="true"
+		height="100%" width="100%" border="normal" entityList="@{errores}"
+		transaccion="@{transaccion}"
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
 		<style src="/css/estilo_zk.css" dynamic="true" />
-	
-		<panel  width="100%" height="100px">
-			
-			
-			
+
+		<panel width="100%" height="120px" border="normal">
+
 			<panelchildren>
-			
-				<toolbar id="tool"  mold="panel" 
+
+				<toolbar id="tool" mold="panel"
 					use="com.obelisco.vista.zk.controls.Toolbar">
 				</toolbar>
 
-				<h:table border="0" width="100%" heigth="100%">
-					<h:tr>
-						<h:td>
-							<grid align="left">
-							 	<columns>
-							 		<column width="10%"></column>
-							 		<column width="90%"></column>
-							 	</columns>
-								<rows>
-									<row>
-										<label value="Fecha" />
-										<hbox>
-										 	<label value="Desde"></label>
-											<datebox id="dateDesde" format="dd/MM/yyyy hh:mm:ss" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>											
-											<label value="Hasta"></label>
-											<datebox id="dateHasta" format="dd/MM/yyyy hh:mm:ss" constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()"></datebox>
-											
-										</hbox>
-									</row>									
-								</rows>
-							</grid>
-						</h:td>
-					</h:tr>
-				</h:table>
-				
+
+				<grid align="left">
+					<columns>
+						<column width="10%"></column>
+						<column width="90%"></column>
+					</columns>
+					<rows>
+						<row>
+							<label value="Fecha" />
+							<hbox>
+								<label value="Desde"></label>
+								<datebox id="dateDesde"
+									format="dd/MM/yyyy hh:mm:ss"
+									constraint="no empty: No puede estar vacio"
+									onCreate="self.value = new Date()">
+								</datebox>
+								<label value="Hasta"></label>
+								<datebox id="dateHasta"
+									format="dd/MM/yyyy hh:mm:ss"
+									constraint="no empty: No puede estar vacio"
+									onCreate="self.value = new Date()">
+								</datebox>
+
+							</hbox>
+						</row>
+						<row>
+							<label value="Tipo de Evento" />
+							<listbox model="@{eventos}" mold="select" rows="1"  width="300px"
+								selectedValue="@{eventoSeleccionado}">
+								<listitem self="@{each=e}" label="@{e}" />
+							</listbox>
+						</row>
+					</rows>
+				</grid>
+
+
 
 
 			</panelchildren>
 		</panel>
-		<panel title="Resultados de Búsqueda" border="normal" height="500px"
-			width="100%" collapsible="true">
+		<panel title="Resultados de Búsqueda" border="normal"
+			height="500px" width="100%" collapsible="true">
 			<panelchildren>
-				<listbox id="lstbox" rows="5" model="@{errores}" height="400px" mold="paging"
-					>
+				<listbox id="lstbox" rows="10" model="@{errores}"
+					height="400px">
 					<listhead sizable="true">
-						<listheader width="30%" label="Causa" />						
+						<listheader width="30%" label="Causa" />
+						<listheader label="Tipo Evento" width="10%"/>
 						<listheader width="10%" label="Fecha" />
-						<listheader label="Descripción" width="60%"/>
+						<listheader label="Descripción" width="50%" />
 					</listhead>
 					<listitem sclass="row-border item"
 						self="@{each=e}">
 						<listcell label="@{e.causa}" />
-						<listcell label="@{e.fecha}"/>
-						<listcell  label="@{e.descripcion}">							
-						</listcell>					
+						<listcell label="@{e.tipoEvento}" />
+						<listcell label="@{e.fecha}" />
+						<listcell label="@{e.descripcion}" />
 					</listitem>
 				</listbox>
+				<paging id="paginLog" >
+					<attribute name="onPaging">
+						<![CDATA[
+						         
+]]>         
+						
+					</attribute>
+				</paging>
 			</panelchildren>
 		</panel>
 		<zscript>
 			<![CDATA[
-			         
-	void doFindEntities(){
+	void doFindEntities() {
+		te = "";
+		if (eventoSeleccionado != null) {
+			te = eventoSeleccionado.name();
+		}
 		errores.clear();
-		if(dateDesde != null && dateHasta != null){
-			if(!dateDesde.getValue().after(dateHasta.getValue())){
-				error = servicioMongo.findErrors(new OpcErrorMongoRequest(dateDesde.getValue(), dateHasta.getValue()));
-				if(error != null && error.errores.size() > 0){
+		if (dateDesde != null && dateHasta != null) {
+			if (!dateDesde.getValue().after(dateHasta.getValue())) {
+				error = servicioMongo.findLogByPropertiesOnDemand(dateDesde
+						.getValue().toString(),
+						dateHasta.getValue().toString(), te, 0, 100);
+				if (error != null && error.errores.size() > 0) {
 					errores = error.errores;
 				}
-				
-			}else{
+
+			} else {
 				alert("La fecha Desde no puede ser Mayor que Hasta");
 			}
-				
-		}else{
+
+		} else {
 			alert("Las fechas no pueden ser nulas!!!");
 		}
-		
-		if(errores.size() == 0){
+
+		if (errores.size() == 0) {
 			alert("No se encontraron resultados!!!");
 		}
 		binder.loadAll();
 	}
-
 ]]>
 			
 		</zscript>

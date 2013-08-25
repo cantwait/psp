@@ -12,7 +12,11 @@
 	         
 	         registers = new OpcItemsTransfer();
 	tanqueNombre = arg.get("tanqueNombre");
-	registers = servicioMongo.getLastItemsByTanque(tanqueNombre);
+	servidorNombre = arg.get("servidorNombre");
+	registers = servicioMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
+	
+	
+	
 ]]>
 </zscript>
 
@@ -35,7 +39,7 @@
 							<button label="Refrescar" mold="trendy">
 								<attribute name="onClick">
 									<![CDATA[
-									     	registers = servicioMongo.getLastItemsByTanque(tanqueNombre);
+									     	registers = servicioMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
 	binder.loadAll();
 ]]>
 									</attribute>
@@ -75,7 +79,7 @@
 			<![CDATA[
 	{
 
-		registers = opcInfoService.getDumpRegistersByServer(servidor.id);
+		registers = servicioMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
 		binder.loadAll();
 
 	}
