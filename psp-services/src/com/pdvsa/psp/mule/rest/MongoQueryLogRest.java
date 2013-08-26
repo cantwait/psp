@@ -78,8 +78,8 @@ public class MongoQueryLogRest {
 		System.out.println(hastaFomatted);
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
-		criterias.add(Criteria.where("timestamp").gt(desdeFomatted.getValue()));
-		criterias.add(Criteria.where("timestamp").lte(hastaFomatted.getValue()));
+		criterias.add(Criteria.where("fecha").gt(desdeFomatted.getValue()));
+		criterias.add(Criteria.where("fecha").lte(hastaFomatted.getValue()));
 		
 		
 		
