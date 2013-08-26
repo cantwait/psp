@@ -97,14 +97,47 @@
 						<listcell label="@{e.descripcion}" />
 					</listitem>
 				</listbox>
-				<paging id="paginLog" >
+				<paging id="lstBoxPaging" visible="true" pageSize="20" >
 					<attribute name="onPaging">
-						<![CDATA[
-						         
-]]>         
+						<![CDATA[{
+							PAGE_SIZE = lstBoxPaging.getPageSize();
+							
+							pagno = lstBoxPaging.activePage;
+							despl = pagno * PAGE_SIZE;
+							//		if (despl == 0)
+							//			despl = 1;
+							
+							if (eventoSeleccionado != null) {
+								te = eventoSeleccionado.name();
+							}
+							errores.clear();
+							if (dateDesde != null && dateHasta != null) {
+								if (!dateDesde.getValue().after(dateHasta.getValue())) {									
+									error = servicioMongo.findLogByPropertiesOnDemand(dateDesde.getValue().toString(),dateHasta.getValue().toString(), te, pagno, PAGE_SIZE);
+									if (error != null && error.errores.size() > 0) {
+										errores = error.errores;
+									}
+
+								} else {
+									alert("La fecha Desde no puede ser Mayor que Hasta");
+								}
+
+							} else {
+								alert("Las fechas no pueden ser nulas!!!");
+							}
+
+							if (errores.size() == 0) {
+								alert("No se encontraron resultados!!!");
+							}
+							binder.loadAll();
+						}
+						}
 						
+							
+]]>
 					</attribute>
 				</paging>
+				
 			</panelchildren>
 		</panel>
 		<zscript>
@@ -117,9 +150,9 @@
 		errores.clear();
 		if (dateDesde != null && dateHasta != null) {
 			if (!dateDesde.getValue().after(dateHasta.getValue())) {
-				error = servicioMongo.findLogByPropertiesOnDemand(dateDesde
-						.getValue().toString(),
-						dateHasta.getValue().toString(), te, 0, 100);
+				cant = servicioMongo.countLogByProperties(parametros);
+				lstBoxPaging.setTotalSize(Integer.valueOf(cant));
+				error = servicioMongo.findLogByPropertiesOnDemand(dateDesde.getValue().toString(),	dateHasta.getValue().toString(), te, 0, 20);
 				if (error != null && error.errores.size() > 0) {
 					errores = error.errores;
 				}
