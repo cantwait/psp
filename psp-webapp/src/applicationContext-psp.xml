@@ -149,6 +149,9 @@ http://www.springframework.org/schema/security
                     <property name="marshaller" ref="jaxbMarshaller"/>
                     <property name="unmarshaller" ref="jaxbMarshaller"/>
                 </bean>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes" value="text/plain" />
+                </bean>
             </list>
         </property>
     </bean>

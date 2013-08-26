@@ -133,9 +133,9 @@ public class ServicioMongo implements IServiciosMongo{
 	    HttpEntity<?> request= new HttpEntity<Object>(headers);
 	    
 	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("pais", evento);
 		uriVariables.put("desde", desde);
 		uriVariables.put("hasta", hasta);
+		uriVariables.put("evento", tipoEvento);
 		uriVariables.put("pagina", pagina);
 		uriVariables.put("tamano", tamano);
 		
@@ -161,12 +161,12 @@ public class ServicioMongo implements IServiciosMongo{
 	    HttpEntity<?> request= new HttpEntity<Object>(headers);
 	    
 	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("evento", tipoEvento);
 		uriVariables.put("desde", desde);
 		uriVariables.put("hasta", hasta);
+		uriVariables.put("evento", tipoEvento);
 		
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class, uriVariables);
-		
+		System.out.println("Status code: " + response.getStatusCode());
 		return response.getBody();
 	}
 

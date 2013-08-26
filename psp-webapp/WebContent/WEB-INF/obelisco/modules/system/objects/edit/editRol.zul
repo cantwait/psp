@@ -61,7 +61,7 @@
 						<panel title="Usuarios"
 							collapsible="false" height="299px">
 							<toolbar mold="panel"
-								style="background:#c5e6ef">
+								>
 								<button label="Agregar Usuario" mold="trendy"
 									>
 									<attribute name="onClick">
