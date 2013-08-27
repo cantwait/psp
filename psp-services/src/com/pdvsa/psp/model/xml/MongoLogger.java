@@ -8,7 +8,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//@XmlRootElement(name="log")
+@XmlRootElement(name="mongologger")
 public class MongoLogger implements Serializable{
 
 	private static final long serialVersionUID = 6243639081989351350L;
