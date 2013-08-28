@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -12,7 +13,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-//@XmlRootElement(name="opc")
+@XmlRootElement(name="object")
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Document(collection="opcInfoRegister")
 public class OpcInfoRegisterMongo implements Serializable{
@@ -32,8 +33,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private Date timestamp;
 	private String regValue = "";
 	private Short quality = 0;	
-	private String unidadMedida;
-	
+	private String unidadMedida;	
 	private String localidadNombre;	
 	private String tanqueNombre;	
 	private String regionNombre;	

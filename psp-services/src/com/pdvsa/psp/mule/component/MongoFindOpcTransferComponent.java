@@ -26,7 +26,7 @@ public class MongoFindOpcTransferComponent {
 		Query qry = new Query();
 		qry.limit(maxElements);
 		
-		items = getMongoTemplate().findAll(OpcInfoRegisterMongo.class, "opcInfoRegister");	
+		items = getMongoTemplate().find(qry, OpcInfoRegisterMongo.class, "opcInfoRegister");	
 		response.getOpcItems().addAll(items);		
 		return response;
 	}
