@@ -47,8 +47,8 @@
 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
-		<!-- <message-filter throwOnUnaccepted="true" doc:name="validation-filter"> 
-			<filter ref="opc-request-schema-validation" /> </message-filter> -->
+		<message-filter throwOnUnaccepted="true" doc:name="validation-filter"> 
+			<filter ref="opc-request-schema-validation" /> </message-filter>
 		<mule-xml:dom-to-xml-transformer />
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
 			<mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
