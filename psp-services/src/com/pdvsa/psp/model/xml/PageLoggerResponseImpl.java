@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@XmlRootElement(name="PageLoggerResponse")
+@XmlRootElement(name="PageResponse")
 public class PageLoggerResponseImpl implements Serializable {
 
 	private static final long serialVersionUID = -9077278474894153758L;
@@ -41,7 +41,7 @@ public class PageLoggerResponseImpl implements Serializable {
 
 	
 	@XmlElementWrapper(name="List")
-	@XmlElement(name="MongoLogger", type=MongoLogger.class)
+	@XmlElement(name="Content", type=MongoLogger.class)
 	public List<MongoLogger> getContent() {
 		return Collections.unmodifiableList(content);
 	}

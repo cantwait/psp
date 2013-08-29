@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@XmlRootElement(name="PageOpcInfoResponse")
+@XmlRootElement(name="PageResponse")
 public class PageOpcInfoResponseImpl implements PageResponse, Serializable {
 
 	private static final long serialVersionUID = -9077278474894153758L;
@@ -41,7 +41,7 @@ public class PageOpcInfoResponseImpl implements PageResponse, Serializable {
 
 	
 	@XmlElementWrapper(name="List")
-	@XmlElement(name="OpcInfoRegister", type=OpcInfoRegisterMongo.class)
+	@XmlElement(name="Content", type=OpcInfoRegisterMongo.class)
 	public List<OpcInfoRegisterMongo> getContent() {
 		return Collections.unmodifiableList(content);
 	}
