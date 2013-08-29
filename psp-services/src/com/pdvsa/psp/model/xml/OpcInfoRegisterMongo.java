@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@XmlRootElement(name="object")
+//@XmlRootElement(name="object")
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Document(collection="opcInfoRegister")
 public class OpcInfoRegisterMongo implements Serializable{

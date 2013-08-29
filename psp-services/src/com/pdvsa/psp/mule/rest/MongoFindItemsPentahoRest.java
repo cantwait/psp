@@ -25,10 +25,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.pdvsa.psp.converter.DateFormatParam;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
-import com.pdvsa.psp.model.xml.PageLoggerResponse;
-import com.pdvsa.psp.model.xml.PageOpcInfoResponse;
+import com.pdvsa.psp.model.xml.PageLoggerResponseImpl;
+import com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl;
 import com.pdvsa.psp.model.xml.PageResponse;
-import com.pdvsa.psp.model.xml.PageResponseImpl;
 import com.pdvsa.psp.mule.rest.exception.BadRequestException;
 
 @Path("/")
@@ -43,7 +42,7 @@ public class MongoFindItemsPentahoRest {
 
 		
 		
-		List<OpcInfoRegisterMongo> items = new ArrayList<OpcInfoRegisterMongo>();
+		List items = new ArrayList();
 		Query qry = new Query();
 		Query qryCount = new Query();
 		
@@ -96,7 +95,7 @@ public class MongoFindItemsPentahoRest {
 		qry.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));		
 		qryCount.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));
 		
-		long cant = getMongoTemplate().count(qryCount, "opcInfoRegisterHistoric");
+		long cant = getMongoTemplate().count(qryCount, "opcInfoRegister");
 		
 		
 		qry.with(new Sort(new Order(Direction.ASC, "timestamp")));
@@ -111,7 +110,7 @@ public class MongoFindItemsPentahoRest {
 		
 //		PageOpcInfoResponse response = new PageOpcInfoResponse(items, new PageRequest(pagina, tamano), cant);
 		
-		PageResponse response = new PageResponseImpl(items, new PageRequest(pagina, tamano), cant);
+		PageResponse response = new PageOpcInfoResponseImpl(items, new PageRequest(pagina, tamano), cant);
 		
 		return response;
 

@@ -25,7 +25,7 @@ import com.pdvsa.psp.converter.DateFormatParam;
 import com.pdvsa.psp.model.xml.MongoLogger;
 import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
-import com.pdvsa.psp.model.xml.PageLoggerResponse;
+import com.pdvsa.psp.model.xml.PageLoggerResponseImpl;
 
 @Path("/")
 public class MongoQueryLogRest {
@@ -36,7 +36,7 @@ public class MongoQueryLogRest {
 	@Produces("text/xml")
 	@Path("/consultar")
 	@XmlJavaTypeAdapter(PageAdapter.class)
-	public PageLoggerResponse getLogByPropertiesOnDemand(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta, @QueryParam("evento") String evento, @QueryParam("pagina") Integer pagina, @QueryParam("tamano")Integer tamano){
+	public PageLoggerResponseImpl getLogByPropertiesOnDemand(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta, @QueryParam("evento") String evento, @QueryParam("pagina") Integer pagina, @QueryParam("tamano")Integer tamano){
 		
 		List<MongoLogger> items = new ArrayList<MongoLogger>();
 		Query qry = new Query();
@@ -67,7 +67,7 @@ public class MongoQueryLogRest {
 				
 		items = getMongoTemplate().find(qry, MongoLogger.class, "opcErrorTransaction");
 		
-		PageLoggerResponse resp = new PageLoggerResponse(items, new PageRequest(pagina, tamano), cant);
+		PageLoggerResponseImpl resp = new PageLoggerResponseImpl(items, new PageRequest(pagina, tamano), cant);
 		
 		
 		return resp;

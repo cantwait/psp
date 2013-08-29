@@ -16,20 +16,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @XmlRootElement(name="PageLoggerResponse")
-public class PageLoggerResponse implements Serializable {
+public class PageLoggerResponseImpl implements Serializable {
 
 	private static final long serialVersionUID = -9077278474894153758L;
 	private  List<MongoLogger> content = new ArrayList<MongoLogger>();
 	private  Pageable pageable;
 	private  Long total;
 	
-	public PageLoggerResponse(){}
+	public PageLoggerResponseImpl(){}
 	
-	public PageLoggerResponse(List<MongoLogger> content){
+	public PageLoggerResponseImpl(List<MongoLogger> content){
 		this(content, null, null == content ? Long.valueOf(0) : content.size());
 	}
 
-	public PageLoggerResponse(List<MongoLogger> content, Pageable pageable, Long total) {
+	public PageLoggerResponseImpl(List<MongoLogger> content, Pageable pageable, Long total) {
 		if (null == content) {
 			throw new IllegalArgumentException("Contenido no puede ser nulo!");
 		}
@@ -40,8 +40,8 @@ public class PageLoggerResponse implements Serializable {
 	}
 
 	
-	@XmlElementWrapper(name="content")
-	@XmlElement(name="mongologger", type=MongoLogger.class)
+	@XmlElementWrapper(name="List")
+	@XmlElement(name="MongoLogger", type=MongoLogger.class)
 	public List<MongoLogger> getContent() {
 		return Collections.unmodifiableList(content);
 	}
@@ -100,7 +100,7 @@ public class PageLoggerResponse implements Serializable {
 			return false;
 		}
 
-		PageLoggerResponse that = (PageLoggerResponse) obj;
+		PageLoggerResponseImpl that = (PageLoggerResponseImpl) obj;
 
 		boolean totalEqual = this.total == that.total;
 		boolean contentEqual = this.content.equals(that.content);

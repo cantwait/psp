@@ -16,20 +16,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @XmlRootElement(name="PageOpcInfoResponse")
-public class PageOpcInfoResponse implements Serializable {
+public class PageOpcInfoResponseImpl implements PageResponse, Serializable {
 
 	private static final long serialVersionUID = -9077278474894153758L;
 	private  List<OpcInfoRegisterMongo> content = new ArrayList<OpcInfoRegisterMongo>();
 	private  Pageable pageable;
 	private  Long total;
 	
-	public PageOpcInfoResponse(){}
+	public PageOpcInfoResponseImpl(){}
 	
-	public PageOpcInfoResponse(List<OpcInfoRegisterMongo> content){
+	public PageOpcInfoResponseImpl(List<OpcInfoRegisterMongo> content){
 		this(content, null, null == content ? Long.valueOf(0) : content.size());
 	}
 
-	public PageOpcInfoResponse(List<OpcInfoRegisterMongo> content, Pageable pageable, Long total) {
+	public PageOpcInfoResponseImpl(List<OpcInfoRegisterMongo> content, Pageable pageable, Long total) {
 		if (null == content) {
 			throw new IllegalArgumentException("Contenido no puede ser nulo!");
 		}
@@ -40,8 +40,8 @@ public class PageOpcInfoResponse implements Serializable {
 	}
 
 	
-	@XmlElementWrapper(name="content")
-	@XmlElement(name="opcinforegister", type=MongoLogger.class)
+	@XmlElementWrapper(name="List")
+	@XmlElement(name="OpcInfoRegister", type=OpcInfoRegisterMongo.class)
 	public List<OpcInfoRegisterMongo> getContent() {
 		return Collections.unmodifiableList(content);
 	}
@@ -100,7 +100,7 @@ public class PageOpcInfoResponse implements Serializable {
 			return false;
 		}
 
-		PageOpcInfoResponse that = (PageOpcInfoResponse) obj;
+		PageOpcInfoResponseImpl that = (PageOpcInfoResponseImpl) obj;
 
 		boolean totalEqual = this.total == that.total;
 		boolean contentEqual = this.content.equals(that.content);
