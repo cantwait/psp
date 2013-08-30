@@ -107,58 +107,12 @@ public class MongoFindItemsPentahoRest {
 		qry.with(new PageRequest(pagina, tamano));
 		
 		items = getMongoTemplate().find(qry, OpcInfoRegisterMongo.class, "opcInfoRegister");
-		
-//		PageOpcInfoResponse response = new PageOpcInfoResponse(items, new PageRequest(pagina, tamano), cant);
-		
-		PageResponse response = new PageOpcInfoResponseImpl(items, new PageRequest(pagina, tamano), cant);
+				
+		PageResponse response = new PageOpcInfoResponseImpl(items, pagina, tamano, cant);
 		
 		return response;
 
 	}
-	
-	
-//	@GET
-//	@Produces("text/plain")
-//	@Path("/contar")
-//	public String countHistoricData(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta,  @QueryParam(value = "pais") String pais,	@QueryParam(value = "region") String region, @QueryParam(value = "localidad") String localidad) {
-//	
-//		Query qry = new Query();
-//		
-//		Long cantidad = new Long(Long.MIN_VALUE);
-//				
-//		DateFormatParam desdeFomatted = new DateFormatParam(desde);
-//		DateFormatParam hastaFomatted = new DateFormatParam(hasta);
-//		
-//		System.out.println(desdeFomatted);
-//		System.out.println(hastaFomatted);
-//		
-//		List<Criteria> criterias = new ArrayList<Criteria>();
-//		criterias.add(Criteria.where("timestamp").gt(desdeFomatted.getValue()));
-//		criterias.add(Criteria.where("timestamp").lte(hastaFomatted.getValue()));
-//		
-//		if(pais != null && pais.length() > 0){
-//			criterias.add(Criteria.where("paisNombre").regex(pais));
-//		}
-//		
-//		if(region != null && region.length() > 0){
-//			criterias.add(Criteria.where("regionNombre").regex(region));
-//		}
-//		
-//		if(localidad != null && localidad.length() > 0){
-//			criterias.add(Criteria.where("localidadNombre").regex(localidad));
-//		}
-//		
-//		qry.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));		
-//		
-//		cantidad = getMongoTemplate().count(qry, "opcInfoRegisterHistoric");
-//		
-//		
-//		
-//		System.out.println(cantidad);
-//				
-//		return cantidad.toString();
-//
-//	}
 	
 	
 	
