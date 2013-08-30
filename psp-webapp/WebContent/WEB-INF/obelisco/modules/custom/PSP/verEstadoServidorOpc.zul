@@ -61,10 +61,8 @@
 				</north>
 				<center autoscroll="true">
 					<panel title="Variables">
-						<toolbar mold="panel"
-							style="background:#c5e6ef">
-							<button label="Refrescar" mold="os"
-								style="background-color:#fff000; border: 1px solid; font-size: 9px;">
+						<toolbar mold="panel">
+							<button label="Refrescar" mold="trendy">
 								<attribute name="onClick">
 									<![CDATA[
 	//registers = opcInfoService.getDumpRegistersByServer(servidor.id);
@@ -77,19 +75,18 @@
 						<panelchildren>
 							<listbox model="@{registers.opcItems}">
 								<listhead sizable="true">
-									<listheader label="Nombre"
-										valign="middle" width="100px" />
-									<listheader label="Tag OPC"
-										valign="middle" width="200px" />
-									<listheader label="Valor"
-										align="right" valign="middle" width="100px"/>
-									<listheader label="Calidad de Lectura" valign="middle" width="80px"/>
-									<listheader label="Fecha de Adquisicion" valign="middle" />
+									<listheader label="Nombre"	valign="middle" width="10%" />
+									<listheader label="Tag OPC"	valign="middle" width="15%" />
+									<listheader label="Valor" align="right" valign="middle" width="10%"/>
+									<listheader  label="Unidad Medida" align="left" valign="middle" width="10%"/>
+									<listheader label="Calidad de Lectura" valign="middle" width="15%"/>
+									<listheader label="Fecha de Adquisicion" valign="middle"  width="30%"/>
 								</listhead>
 								<listitem self="@{each=reg}">
 									<listcell label="@{reg.tagName}" />
 									<listcell label="@{reg.tagOpc}" />
 									<listcell label="@{reg.regValue}" />
+									<listcell  label="@{reg.unidadMedida}"/>
 									<listcell label="@{reg.quality}"/>
 									<listcell label="@{reg.timestamp}"/>
 								</listitem>

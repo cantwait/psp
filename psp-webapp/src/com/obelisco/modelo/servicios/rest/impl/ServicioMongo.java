@@ -19,8 +19,9 @@ import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 import com.pdvsa.psp.model.xml.OpcItemsTransfer;
-import com.pdvsa.psp.model.xml.PageLoggerResponse;
-import com.pdvsa.psp.model.xml.PageOpcInfoResponse;
+import com.pdvsa.psp.model.xml.PageLoggerResponseImpl;
+import com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl;
+import com.pdvsa.psp.model.xml.PageResponse;
 
 
 public class ServicioMongo implements IServiciosMongo{
@@ -49,21 +50,10 @@ public class ServicioMongo implements IServiciosMongo{
 	}
 	
 	@Override
-	public PageOpcInfoResponse getDataPentaho(String desde, String hasta, String pais,String region, String localidad, Integer pagina, Integer cantidad) {
+	public PageOpcInfoResponseImpl getDataPentaho(String desde, String hasta, String pais,String region, String localidad, String variable, Integer pagina, Integer cantidad) {
 		
-		String nombrePais = "";
-		String nombreRegion = "";
-		String nombreLocalidad = "";
+				
 		
-		if(pais != null && pais.length() > 0){
-			nombrePais = pais;
-		}
-		if(region != null && region.length() > 0){
-			nombreRegion = region;
-		}
-		if(localidad != null && localidad.length() > 0){
-			nombreLocalidad = localidad;
-		}
 		
 		String url = new String(address + "/historico/consultar?desde={desde}&hasta={hasta}&pais={pais}&region={region}&localidad={localidad}&pagina={pagina}&tamano={tamano}");
 		System.out.println(url.toString());
@@ -72,21 +62,32 @@ public class ServicioMongo implements IServiciosMongo{
 	    HttpEntity<?> request= new HttpEntity<Object>(headers);
 	    
 	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("pais", nombrePais);
-		uriVariables.put("region", nombreRegion);
-		uriVariables.put("localidad", nombreLocalidad);
+	    
+	    if(pais != null && pais.length() > 0){
+			uriVariables.put("pais", pais);
+
+		}
+		if(region != null && region.length() > 0){
+			uriVariables.put("region", region);
+		}
+		if(localidad != null && localidad.length() > 0){
+			uriVariables.put("localidad", localidad);
+		}
+		
+		
+		uriVariables.put("variable", variable);
 		uriVariables.put("desde", desde);
 		uriVariables.put("hasta", hasta);
 		uriVariables.put("pagina", pagina);
 		uriVariables.put("cantidad", cantidad);
 		
-		ResponseEntity<PageOpcInfoResponse> response = restTemplate.exchange(url, HttpMethod.GET, request, PageOpcInfoResponse.class, uriVariables);
+		ResponseEntity<PageOpcInfoResponseImpl> response = restTemplate.exchange(url, HttpMethod.GET, request, PageOpcInfoResponseImpl.class, uriVariables);
 		
 		return response.getBody();
 	}
 	
 	@Override
-	public PageLoggerResponse findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano) {
+	public PageLoggerResponseImpl findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano) {
 		
 		String evento = "";
 		
@@ -107,7 +108,7 @@ public class ServicioMongo implements IServiciosMongo{
 		uriVariables.put("pagina", pagina);
 		uriVariables.put("tamano", tamano);
 		
-		ResponseEntity<PageLoggerResponse> response = restTemplate.exchange(url, HttpMethod.GET, request, PageLoggerResponse.class, uriVariables);
+		ResponseEntity<PageLoggerResponseImpl> response = restTemplate.exchange(url, HttpMethod.GET, request, PageLoggerResponseImpl .class, uriVariables);
 		
 		return response.getBody();
 	}

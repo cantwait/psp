@@ -28,7 +28,7 @@
 ]]>
 	</zscript>
 
-	<window id="reporteOpc" title="Tabla Modbus-Opc" closable="true"
+	<window id="reporteOpc" title="Tabla Opc" closable="true"
 	transaccion="@{transaccion}"  entity="@{itemAEditar}" entityList="@{opcinfo}"
 		use="com.obelisco.vista.zk.components.GenericWindowList"
 		height="100%" width="100%" border="normal">
@@ -67,8 +67,7 @@
 			width="100%" collapsible="true">
 
 			<toolbar mold="panel" style="background:#c5e6ef" visible="false">
-				<button label="Realizar Busqueda" mold="os"
-					style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
+				<button label="Realizar Busqueda" mold="trendy">
 					<attribute name="onClick">
 						<![CDATA[
 	if (cmbServidor.getSelectedIndex() != -1) {
@@ -88,8 +87,7 @@
 					</attribute>
 				</button>
 				<hbox align="center">
-					<button label="Exportar" mold="os"
-						style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
+					<button label="Exportar" mold="trendy">
 						<attribute name="onClick">
 									<![CDATA[
 	//C:\\Desarrollos\\psp\\psp-webadmin-mvn\\WebContent\\reporte\\OpcInfo.jasper

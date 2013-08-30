@@ -109,13 +109,13 @@
 		te = "";
 		if (cmbEventos.getSelectedItem() != null) {
 			te = cmbEventos.getSelectedItem().getLabel();
-			alert(te);
+			
 		}
 		errores.clear();
 		if (dateDesde != null && dateHasta != null) {
 			if (!dateDesde.getValue().after(dateHasta.getValue())) {
 				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, pagno, PAGE_SIZE);
-				if (error != null && error.errores.size() > 0) {
+				if (error != null && error.getContent().size() > 0) {
 					errores = error.getContent();
 				}
 
@@ -155,8 +155,9 @@
 				
 				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, 0, 20);
 				
-				lstBoxPaging.setTotalSize(Integer.valueOf(error.getTotalElements()));
-				if (error != null && error.errores.size() > 0) {
+				
+				lstBoxPaging.setTotalSize(Integer.valueOf(error.getTotal().toString()));
+				if (error != null && error.getContent().size() > 0) {
 					errores = error.getContent();
 				}
 

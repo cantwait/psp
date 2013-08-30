@@ -160,8 +160,8 @@ http://www.springframework.org/schema/security
     	<property name="classesToBeBound">
     		<list>
     		    <value>com.pdvsa.psp.model.xml.OpcItemsTransfer</value>
-    			<value>com.pdvsa.psp.model.xml.PageLoggerResponse</value>    			
-    			<value>com.pdvsa.psp.model.xml.PageOpcInfoResponse</value>
+    			<value>com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl</value>
+    			<value>com.pdvsa.psp.model.xml.PageLoggerResponseImpl</value>
     		</list>
     	</property>
     </bean>
