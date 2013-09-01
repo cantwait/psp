@@ -1,12 +1,14 @@
 package com.pdvsa.psp.model.xml;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//@XmlRootElement(name="log")
+@XmlRootElement(name="mongologger")
 public class MongoLogger implements Serializable{
 
 	private static final long serialVersionUID = 6243639081989351350L;
@@ -54,20 +56,22 @@ public class MongoLogger implements Serializable{
 		this.causa = causa;
 	}
 
-	public Evento getTipoMovimiento() {
-		return tipoEvento;
-	}
-
-	public void setTipoMovimiento(Evento tipoMovimiento) {
-		this.tipoEvento = tipoEvento;
-	}
-
-	public Evento getTipoEvento() {
+	public Evento getTipoEvento() {		
 		return tipoEvento;
 	}
 
 	public void setTipoEvento(Evento tipoEvento) {
 		this.tipoEvento = tipoEvento;
+	}
+	
+	public static List<Evento> getEventos(){
+		List<Evento> eventos  = new ArrayList<Evento>();
+		
+		for(Evento e: Evento.values()){
+			eventos.add(e);
+		}
+		
+		return eventos;
 	}
 	
 	

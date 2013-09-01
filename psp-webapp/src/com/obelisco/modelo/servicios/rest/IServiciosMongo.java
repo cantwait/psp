@@ -7,17 +7,17 @@ import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 import com.pdvsa.psp.model.xml.OpcItemsTransfer;
+import com.pdvsa.psp.model.xml.PageLoggerResponseImpl;
+import com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl;
+import com.pdvsa.psp.model.xml.PageResponse;
 
 public interface IServiciosMongo {
 	
 	public OpcItemsTransfer getLastItemsByTanque(String nombreServidor, String tanqueNombre);
 	
-	public String getCantidadItemsInQuery(String desde, String hasta, String pais, String region, String localidad);
+	public PageResponse getDataPentaho(String desde, String hasta, String pais, String region, String localidad, String variable, Integer pagina, Integer tamano);
 	
-	public OpcInfoRegisterListResponse getDataPentaho(String desde, String hasta, String pais, String region, String localidad, Integer pagina, Integer tamano);
+	public PageResponse findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano);
 	
-	public OpcErrorResponse findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano);
-	
-	public String countLogByProperties(String desde, String hasta, String tipoEvento);
 
 }

@@ -37,14 +37,12 @@ public class OpcInfoPollingService extends AbstractTransformer{
  		if(info.size() > 0){
 			for (OpcInfoRegister op : info) {				
 				OpcInfoRegisterMongo o = new OpcInfoRegisterMongo();
-				o.setStationId(op.getStationId());
-				o.setHostModbusSlave(op.getHostModbusSlave());
-				o.setPortModbusSlave(op.getPortModbusSlave());
+				o.setIdServidor(op.getStationId());
+
 				o.setQuality(op.getQuality());
 				o.setRegValue(op.getRegValue());
 				o.setTagName(op.getTagName());
 				o.setTagOpc(op.getTagOpc());
-				o.setReference(op.getReference());
 				o.setTimestamp(op.getTimestamp());				
 				items.getOpcItems().add(o);
 			}

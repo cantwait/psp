@@ -5,13 +5,15 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-//@XmlRootElement(name="opc")
+//@XmlRootElement(name="object")
 //@XmlAccessorType(XmlAccessType.FIELD)
 @Document(collection="opcInfoRegister")
 public class OpcInfoRegisterMongo implements Serializable{
@@ -22,47 +24,26 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private static final long serialVersionUID = -6080212548241392706L;
 	@Id
 	private String id = UUID.randomUUID().toString();
-	@Indexed
-	private Long stationId;
-	private String hostModbusSlave;
-	private Integer portModbusSlave;	
-	private Integer reference;
+
+	@Transient
+	private Long idServidor;
+	
 	private String tagOpc;
 	private String tagName;
 	private Date timestamp;
 	private String regValue = "";
 	private Short quality = 0;	
+	private String unidadMedida;	
 	private String localidadNombre;	
 	private String tanqueNombre;	
 	private String regionNombre;	
 	private String paisNombre;
+	
+	@Indexed	
 	private String nombreServidor;
 	
 	public OpcInfoRegisterMongo() {
 		
-	}
-	
-	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName, String hostModbusSlave, Integer portModbusSlave, String localidadNombre, String regionNombre, String paisNombre) {
-		super();
-		this.stationId = stationId;
-		this.hostModbusSlave = hostModbusSlave;
-		this.portModbusSlave = portModbusSlave;
-		this.reference = reference;
-		this.tagOpc = tagOpc;
-		this.tagName = tagName;
-		this.localidadNombre = localidadNombre;
-		this.regionNombre = regionNombre;
-		this.paisNombre = paisNombre;
-		
-	}
-
-	public OpcInfoRegisterMongo(Long stationId, Integer reference, String tagOpc, String tagName, Date timestamp, String regValue, Short quality) {
-		this.reference = reference;
-		this.tagOpc = tagOpc;
-		this.tagName = tagName;		
-		this.timestamp = timestamp;
-		this.regValue = regValue;
-		this.quality = quality;
 	}
 	
 
@@ -74,14 +55,6 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getReference() {
-		return reference;
-	}
-	
-	public void setReference(Integer reference) {
-		this.reference = reference;
-	}
-	
 	public String getTagOpc() {
 		return tagOpc;
 	}
@@ -115,30 +88,6 @@ public class OpcInfoRegisterMongo implements Serializable{
 	
 	public void setRegValue(String regValue) {
 		this.regValue = regValue;
-	}
-
-	public Long getStationId() {
-		return stationId;
-	}
-
-	public void setStationId(Long stationId) {
-		this.stationId = stationId;
-	}
-
-	public String getHostModbusSlave() {
-		return hostModbusSlave;
-	}
-
-	public void setHostModbusSlave(String hostModbusSlave) {
-		this.hostModbusSlave = hostModbusSlave;
-	}
-
-	public Integer getPortModbusSlave() {
-		return portModbusSlave;
-	}
-
-	public void setPortModbusSlave(Integer portModbusSlave) {
-		this.portModbusSlave = portModbusSlave;
 	}
 
 	public void setQuality(Short quality) {
@@ -187,6 +136,79 @@ public class OpcInfoRegisterMongo implements Serializable{
 
 	public void setNombreServidor(String nombreServidor) {
 		this.nombreServidor = nombreServidor;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((localidadNombre == null) ? 0 : localidadNombre.hashCode());
+		result = prime * result
+				+ ((nombreServidor == null) ? 0 : nombreServidor.hashCode());
+		result = prime * result
+				+ ((paisNombre == null) ? 0 : paisNombre.hashCode());
+		result = prime * result
+				+ ((regionNombre == null) ? 0 : regionNombre.hashCode());
+		result = prime * result + ((tagOpc == null) ? 0 : tagOpc.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OpcInfoRegisterMongo other = (OpcInfoRegisterMongo) obj;
+		if (localidadNombre == null) {
+			if (other.localidadNombre != null)
+				return false;
+		} else if (!localidadNombre.equals(other.localidadNombre))
+			return false;
+		if (nombreServidor == null) {
+			if (other.nombreServidor != null)
+				return false;
+		} else if (!nombreServidor.equals(other.nombreServidor))
+			return false;
+		if (paisNombre == null) {
+			if (other.paisNombre != null)
+				return false;
+		} else if (!paisNombre.equals(other.paisNombre))
+			return false;
+		if (regionNombre == null) {
+			if (other.regionNombre != null)
+				return false;
+		} else if (!regionNombre.equals(other.regionNombre))
+			return false;
+		if (tagOpc == null) {
+			if (other.tagOpc != null)
+				return false;
+		} else if (!tagOpc.equals(other.tagOpc))
+			return false;
+		return true;
+	}
+
+
+	public Long getIdServidor() {
+		return idServidor;
+	}
+
+
+	public void setIdServidor(Long stationId) {
+		this.idServidor = stationId;
+	}
+
+
+	public String getUnidadMedida() {
+		return unidadMedida;
+	}
+
+
+	public void setUnidadMedida(String unidadMedida) {
+		this.unidadMedida = unidadMedida;
 	}
 
 	

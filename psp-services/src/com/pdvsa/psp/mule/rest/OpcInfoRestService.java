@@ -19,7 +19,7 @@ public class OpcInfoRestService {
 	
 	
 	@POST
-	@Path("/transfer-opc-item")
+	@Path("/transferir")
 	@Consumes("text/xml")
 	@Produces("text/xml")
 	public OpcItemsTransfer saveOpcItem(OpcItemsTransfer xml){

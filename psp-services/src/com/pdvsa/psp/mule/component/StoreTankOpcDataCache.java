@@ -3,14 +3,17 @@ package com.pdvsa.psp.mule.component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.mule.api.annotations.param.Payload;
 
 import com.pdvsa.psp.model.ServidorOpc;
 import com.pdvsa.psp.model.Tanque;
+import com.pdvsa.psp.model.xml.MongoLogger;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
 import com.pdvsa.psp.model.xml.OpcItemsTransfer;
 import com.pdvsa.psp.service.IServidorService;
@@ -22,50 +25,34 @@ public class StoreTankOpcDataCache {
 
 	public void storeLastItemsInMemory(@Payload OpcItemsTransfer items) {
 
-		initializeMap(items);
 		for (OpcInfoRegisterMongo item : items.getOpcItems()) {
-			for (Entry<String, Map<String, List<OpcInfoRegisterMongo>>> servidor : getMapCache()
-					.entrySet()) {
+			
+			if (!getMapCache().containsKey(item.getNombreServidor())) {
+				getMapCache().put(item.getNombreServidor(), new ConcurrentHashMap<String, List<OpcInfoRegisterMongo>>());
 
-				if (servidor.getKey().equals(item.getNombreServidor())) {
-					Map<String, List<OpcInfoRegisterMongo>> innerMap = servidor.getValue();
-					for (Entry<String, List<OpcInfoRegisterMongo>> tanque : innerMap.entrySet()) {
-						if (item.getTanqueNombre().equals(tanque.getKey())) {
-							List<OpcInfoRegisterMongo> variables = tanque.getValue();
-							variables.add(item);
-						}
+				Map<String, List<OpcInfoRegisterMongo>> innerMap = getMapCache().get(item.getNombreServidor());
+				List<OpcInfoRegisterMongo> variables = new ArrayList<OpcInfoRegisterMongo>();
+				getMapCache().get(item.getNombreServidor()).put(item.getTanqueNombre(), variables);
+			}			
+			
+			Map<String, List<OpcInfoRegisterMongo>> servidor =  getMapCache().get(item.getNombreServidor());
 
+			if (servidor.containsKey(item.getTanqueNombre())) {
+				List<OpcInfoRegisterMongo> variables  = servidor.get(item.getTanqueNombre());
+				for (Iterator i = variables.iterator(); i.hasNext();) {
+					OpcInfoRegisterMongo register = (OpcInfoRegisterMongo) i.next();
+					if (register.equals(item)) {
+						i.remove();
 					}
-
 				}
+				variables.add(item);
+			} else {
+				List<OpcInfoRegisterMongo> variables = new ArrayList<OpcInfoRegisterMongo>();
+				getMapCache().get(item.getNombreServidor()).put(item.getTanqueNombre(), variables);
+				variables.add(item);
 			}
+				
 		}
-
-	}
-
-	private void initializeMap(OpcItemsTransfer opcItems) {
-
-		List<OpcInfoRegisterMongo> items = new ArrayList<OpcInfoRegisterMongo>();
-		Map<String, List<OpcInfoRegisterMongo>> emptyInnerMap = new HashMap<String, List<OpcInfoRegisterMongo>>();
-
-		for (OpcInfoRegisterMongo opc : opcItems.getOpcItems()) {
-			if (!getMapCache().containsKey(opc.getNombreServidor())) {
-				getMapCache().put(opc.getNombreServidor(), emptyInnerMap);
-
-				Map<String, List<OpcInfoRegisterMongo>> innerMap = getMapCache().get(opc.getNombreServidor());
-				if (!innerMap.containsKey(opc.getTanqueNombre())) {
-					getMapCache().get(opc.getNombreServidor()).put(opc.getTanqueNombre(), items);
-				}
-			}else{
-				Map<String, List<OpcInfoRegisterMongo>> innerMap = getMapCache().get(opc.getNombreServidor());				
-				for (Entry<String, List<OpcInfoRegisterMongo>> m : innerMap.entrySet()) {
-					List<OpcInfoRegisterMongo> variables = m.getValue();
-					variables.clear();
-				}
-			}
-		}
-
-		
 
 	}
 

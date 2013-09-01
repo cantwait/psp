@@ -13,7 +13,7 @@ import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 public class QueryOpcDataMongo {
 	
 	
-	@Path("/find-items")
+	@Path("/consultar")
 	@Produces(MediaType.TEXT_XML)
 	@Consumes(MediaType.TEXT_XML)
 	@POST
@@ -21,7 +21,7 @@ public class QueryOpcDataMongo {
 		return xml;
 	}
 	
-	@Path("/find-last-record")
+	@Path("/consultar-ultimo")
 	@Produces(MediaType.TEXT_XML)
 	@Consumes(MediaType.TEXT_XML)
 	@POST

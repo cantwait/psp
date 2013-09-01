@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
@@ -14,12 +15,18 @@ public class MongoFindOpcTransferComponent {
 	
 	private MongoTemplate mongoTemplate;
 	
+	private Integer maxElements = 1000;
+	
 	
 	public OpcItemsTransfer findAllItems(){
 		
 		OpcItemsTransfer response = new OpcItemsTransfer();
 		List<OpcInfoRegisterMongo> items = new ArrayList<OpcInfoRegisterMongo>();		
-		items = getMongoTemplate().findAll(OpcInfoRegisterMongo.class, "opcInfoRegister");	
+		
+		Query qry = new Query();
+		qry.limit(maxElements);
+		
+		items = getMongoTemplate().find(qry, OpcInfoRegisterMongo.class, "opcInfoRegister");	
 		response.getOpcItems().addAll(items);		
 		return response;
 	}
@@ -31,6 +38,18 @@ public class MongoFindOpcTransferComponent {
 
 	public void setMongoTemplate(MongoTemplate mongoTemplate) {
 		this.mongoTemplate = mongoTemplate;
-	}	
+	}
+
+
+	public Integer getMaxElements() {
+		return maxElements;
+	}
+
+
+	public void setMaxElements(Integer maxElements) {
+		this.maxElements = maxElements;
+	}
+
+
 
 }

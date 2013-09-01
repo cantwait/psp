@@ -19,6 +19,9 @@ import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterRequest;
 import com.pdvsa.psp.model.xml.OpcItemsTransfer;
+import com.pdvsa.psp.model.xml.PageLoggerResponseImpl;
+import com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl;
+import com.pdvsa.psp.model.xml.PageResponse;
 
 
 public class ServicioMongo implements IServiciosMongo{
@@ -47,21 +50,10 @@ public class ServicioMongo implements IServiciosMongo{
 	}
 	
 	@Override
-	public OpcInfoRegisterListResponse getDataPentaho(String desde, String hasta, String pais,String region, String localidad, Integer pagina, Integer cantidad) {
+	public PageOpcInfoResponseImpl getDataPentaho(String desde, String hasta, String pais,String region, String localidad, String variable, Integer pagina, Integer cantidad) {
 		
-		String nombrePais = "";
-		String nombreRegion = "";
-		String nombreLocalidad = "";
+				
 		
-		if(pais != null && pais.length() > 0){
-			nombrePais = pais;
-		}
-		if(region != null && region.length() > 0){
-			nombreRegion = region;
-		}
-		if(localidad != null && localidad.length() > 0){
-			nombreLocalidad = localidad;
-		}
 		
 		String url = new String(address + "/historico/consultar?desde={desde}&hasta={hasta}&pais={pais}&region={region}&localidad={localidad}&pagina={pagina}&tamano={tamano}");
 		System.out.println(url.toString());
@@ -70,55 +62,32 @@ public class ServicioMongo implements IServiciosMongo{
 	    HttpEntity<?> request= new HttpEntity<Object>(headers);
 	    
 	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("pais", nombrePais);
-		uriVariables.put("region", nombreRegion);
-		uriVariables.put("localidad", nombreLocalidad);
+	    
+	    if(pais != null && pais.length() > 0){
+			uriVariables.put("pais", pais);
+
+		}
+		if(region != null && region.length() > 0){
+			uriVariables.put("region", region);
+		}
+		if(localidad != null && localidad.length() > 0){
+			uriVariables.put("localidad", localidad);
+		}
+		
+		
+		uriVariables.put("variable", variable);
 		uriVariables.put("desde", desde);
 		uriVariables.put("hasta", hasta);
 		uriVariables.put("pagina", pagina);
 		uriVariables.put("cantidad", cantidad);
 		
-		ResponseEntity<OpcInfoRegisterListResponse> response = restTemplate.exchange(url, HttpMethod.GET, request, OpcInfoRegisterListResponse.class, uriVariables);
+		ResponseEntity<PageOpcInfoResponseImpl> response = restTemplate.exchange(url, HttpMethod.GET, request, PageOpcInfoResponseImpl.class, uriVariables);
 		
 		return response.getBody();
 	}
 	
 	@Override
-	public String getCantidadItemsInQuery(String desde, String hasta, String pais, String region, String localidad) {
-		String nombrePais = "";
-		String nombreRegion = "";
-		String nombreLocalidad = "";
-		
-		if(pais != null && pais.length() > 0){
-			nombrePais = pais;
-		}
-		if(region != null && region.length() > 0){
-			nombreRegion = region;
-		}
-		if(localidad != null && localidad.length() > 0){
-			nombreLocalidad = localidad;
-		}
-		
-		String url = new String(address + "/historico/contar?desde={desde}&hasta={hasta}&pais={pais}&region={region}&localidad={localidad}");
-		System.out.println(url.toString());
-		HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.TEXT_PLAIN);
-	    HttpEntity<?> request= new HttpEntity<Object>(headers);
-	    
-	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("pais", nombrePais);
-		uriVariables.put("region", nombreRegion);
-		uriVariables.put("localidad", nombreLocalidad);
-		uriVariables.put("desde", desde);
-		uriVariables.put("hasta", hasta);
-		
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class, uriVariables);
-		
-		return response.getBody();
-	}
-	
-	@Override
-	public OpcErrorResponse findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano) {
+	public PageLoggerResponseImpl findLogByPropertiesOnDemand(String desde, String hasta, String tipoEvento, Integer pagina, Integer tamano) {
 		
 		String evento = "";
 		
@@ -133,42 +102,18 @@ public class ServicioMongo implements IServiciosMongo{
 	    HttpEntity<?> request= new HttpEntity<Object>(headers);
 	    
 	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("pais", evento);
 		uriVariables.put("desde", desde);
 		uriVariables.put("hasta", hasta);
+		uriVariables.put("evento", tipoEvento);
 		uriVariables.put("pagina", pagina);
 		uriVariables.put("tamano", tamano);
 		
-		ResponseEntity<OpcErrorResponse> response = restTemplate.exchange(url, HttpMethod.GET, request, OpcErrorResponse.class, uriVariables);
+		ResponseEntity<PageLoggerResponseImpl> response = restTemplate.exchange(url, HttpMethod.GET, request, PageLoggerResponseImpl .class, uriVariables);
 		
 		return response.getBody();
 	}
 
-	@Override
-	public String countLogByProperties(String desde, String hasta, String tipoEvento) {
-		
-		String evento = "";
-		
-		if(tipoEvento != null && tipoEvento.length() > 0){
-			evento = tipoEvento;
-		}
-		
-		
-		String url = new String(address + "/log/contar?desde={desde}&hasta={hasta}&evento={evento}");
-		System.out.println(url.toString());
-		HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.TEXT_PLAIN);
-	    HttpEntity<?> request= new HttpEntity<Object>(headers);
-	    
-	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-		uriVariables.put("evento", tipoEvento);
-		uriVariables.put("desde", desde);
-		uriVariables.put("hasta", hasta);
-		
-		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class, uriVariables);
-		
-		return response.getBody();
-	}
+	
 
 	public RestTemplate getRestTemplate() {
 		return restTemplate;

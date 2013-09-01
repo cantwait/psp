@@ -63,12 +63,12 @@
 				</panel>
 			</center>
 			<south height="48px">
-				<div align="right" style="background:#c5e6ef"
+				<div align="right" 
 					height="100%">
-					<button id="btnAceptar" label="Aceptar"
+					<button id="btnAceptar" label="Aceptar" mold="trendy"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>
-					<button id="btnCancelar" label="Cancelar"
+					<button id="btnCancelar" label="Cancelar" mold="trendy"
 						image="/images/icons/delete.png" orient="vertical">
 					</button>
 				</div>

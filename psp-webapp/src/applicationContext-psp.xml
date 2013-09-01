@@ -149,6 +149,9 @@ http://www.springframework.org/schema/security
                     <property name="marshaller" ref="jaxbMarshaller"/>
                     <property name="unmarshaller" ref="jaxbMarshaller"/>
                 </bean>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes" value="text/plain" />
+                </bean>
             </list>
         </property>
     </bean>
@@ -156,10 +159,9 @@ http://www.springframework.org/schema/security
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
     	<property name="classesToBeBound">
     		<list>
-    			<value>com.pdvsa.psp.model.xml.OpcErrorMongoRequest</value>
-    			<value>com.pdvsa.psp.model.xml.OpcErrorResponse</value>
-    			<value>com.pdvsa.psp.model.xml.OpcItemsTransfer</value>
-    			<value>com.pdvsa.psp.model.xml.OpcInfoRegisterListResponse</value>
+    		    <value>com.pdvsa.psp.model.xml.OpcItemsTransfer</value>
+    			<value>com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl</value>
+    			<value>com.pdvsa.psp.model.xml.PageLoggerResponseImpl</value>
     		</list>
     	</property>
     </bean>

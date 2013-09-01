@@ -11,12 +11,16 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractTransformer;
 
+import com.pdvsa.psp.dao.IItemDAO;
+import com.pdvsa.psp.model.Item;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
+import com.pdvsa.psp.service.IItemService;
 import com.pdvsa.psp.service.IServidorService;
 
 public class ProcessOpcInfoTransformer extends AbstractTransformer {
 	
 	private IServidorService servidorService;
+	private IItemService itemService;
 	
 	@Override
 	protected Object doTransform(Object src, String enc)
@@ -25,7 +29,7 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 		if(src instanceof OpcInfoRegisterMongo){
 			OpcInfoRegisterMongo opc = (OpcInfoRegisterMongo) src;
 			
-			HashMap<String, Object> valores = servidorService.getValuesFromServerById(opc.getStationId());			
+			HashMap<String, Object> valores = servidorService.getValuesFromServerById(opc.getIdServidor());			
 			String nombreTanque = StringUtils.left(opc.getTagOpc(), StringUtils.indexOf(opc.getTagOpc(), '.'));
 			if(valores != null && valores.values().size() > 0){
 				opc.setTanqueNombre(nombreTanque);
@@ -34,12 +38,18 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 				opc.setLocalidadNombre(valores.get("localidadNombre").toString());
 				opc.setNombreServidor(valores.get("servidorNombre").toString());
 			}
+			
+			Item item = itemService.getItemByNombre(opc.getTagName());
+			if (item != null) {
+				opc.setUnidadMedida(item.getUnidadMedida().getNombre());
+			}
+			
 			return opc;
 			
 		}else if(src instanceof ArrayList){
 			List<OpcInfoRegisterMongo> opcs = new ArrayList<OpcInfoRegisterMongo>();
 			for (OpcInfoRegisterMongo opc : opcs) {
-				HashMap<String, Object> valores = servidorService.getValuesFromServerById(opc.getStationId());			
+				HashMap<String, Object> valores = servidorService.getValuesFromServerById(opc.getIdServidor());			
 				String nombreTanque = StringUtils.left(opc.getTagOpc(), StringUtils.indexOf(opc.getTagOpc(), '.'));
 				if(valores != null && valores.values().size() > 0){
 					opc.setTanqueNombre(nombreTanque);
@@ -47,6 +57,10 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 					opc.setRegionNombre(valores.get("regionNombre").toString());
 					opc.setLocalidadNombre(valores.get("localidadNombre").toString());
 					opc.setNombreServidor(valores.get("servidorNombre").toString());
+				}
+				Item item = itemService.getItemByNombre(opc.getTagName());
+				if (item != null) {
+					opc.setUnidadMedida(item.getUnidadMedida().getNombre());
 				}
 				
 				return opcs;
@@ -62,21 +76,13 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 	public void setServidorService(IServidorService servidorService) {
 		this.servidorService = servidorService;
 	}
-	
-	public static void main(String... args){
-//		String original = "TK-1002.DA[5].VU";
-//		
-//		String modificado = StringUtils.left(original, StringUtils.indexOf(original, '.'));
-//		
-//		System.out.println(modificado);		
-		
-		
-	    Calendar newDate = Calendar.getInstance();
-	    
-	    newDate.setTime(new Date(Long.valueOf(1371920235676l)));
-	    
-	    System.out.println(newDate.getTime());
-		
+
+	public IItemService getItemService() {
+		return itemService;
+	}
+
+	public void setItemService(IItemService itemService) {
+		this.itemService = itemService;
 	}
 
 }

@@ -309,7 +309,29 @@ public class TransactionTree extends Tree implements AfterCompose {
 		Transaccion carpeta = securityService.getRootTransaction();
 		createTree(children, carpeta);
 
+		List<Transaccion> nodosHijos = null;
 		
+		
+		nodosHijos = securityService.getChildremByFather(carpeta);
+		
+		selectItem((Treeitem) children.getFirstChild());
+		
+		if (nodosHijos != null && nodosHijos.size() > 0) {
+			Collections.sort(nodosHijos, new Comparator<Transaccion>() {
+
+				@Override
+				public int compare(Transaccion o1, Transaccion o2) {
+					int i1 = ((Transaccion) o1).getCodigo().intValue();
+					int i2 = ((Transaccion) o2).getCodigo().intValue();
+
+					return Math.abs(i1) - Math.abs(i2);
+				}
+
+			});
+
+			createChildrem(this.getSelectedItem(), nodosHijos);
+
+		}
 		
 
 	}

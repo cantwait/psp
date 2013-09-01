@@ -261,11 +261,11 @@ public class AllFunctionsTree extends Tree implements AfterCompose {
 			children.getChildren().clear();
 		}
 
-		securityService = (ISecurityService) SpringUtil
-				.getBean("securityService");
+		securityService = (ISecurityService) SpringUtil.getBean("securityService");
 
 		Transaccion carpeta = securityService.getRootTransaction();
 		createTree(children, carpeta);
+		
 
 	}
 

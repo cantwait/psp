@@ -15,9 +15,7 @@
 	errores = new ArrayList();
 	response = new OpcErrorResponse();
 
-	eventos = MongoLogger.Evento.values();
-
-	
+	eventos = MongoLogger.getEventos();
 
 	eventoSeleccionado = null;
 ]]>
@@ -49,14 +47,14 @@
 							<label value="Fecha" />
 							<hbox>
 								<label value="Desde"></label>
-								<datebox id="dateDesde"
-									format="dd/MM/yyyy hh:mm:ss"
+								<datebox id="dateDesde" width="200px"
+									format="dd/MM/yyyy kk:mm:ss"
 									constraint="no empty: No puede estar vacio"
 									onCreate="self.value = new Date()">
 								</datebox>
 								<label value="Hasta"></label>
-								<datebox id="dateHasta"
-									format="dd/MM/yyyy hh:mm:ss"
+								<datebox id="dateHasta" width="200px"
+									format="dd/MM/yyyy kk:mm:ss"
 									constraint="no empty: No puede estar vacio"
 									onCreate="self.value = new Date()">
 								</datebox>
@@ -65,10 +63,10 @@
 						</row>
 						<row>
 							<label value="Tipo de Evento" />
-							<listbox model="@{eventos}" mold="select" rows="1"  width="300px"
-								selectedValue="@{eventoSeleccionado}">
-								<listitem self="@{each=e}" label="@{e}" />
-							</listbox>
+							<combobox model="@{eventos}" id="cmbEventos"
+								 width="300px" selectedValue="@{eventoSeleccionado}">
+								<comboitem self="@{each=ev}" label="@{ev}" />
+							</combobox>
 						</row>
 					</rows>
 				</grid>
@@ -85,7 +83,7 @@
 					height="400px">
 					<listhead sizable="true">
 						<listheader width="30%" label="Causa" />
-						<listheader label="Tipo Evento" width="10%"/>
+						<listheader label="Tipo Evento" width="10%" />
 						<listheader width="10%" label="Fecha" />
 						<listheader label="Descripción" width="50%" />
 					</listhead>
@@ -97,31 +95,28 @@
 						<listcell label="@{e.descripcion}" />
 					</listitem>
 				</listbox>
-				<paging id="paginLog" >
+				<paging id="lstBoxPaging" visible="true"
+					pageSize="20">
 					<attribute name="onPaging">
 						<![CDATA[
-						         
-]]>         
-						
-					</attribute>
-				</paging>
-			</panelchildren>
-		</panel>
-		<zscript>
-			<![CDATA[
-	void doFindEntities() {
+	{
+		PAGE_SIZE = lstBoxPaging.getPageSize();
+
+		pagno = lstBoxPaging.activePage;
+		despl = pagno * PAGE_SIZE;
+		//		if (despl == 0)
+		//			despl = 1;
 		te = "";
-		if (eventoSeleccionado != null) {
-			te = eventoSeleccionado.name();
+		if (cmbEventos.getSelectedItem() != null) {
+			te = cmbEventos.getSelectedItem().getLabel();
+			
 		}
 		errores.clear();
 		if (dateDesde != null && dateHasta != null) {
 			if (!dateDesde.getValue().after(dateHasta.getValue())) {
-				error = servicioMongo.findLogByPropertiesOnDemand(dateDesde
-						.getValue().toString(),
-						dateHasta.getValue().toString(), te, 0, 100);
-				if (error != null && error.errores.size() > 0) {
-					errores = error.errores;
+				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, pagno, PAGE_SIZE);
+				if (error != null && error.getContent().size() > 0) {
+					errores = error.getContent();
 				}
 
 			} else {
@@ -136,6 +131,53 @@
 			alert("No se encontraron resultados!!!");
 		}
 		binder.loadAll();
+
+	}
+]]>
+					</attribute>
+				</paging>
+
+			</panelchildren>
+		</panel>
+		<zscript>
+			<![CDATA[
+	void doFindEntities() {
+		te = "";
+		
+		if (cmbEventos.getSelectedItem() != null) {
+			te = cmbEventos.getSelectedItem().getLabel();
+		}
+		errores.clear();
+		if (dateDesde != null && dateHasta != null) {
+			if (!dateDesde.getValue().after(dateHasta.getValue())) {
+
+				
+				
+				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, 0, 20);
+				
+				
+				lstBoxPaging.setTotalSize(Integer.valueOf(error.getTotal().toString()));
+				if (error != null && error.getContent().size() > 0) {
+					errores = error.getContent();
+				}
+
+			} else {
+				alert("La fecha Desde no puede ser Mayor que Hasta");
+			}
+
+		} else {
+			alert("Las fechas no pueden ser nulas!!!");
+		}
+
+		if (errores.size() == 0) {
+			alert("No se encontraron resultados!!!");
+		}
+		binder.loadAll();
+	}
+	String formatDate(Date date) {
+		java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat(
+				"yyyy-MM-dd kk:mm:ss");
+		return formatter.format(date);
 	}
 ]]>
 			
