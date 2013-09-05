@@ -20,5 +20,10 @@
      <bean id="itemsFromCache" class="com.pdvsa.psp.mule.rest.CacheItemsRest">
          <property name="mapCache" ref="mapCache" />
      </bean>
+     
+     <bean id="validateTime" class="com.pdvsa.psp.mule.component.ValidateTimeTransmission">
+         <property name="mapCache" ref="mapCache"/>
+         <property name="tiempoMinutos" value="${global.minutes}"/>
+     </bean>
 	
 </beans>

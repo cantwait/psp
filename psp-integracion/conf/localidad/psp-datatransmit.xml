@@ -60,6 +60,7 @@
 				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:object-to-xml-transformer>
+		
 		<set-variable variableName="xmlPayload" value="#[payload]" />
 		<http:outbound-endpoint exchange-pattern="request-response"
 			host="${rest.master.host}" port="${rest.master.port}" responseTimeout="20000"
