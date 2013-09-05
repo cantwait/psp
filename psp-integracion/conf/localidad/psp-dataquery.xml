@@ -48,6 +48,8 @@
 				<spring-object bean="mongoFindItemsPentahoRest" />
 			</component>
 		</jersey:resources>
+		
+		<exception-strategy ref="Choice_Exception_Strategy" doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 	
 	<flow name="ConsultarLogBus">
