@@ -101,6 +101,41 @@
 			</component>
 		</all> 
         </catch-exception-strategy>
+<<<<<<< HEAD
+=======
+        <catch-exception-strategy when="#[exception.causedBy(com.pdvsa.psp.mule.rest.exception.BadRequestException)]" doc:name="Catch Exception Strategy">
+             <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[
+                import java.text.SimpleDateFormat;
+                import java.util.Date;
+                import java.text.DateFormat;
+                import java.util.Calendar;
+                import com.pdvsa.psp.model.xml.MongoLogger;             
+                
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateStr = dateFormat.format(Calendar.getInstance().getTime());
+                
+                Date currentTime = dateFormat.parse(dateStr);
+                
+                def log = new MongoLogger();
+                log.tipoEvento = MongoLogger.Evento.VALIDACION;	
+				log.descripcion = "Error de Parametros para Servicio";
+				log.fecha = currentTime;
+				log.causa = exception.cause;	
+				
+				return log;
+				]]></scripting:script>
+        </scripting:transformer>        
+	        <component>
+		    	<spring-object bean="mongoInsertLogComponent"/>
+			</component>
+			<mule-xml:object-to-xml-transformer encoding="UTF-8" mimeType="text/xml"
+				doc:name="Object to XML">
+				<mule-xml:alias name="response"
+					class="com.pdvsa.psp.model.xml.MongoLogger" />
+			</mule-xml:object-to-xml-transformer>		
+        </catch-exception-strategy>
+>>>>>>> branch 'master' of https://github.com/cantwait/psp.git
         <catch-exception-strategy		
 			doc:name="Catch Exception Strategy">
 			<scripting:transformer doc:name="Groovy">

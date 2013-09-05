@@ -9,6 +9,7 @@
           http://www.springframework.org/schema/context/spring-context-3.0.xsd
           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
+<<<<<<< HEAD
       
 	 <util:map id="mapCache" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.util.Map">	     
 	 </util:map>
@@ -24,6 +25,18 @@
      <bean id="validateTime" class="com.pdvsa.psp.mule.component.ValidateTimeTransmission">
          <property name="mapCache" ref="mapCache"/>
          <property name="tiempoMinutos" value="${global.minutes}"/>
+=======
+     
+	 <util:map id="mapCache" scope="singleton" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.util.Map">	     
+	 </util:map>
+     
+     <bean id="storeTankOpcDataCache" class="com.pdvsa.psp.mule.component.StoreTankOpcDataCache">  
+         <property name="mapCache" ref="mapCache" />
+     </bean>
+     
+     <bean id="itemsFromCache" class="com.pdvsa.psp.mule.rest.CacheItemsRest">
+         <property name="mapCache" ref="mapCache" />
+>>>>>>> branch 'master' of https://github.com/cantwait/psp.git
      </bean>
 	
 </beans>

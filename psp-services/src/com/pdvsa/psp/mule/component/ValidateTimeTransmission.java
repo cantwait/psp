@@ -23,7 +23,7 @@ public class ValidateTimeTransmission {
 	private String tiempoMinutos;
 	private Map<String, Map<String, List<OpcInfoRegisterMongo>>> mapCache;
 	
-	
+	 
 	public List<OpcInfoRegisterMongo> validateTimeBetween(){
 		List<OpcInfoRegisterMongo> registrosConTiempoSuperado = new ArrayList<OpcInfoRegisterMongo>();
 		
