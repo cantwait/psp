@@ -17,6 +17,7 @@
       <xs:element name="tanqueNombre" type="xs:string"  nillable="false" maxOccurs="1" minOccurs="1"/>
       <xs:element name="regionNombre" type="xs:string" nillable="false" maxOccurs="1" minOccurs="1"/>
       <xs:element name="paisNombre" type="xs:string" nillable="false" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="productoNombre" type="xs:string" nillable="false" maxOccurs="1" minOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 
