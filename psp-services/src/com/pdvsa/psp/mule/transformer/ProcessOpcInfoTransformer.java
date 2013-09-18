@@ -37,6 +37,7 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 				opc.setRegionNombre(valores.get("regionNombre").toString());
 				opc.setLocalidadNombre(valores.get("localidadNombre").toString());
 				opc.setNombreServidor(valores.get("servidorNombre").toString());
+				opc.setProductoNombre(valores.get("productoNombre").toString());
 			}
 			
 			Item item = itemService.getItemByNombre(opc.getTagName());
@@ -57,6 +58,7 @@ public class ProcessOpcInfoTransformer extends AbstractTransformer {
 					opc.setRegionNombre(valores.get("regionNombre").toString());
 					opc.setLocalidadNombre(valores.get("localidadNombre").toString());
 					opc.setNombreServidor(valores.get("servidorNombre").toString());
+					opc.setProductoNombre(valores.get("productoNombre").toString());
 				}
 				Item item = itemService.getItemByNombre(opc.getTagName());
 				if (item != null) {

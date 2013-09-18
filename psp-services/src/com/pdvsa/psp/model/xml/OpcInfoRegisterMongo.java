@@ -38,6 +38,7 @@ public class OpcInfoRegisterMongo implements Serializable{
 	private String tanqueNombre;	
 	private String regionNombre;	
 	private String paisNombre;
+	private String productoNombre;
 	
 	@Indexed	
 	private String nombreServidor;
@@ -209,6 +210,16 @@ public class OpcInfoRegisterMongo implements Serializable{
 
 	public void setUnidadMedida(String unidadMedida) {
 		this.unidadMedida = unidadMedida;
+	}
+
+
+	public String getProductoNombre() {
+		return productoNombre;
+	}
+
+
+	public void setProductoNombre(String productoNombre) {
+		this.productoNombre = productoNombre;
 	}
 
 	

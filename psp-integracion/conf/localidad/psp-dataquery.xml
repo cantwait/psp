@@ -48,11 +48,7 @@
 				<spring-object bean="mongoFindItemsPentahoRest" />
 			</component>
 		</jersey:resources>
-<<<<<<< HEAD
-=======
-		
 		<exception-strategy ref="Choice_Exception_Strategy" doc:name="Catch_Exception_Strategy_DEFAULT" />
->>>>>>> branch 'master' of https://github.com/cantwait/psp.git
 	</flow>
 	
 	<flow name="ConsultarLogBus">

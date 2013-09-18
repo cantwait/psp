@@ -13,7 +13,6 @@
 	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
 	xmlns:mule-xml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey"
-<<<<<<< HEAD
 	xsi:schemaLocation=" 
           http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
           http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
@@ -97,7 +96,7 @@
 		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
 	</flow>
 	
-	<flow name="ValidateTiemFlow">
+	<flow name="ValidateTiempoFlow">
 	    <quartz:inbound-endpoint jobName="job-validate-data-recieved-localidad"
 			repeatInterval="${psp.transmitFrecuency}" repeatCount="-1" connector-ref="Quartz-Connector"
 			doc:name="Quartz">
@@ -125,7 +124,6 @@
         </enricher>
          <smtp:outbound-endpoint to="#[flowVars['addresses']]" user="${smtp.username}" password="${smtp.password}" host="${smtp.host}" port="${smtp.port}" connector-ref="emailConnector"
               subject="${email.subjectPrefix} N O T I F I C A C I O N" responseTimeout="10000" connector-ref="emailConnector" doc:name="SMTP" >
-        	
          </smtp:outbound-endpoint>
 	</flow>
 	
@@ -137,94 +135,5 @@
        serviceClass="com.pdvsa.psp.service.IRolService" />
      </http:outbound-endpoint>
    </sub-flow>
-=======
-	xsi:schemaLocation="
-          http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-          http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
-          http://www.mulesoft.org/schema/mule/pop3 http://www.mulesoft.org/schema/mule/pop3/3.1/mule-pop3.xsd
-          http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/3.3/mule-smtp.xsd
-          http://www.mulesoft.org/schema/mule/pop3s http://www.mulesoft.org/schema/mule/pop3s/current/mule-pop3s.xsd
-          http://www.mulesoft.org/schema/mule/imap http://www.mulesoft.org/schema/mule/imap/current/mule-imap.xsd
-          http://www.mulesoft.org/schema/mule/imaps http://www.mulesoft.org/schema/mule/imaps/current/mule-imaps.xsd
-          http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/3.2/mule-email.xsd
-          http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/3.1/mule-file.xsd
-          http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
-          http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-          http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/3.2/mule-jdbc.xsd
-          http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
-          http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-          http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.3/mule-scripting.xsd
-          http://www.mulesoft.org/schema/mule/management http://www.mulesoft.org/schema/mule/management/3.2/mule-management.xsd
-          http://www.mulesoft.org/schema/mule/ognl http://www.mulesoft.org/schema/mule/ognl/current/mule-ognl.xsd
-          http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd
-          http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-          http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
-          http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.1/mule-vm.xsd
-          http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
-          http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
-          http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
-	
-	<flow name="ReceiveOPCData" >
-		<http:inbound-endpoint exchange-pattern="request-response"
-			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/opcdata"
-			doc:name="http-save-opc-endpoint" />
-		<jersey:resources doc:name="REST">
-			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
-		</jersey:resources>
-		<object-to-string-transformer doc:name="Object to String" />
-<<<<<<< HEAD
-		<!-- <message-filter throwOnUnaccepted="true" doc:name="validation-filter"> 
-			<filter ref="opc-request-schema-validation" /> </message-filter> -->
-=======
-		<message-filter throwOnUnaccepted="true" doc:name="validation-filter"> 
-			<filter ref="opc-request-schema-validation" /> </message-filter>
->>>>>>> branch 'master' of https://github.com/cantwait/psp.git
-		<mule-xml:dom-to-xml-transformer />
-		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
-			<mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
-			<mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
-			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
-		</mule-xml:xml-to-object-transformer>
-		<all>
-			<component>
-				<spring-object bean="mongoInsertComponent" />
-			</component>
-			<component>
-				<spring-object bean="storeTankOpcDataCache" />
-			</component>
-			<component>
-				<spring-object bean="mongoSaveHistoricItemsComponent" />
-			</component>
-		</all>
-		<scripting:transformer doc:name="Groovy">
-			<scripting:script engine="Groovy">
-				<![CDATA[
-         			import java.text.SimpleDateFormat;
-         			import java.util.Date;
-         			import java.text.DateFormat;
-         			import java.util.Calendar;
-         			import com.pdvsa.psp.model.xml.MongoLogger;
-                  
-      	 			//org.mule.api.routing.filter.FilterUnacceptedException
-       				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        			String dateStr = dateFormat.format(Calendar.getInstance().getTime());
-                  
-					Date currentTime = dateFormat.parse(dateStr);
-                  
-	        		def log = new MongoLogger();
-        			log.tipoEvento = MongoLogger.Evento.EXITO; 
-      				log.descripcion = "Se ha completado la transaccion de manera Exitosa";
-      				log.fecha = currentTime;    
-      
-      				return log;
-      			]]>
-			</scripting:script>
-		</scripting:transformer>
-		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-			<mule-xml:alias name="response" class="com.pdvsa.psp.model.xml.MongoLogger" />
-		</mule-xml:object-to-xml-transformer>
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
-	</flow>
->>>>>>> branch 'master' of https://github.com/cantwait/psp.git
 
 </mule>

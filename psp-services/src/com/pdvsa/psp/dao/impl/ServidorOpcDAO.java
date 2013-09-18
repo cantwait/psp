@@ -113,7 +113,7 @@ public class ServidorOpcDAO extends BaseDAO<ServidorOpc, Long> implements IServi
 		
 		HashMap<String,Object> valores = new HashMap<String,Object>();
 		
-		String qry = "select l.id as id_localidad, l.nombre as nombre_localidad, r.id as id_region, r.nombre as nombre_region, p.id as pais_id, p.nombre as pais_nombre, so.id as servidor_id, so.nombre as servidor_nombre from public.paises p  left join public.regiones r on p.id = r.id_pais   left join public.localidades l on r.id = l.id_region   left join cs.servidores_opc so on so.id_localidad = l.id  where so.id = :servidorId";
+		String qry = "select l.id as id_localidad, l.nombre as nombre_localidad, r.id as id_region, r.nombre as nombre_region, p.id as pais_id, p.nombre as pais_nombre, so.id as servidor_id, so.nombre as servidor_nombre, pro.nombre as producto_nombre from public.paises p  left join public.regiones r on p.id = r.id_pais   left join public.localidades l on r.id = l.id_region   left join cs.servidores_opc so on so.id_localidad = l.id left join cs.tanques ta on ta.id_servidor_opc = so.id left join cs.productos pro on pro.id = ta.id_producto  where so.id = :servidorId";
 		
 		Query sqlQry = em().createNativeQuery(qry).setParameter("servidorId", id);
 		
@@ -127,6 +127,7 @@ public class ServidorOpcDAO extends BaseDAO<ServidorOpc, Long> implements IServi
 		valores.put("paisNombre", o[5]);
 		valores.put("servidorId", o[6]);
 		valores.put("servidorNombre", o[7]);
+		valores.put("productoNombre", o[8]);
 		
 		
 		return valores;
