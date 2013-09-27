@@ -3,69 +3,49 @@
 <zk xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	<window id="win" vflex="1" hflex="1" height="100%" >
+	<window id="win" height="100%" width="100%">
 		<borderlayout>
-<!-- 			<center  autoscroll="true"> -->
-			<east>
-				<panel title="Entrada al Sistema" width="50%" >
-					<panelchildren >
-						<grid >
-							<columns>
-								<column />
-							</columns>
-							<rows>
-								<row>
-									<h:form id="f" name="f"
-										action="j_spring_security_check" method="POST">
+			<center autoscroll="true">
+				<panel title="Entrada al Sistema" width="50%">
+					<panelchildren>
+						<h:form id="f" name="f"
+							action="j_spring_security_check" method="POST">
+							<grid>
+								<columns>
+									<column width="20%" />
+									<column width="80%" />
+								</columns>
+								<rows>
+									<row>
+										<label
+											id="label_ZKLoginDialog_user" value="Usuario" />
+										<textbox id="u"
+											name="j_username" width="80%" focus="true" />
+									</row>
+									<row>
+										<label
+											id="label_ZKLoginDialog_pwd" value="Contraseña" />
+										<textbox id="p" type="password"
+											name="j_password" width="80%" />
+									</row>
 
-										<grid style="border:0px">
-											<columns>
-												<column width="20%" />
-												<column width="80%" />
-											</columns>
-											<rows>
-
-												<row>
-													<label
-														id="label_ZKLoginDialog_user" value="Usuario" />
-													<textbox id="u"
-														name="j_username" width="99%" focus="true" />
-												</row>
-												<row>
-													<label
-														id="label_ZKLoginDialog_pwd" value="Contraseña" />
-													<textbox id="p"
-														type="password" name="j_password" width="99%" />
-												</row>
-
-												<row spans="2">
-													<hbox>
-														<h:input
-															type="submit" value="Login" />
-													</hbox>
-												</row>
-												<row spans="2"
-													if="${not empty param.login_error}">
-													<label
-														style="color:red"
-														value="Falló La entrada al Sistema. Por favor Intente de Nuevo. Razón: ${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}" />
-												</row>
-											</rows>
-										</grid>
-									</h:form>
-								</row>
-							</rows>
-						</grid>
+									<row spans="2">
+										<hbox>
+											<h:input type="submit"
+												value="Login" />
+										</hbox>
+									</row>
+									<row spans="2"
+										if="${not empty param.login_error}">
+										<label style="color:red"
+											value="Falló La entrada al Sistema. Por favor Intente de Nuevo. Razón: ${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}" />
+									</row>
+								</rows>
+							</grid>
+						</h:form>
 					</panelchildren>
 				</panel>
-				
-			</east>
-			<west>
-				
-			</west>
-				
-				
-<!-- 			</center> -->
+			</center>
 		</borderlayout>
 	</window>
 </zk>

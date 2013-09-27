@@ -3,129 +3,123 @@
 
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./lstArbol"?>
 
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
-	xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:h="http://www.w3.org/1999/xhtml">
 
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
 
 	<window id="lstArbol" title="Transacciones del Sistema"
-		closable="true" height="100%" 
-		transaccion="@{transaccion}" use="com.obelisco.vista.zk.components.GenericTreeWindow">
+		closable="true" height="100%" transaccion="@{transaccion}"
+		use="com.obelisco.vista.zk.components.GenericTreeWindow">
 		<caption image="/images/icons/24x24/window.png" />
-		<h:table border="0" width="100%" height="100%">
-			<h:tr>
-				<h:td >					
-					<toolbar id="tool" mold="panel"	use="com.obelisco.vista.zk.controls.Toolbar">
-					</toolbar>
-				</h:td>
-			</h:tr>
-			<h:tr>
-				<h:td style="padding : 0px;">
-					<borderlayout height="640px" width="100%">
-						<west title="Transacciones" width="30%"
-							collapsible="true"
-							autoscroll="true">
-							<panel border="normal" collapsible="true">
-								<panelchildren>
-									<tree id="tree" height="100%"
-										use="com.obelisco.vista.zk.controls.AllFunctionsTree">
-										<treechildren />
-									</tree>
-								</panelchildren>
-							</panel>
-						</west>
-						<center autoscroll="true">
-							<panel id="workArea" height="100%" closable="false"
-								maximizable="false" collapsible="false" framable="false">
-								<panelchildren></panelchildren>
-							</panel>
-						</center>
-					</borderlayout>
-				</h:td>
-			</h:tr>
-		</h:table>
-		
-	<zscript>
+		<borderlayout height="100%" width="100%">
+			<north height="44px">
+				<toolbar id="tool" mold="panel"
+					use="com.obelisco.vista.zk.controls.Toolbar">
+				</toolbar>
+			</north>
+			<west title="Transacciones" width="30%" collapsible="true"
+				autoscroll="true">
+				<panel border="normal" collapsible="true">
+					<panelchildren>
+						<tree id="tree" height="100%" 
+							use="com.obelisco.vista.zk.controls.AllFunctionsTree">
+							<treechildren />
+						</tree>
+					</panelchildren>
+				</panel>
+			</west>
+			<center autoscroll="true">
+				<panel id="workArea" height="100%" closable="false"
+					maximizable="false" collapsible="false" framable="false">
+					<panelchildren></panelchildren>
+				</panel>
+			</center>
+		</borderlayout>
+		<zscript>
 
-		void doEditEntity(Object o) {
+			void doEditEntity(Object o) {
 
 			command = new ShowDialogCommand();
 			command.parametros.put("aEntity",o);
 			command.parametros.put("aOperacion",OperacionHelper.getOperacion(OperationType.MODIFICAR));
-		
+
 			if (o instanceof Transaccion) {
-				command.archivoZul =  "/WEB-INF/obelisco/modules/system/transactions/dialogoTransaccion.zul";
-			} 
+			command.archivoZul =
+			"/WEB-INF/obelisco/modules/system/transactions/dialogoTransaccion.zul";
+			}
 
 			if (command.execute(null) == ActionType.ACEPTAR) {
-				//Se refresca el Arbol
-				tree.refreshTree(OperationType.MODIFICAR,o);	
+			//Se refresca el Arbol
+			tree.refreshTree(OperationType.MODIFICAR,o);
 			}
-		
-		}
 
-		void doNewEntity(Object parent) {
-			
-			if (parent.tipoTransaccion.equals(Transaccion.TipoTransaccion.FOLDER)) {
-			
-				commandSelectNodo = new ShowDialogCommand();
-				commandSelectNodo.archivoZul = "/WEB-INF/obelisco/modules/system/transactions/dialogoNuevoNodo.zul";
+			}
 
-				if (commandSelectNodo.execute(null) == ActionType.ACEPTAR) {
-									
-					//Se refresca el Arbol
-					tipoNodo = commandSelectNodo.getReturnValue("tipoNodo");
-					
-					nodo = new Transaccion();
-					nodo.padre = parent;
-					nodo.tipoTransaccion = tipoNodo;
-					
-					command = new ShowDialogCommand();
-					
-					command.parametros.put("aEntity",nodo);
-					command.parametros.put("aOperacion",OperacionHelper.getOperacion(OperationType.INCLUIR));
+			void doNewEntity(Object parent) {
 
-					
-					
-					command.archivoZul = "/WEB-INF/obelisco/modules/system/transactions/dialogoTransaccion.zul";
-					 
-					
-					
-					if (command.execute(null) == ActionType.ACEPTAR) {
-						//Se refresca el Arbol
-//						if (nodo instanceof Transaccion) {
-//							parent.transacciones.add(nodo);
-//						} else if (nodo instanceof CarpetaTransaccion) {
-//							parent.hijos.add(nodo);
-//						}
+			if (parent.tipoTransaccion.equals(Transaccion.TipoTransaccion.FOLDER))
+			{
 
-						tree.refreshTree(OperationType.INCLUIR,nodo);	
-					}
-					
-				}
-				
-			
+			commandSelectNodo = new ShowDialogCommand();
+			commandSelectNodo.archivoZul =
+			"/WEB-INF/obelisco/modules/system/transactions/dialogoNuevoNodo.zul";
+
+			if (commandSelectNodo.execute(null) == ActionType.ACEPTAR) {
+
+			//Se refresca el Arbol
+			tipoNodo = commandSelectNodo.getReturnValue("tipoNodo");
+
+			nodo = new Transaccion();
+			nodo.padre = parent;
+			nodo.tipoTransaccion = tipoNodo;
+
+			command = new ShowDialogCommand();
+
+			command.parametros.put("aEntity",nodo);
+			command.parametros.put("aOperacion",OperacionHelper.getOperacion(OperationType.INCLUIR));
+
+
+
+			command.archivoZul =
+			"/WEB-INF/obelisco/modules/system/transactions/dialogoTransaccion.zul";
+
+
+
+			if (command.execute(null) == ActionType.ACEPTAR) {
+			//Se refresca el Arbol
+			// if (nodo instanceof Transaccion) {
+			// parent.transacciones.add(nodo);
+			// } else if (nodo instanceof CarpetaTransaccion) {
+			// parent.hijos.add(nodo);
+			// }
+
+			tree.refreshTree(OperationType.INCLUIR,nodo);
+			}
+
+			}
+
+
 			} else {
-				
-				alert("Imposible Agregar elementos al Nodo Seleccionado");
-				
+
+			alert("Imposible Agregar elementos al Nodo Seleccionado");
+
 			}
-		
-		}
 
-		void doDeleteEntity(Object o) {
+			}
+
+			void doDeleteEntity(Object o) {
 			securityService.removeTransaccion(o);
-			tree.refreshTree(OperationType.ELIMINAR,o);			
-		}
+			tree.refreshTree(OperationType.ELIMINAR,o);
+			}
 
-		void doCustomAction(Object object, Operacion operacion) {
+			void doCustomAction(Object object, Operacion operacion) {
 			//servicioAdministrarSeguridad.guardarCarpeta(tree.getRootValue());
-			//alert("Los Datos se han Guardado Satisfactoriamente");		
-		}
+			//alert("Los Datos se han Guardado Satisfactoriamente");
+			}
 
 		</zscript>
-		
+
 	</window>
 
 

@@ -21,15 +21,14 @@
 		entityList="@{items}" transaccion="@{transaccion}"
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 
-		<panel border="normal" width="100%">
+		<panel  width="100%" height="100%"> 
 			<toolbar id="tool" mold="panel"
 				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
 			<panelchildren>
-				<listbox id="lstbox" rows="10" model="@{items}"
-					height="420px" mold="paging" selectedItem="@{itemAEditar}">
+				<listbox id="lstbox" model="@{items}"
+					mold="paging" vflex="true" rows="10" pageSize="10" preloadSize="10" selectedItem="@{itemAEditar}">
 					<listhead sizable="true">
 						<listheader width="30%" label="Nombre" />
 						<listheader width="10%" label="Tipo Item" />

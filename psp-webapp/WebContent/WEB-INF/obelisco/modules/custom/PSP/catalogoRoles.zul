@@ -36,16 +36,14 @@
 		selectedEntity="@{entidadCatalogo}"
 		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
-				<panel>
+				<panel  height="100%">
 					<panelchildren>
-
 						<listbox id="lstbox" model="@{rolesActuales}"
-							selectedItem="@{entidadCatalogo}" mold="paging" rows="15"
-							pageSize="10" preloadSize="10" multiple="true" checkmark="true"
-							vflex="true">
+							selectedItem="@{entidadCatalogo}" mold="paging" multiple="true"
+							checkmark="true" vflex="true" rows="10" pageSize="10"
+							preloadSize="10">
 							<listhead sizable="true">
 								<listheader width="30px" align="center" />
 								<listheader label="Nombre" />
@@ -53,7 +51,7 @@
 							</listhead>
 							<listitem sclass="row-border item"
 								self="@{each=e}">
-								<listcell  />
+								<listcell />
 								<listcell label="@{e.nombre}" />
 								<listcell label="@{e.descripcion}" />
 							</listitem>
@@ -63,13 +61,14 @@
 				</panel>
 			</center>
 			<south height="48px">
-				<div align="right" 
-					height="100%">
-					<button id="btnAceptar" label="Aceptar" mold="trendy"
-						image="/images/icons/disk_blue.png" orient="vertical">
+				<div align="right" height="100%">
+					<button id="btnAceptar" label="Aceptar"
+						mold="trendy" image="/images/icons/disk_blue.png"
+						orient="vertical">
 					</button>
-					<button id="btnCancelar" label="Cancelar" mold="trendy"
-						image="/images/icons/delete.png" orient="vertical">
+					<button id="btnCancelar" label="Cancelar"
+						mold="trendy" image="/images/icons/delete.png"
+						orient="vertical">
 					</button>
 				</div>
 			</south>

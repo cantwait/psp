@@ -26,7 +26,6 @@
 		width="100%">
 		<caption image="/images/icons/24x24/window.png" />
 		<panelchildren>
-			<style src="/css/estilo_zk.css" dynamic="true" />
 			<panel>
 				<panelchildren>
 					<grid height="100%">

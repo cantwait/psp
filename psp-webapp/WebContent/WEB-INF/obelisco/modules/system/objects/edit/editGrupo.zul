@@ -3,9 +3,8 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./dlgEditGrupos"?>
 
 
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
-	xmlns:h="http://www.w3.org/1999/xhtml">
-	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />	
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:h="http://www.w3.org/1999/xhtml">
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 	<zscript src="/WEB-INF/obelisco/commons/configureDialog.zs" />
 	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
 
@@ -20,55 +19,49 @@
 		}
 	}
 ]]>
-</zscript>
+	</zscript>
 
-	<window id="dlgEditGrupos" title="Grupo" border="normal" width="99%"
-		closable="true" height="99%"
+	<window id="dlgEditGrupos" title="Grupo" border="normal" width="100%"
+		closable="true" height="100%"
 		use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
 				<borderlayout>
 					<north>
 						<grid>
 							<columns>
-								<column width="40%" />
-								<column width="60%" />
+								<column width="20%" />
+								<column width="30%" />
+								<column width="20%" />
+								<column width="30%" />
 							</columns>
 							<rows>
 								<row>
 									<label value="Nombre" />
-									<textbox id="txtNombre"
-										constraint="no empty" value="@{aGrupoGeneral.nombre}" />
-								</row>
-								<row>
+									<textbox id="txtNombre" constraint="no empty"
+										value="@{aGrupoGeneral.nombre}" />
 									<label value="Descripción" />
-									<textbox id="txtDescripcion"
-										value="@{aGrupoGeneral.descripcion}" cols="50" rows="2" />
+									<textbox id="txtDescripcion" value="@{aGrupoGeneral.descripcion}"
+										cols="50" rows="2" />
 								</row>
 								<row>
 									<label value="Pooling" />
-									<intbox id="txtPool"
-										constraint="no zero, no negative, no empty"
+									<intbox id="txtPool" constraint="no zero, no negative, no empty"
 										value="@{aGrupoGeneral.pooling}" />
-								</row>
-								<row spans="2" align="right">
+									<label value="Activo"></label>
 									<hbox>
-										<checkbox id="checkActivo"
-											label="Activo" checked="@{aGrupoGeneral.activo}">
+										<checkbox id="checkActivo" checked="@{aGrupoGeneral.activo}">
 										</checkbox>
 									</hbox>
 								</row>
 							</rows>
 						</grid>
 					</north>
-					<center>
-						<panel title="Variables" collapsible="false"
-							height="299px">
+					<center autoscroll="true" title="Variables">
+						<panel height="100%" width="100%">
 							<toolbar mold="panel">
-								<button label="Agregar Variable"
-									mold="trendy">
+								<button label="Agregar Variable" mold="trendy">
 									<attribute name="onClick">
 									<![CDATA[
 	{
@@ -92,42 +85,27 @@
 							</toolbar>
 							<panelchildren>
 								<!-- Lista de grupos -->
-								<borderlayout height="100%">
-									<center autoscroll="true">
-										<listbox preloadSize="10" vflex="true"
-											model="@{itemsOpc}" mold="paging" pageSize="10" >
-											<listhead sizable="true">
-												<listheader
-													label="Nombre" width="300px" />
-												<listheader
-													label="Medida" width="150px" />
-												<listheader
-													label="Descripcion" width="300px" />
-												<listheader
-													label="Tag Opc" width="300px" />
-												<listheader
-													label="Operaciones" align="center" />
-											</listhead>
-											<listitem
-												sclass="row-border item" self="@{each=e}">
-												<listcell
-													label="@{e.nombre}" />
-												<listcell
-													label="@{e.unidadMedida.nombre}" />
-												<listcell
-													label="@{e.descripcion}" />
-												<listcell
-													label="@{e.itemOpc}" />
-												<listcell>
-													<hbox
-														spacing="5px">
-														<toolbarbutton
-															style="font-size: 9px; font-weight: normal;"
-															objeto="@{e}"
-															use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-															image="/images/icons/16x16/delete2.png"
-															tooltiptext="Eliminar ...">
-															<attribute name="onClick">
+								<listbox model="@{itemsOpc}" mold="paging" vflex="true"
+									rows="8" pageSize="8" preloadSize="8"> 
+									<listhead sizable="true">
+										<listheader label="Nombre" width="300px" />
+										<listheader label="Medida" width="150px" />
+										<listheader label="Descripcion" width="300px" />
+										<listheader label="Tag Opc" width="300px" />
+										<listheader label="Operaciones" align="center" />
+									</listhead>
+									<listitem sclass="row-border item" self="@{each=e}">
+										<listcell label="@{e.nombre}" />
+										<listcell label="@{e.unidadMedida.nombre}" />
+										<listcell label="@{e.descripcion}" />
+										<listcell label="@{e.itemOpc}" />
+										<listcell>
+											<hbox spacing="5px">
+												<toolbarbutton style="font-size: 9px; font-weight: normal;"
+													objeto="@{e}"
+													use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+													image="/images/icons/16x16/delete2.png" tooltiptext="Eliminar ...">
+													<attribute name="onClick">
 											<![CDATA[
 	{
 		c = event.target;
@@ -137,16 +115,12 @@
 
 	}
 ]]>
-											</attribute>
-														</toolbarbutton>
-													</hbox>
-												</listcell>
-											</listitem>
-										</listbox>
-
-
-									</center>
-								</borderlayout>
+													</attribute>
+												</toolbarbutton>
+											</hbox>
+										</listcell>
+									</listitem>
+								</listbox>
 							</panelchildren>
 						</panel>
 					</center>
@@ -200,7 +174,7 @@
 
 	}
 ]]>
-	</zscript>
+		</zscript>
 
 	</window>
 

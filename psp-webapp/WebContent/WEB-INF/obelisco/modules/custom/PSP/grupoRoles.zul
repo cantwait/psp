@@ -21,9 +21,8 @@
 		entityList="@{roles}" transaccion="@{transaccion}"
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 
-		<panel border="normal" width="100%">
+		<panel border="normal" width="100%" height="100%">
 			<toolbar id="tool" mold="panel" width="100%"
 				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
@@ -32,8 +31,8 @@
 
 				<!-- Lista de roles -->
 
-				<listbox id="lstbox" rows="5" model="@{roles}"
-					height="400px" mold="paging" selectedItem="@{rolAEditar}">
+				<listbox id="lstbox" model="@{roles}"
+					mold="paging"  vflex="true" rows="10" pageSize="10" preloadSize="10"  selectedItem="@{rolAEditar}">
 					<listhead sizable="true">
 						<listheader width="30%" label="Nombre" />
 						<listheader width="50%" label="Descripcion" />

@@ -2,7 +2,7 @@
 
 <zk xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:zk="http://www.zkoss.org/2005/zk">
-	<borderlayout height="800px">
+	<borderlayout height="100%">
 		<center autoscroll="true" self="@{insert(areatrabajo)}">
 		</center>
 	</borderlayout>

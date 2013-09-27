@@ -8,11 +8,12 @@
 	<zscript>
 	<![CDATA[
 	objeto = arg.get("aObjeto");
-	operacionSelected = null;	
+	operacionSelected = null;
 	roles = new ArrayList();
 	operaciones = new ArrayList();
-	if(objeto != null){
-		operaciones = securityService.getOperacionesByTransaccionId(objeto.codigo);
+	if (objeto != null) {
+		operaciones = securityService
+				.getOperacionesByTransaccionId(objeto.codigo);
 	}
 ]]>
 	</zscript>
@@ -24,11 +25,11 @@
 		<panelchildren>
 			<style src="/css/mystyle.css" dynamic="true" />
 			<textbox visible="false" />
-			<tabbox orient="horizontal" height="100%" tabscroll="true">
+			<tabbox orient="horizontal" height="100%"
+				tabscroll="true">
 				<tabs width="120px">
 					<tab label="Datos Generales" />
-					<tab label="Operaciones / Roles" />
-					<tab label="Seguridad" visible="false" />
+					<tab label="Permisos" />
 				</tabs>
 				<tabpanels>
 					<tabpanel>
@@ -52,30 +53,26 @@
 									<label
 										value="@{objeto.tipoTransaccion}" />
 								</row>
-
-
 								<row>
 									<label value="Clase" />
-									<label value="@{objeto.clase}" />
+									<label value="@{objeto.archivoZul}" />
 								</row>
-
-
 							</rows>
 						</grid>
 					</tabpanel>
 					<tabpanel>
 						<borderlayout>
-							<north height="30%">
+							<west width="50%">
 								<panel title="Operaciones">
 									<panelchildren>
-										<listbox id="lstboxOperaciones" rows="5"
-											model="@{operaciones}" height="400px" mold="paging"
+										<listbox id="lstboxOperaciones"
+											height="100%" model="@{operaciones}" vflex="true" mold="paging"
 											selectedItem="@{operacionSelected}">
 											<listhead sizable="true">
 												<listheader width="20%"
 													label="codigo" />
 												<listheader width="80%"
-													label="Nombre" />												
+													label="Nombre" />
 											</listhead>
 											<listitem
 												sclass="row-border item" self="@{each=e}">
@@ -83,30 +80,31 @@
 													label="@{e.codigo}" />
 												<listcell
 													label="@{e.nombre}" />
-												
+
 											</listitem>
 											<attribute name="onSelect">
 												<![CDATA[
-												         if(operacionSelected != null){
-												        	 roles = securityService.getRolesByOperacionAndTransaccion(objeto.codigo, operacionSelected.codigo);
-												        	 binder.loadComponent(lstboxUsuarios);
-												         }
+	if (operacionSelected != null) {
+		roles = securityService.getRolesByOperacionAndTransaccion(
+				objeto.codigo, operacionSelected.codigo);
+		binder.loadComponent(lstboxUsuarios);
+	}
 ]]>
 											</attribute>
 										</listbox>
 									</panelchildren>
 								</panel>
-							</north>
-							<south height="70%">
+							</west>
+							<center autoscroll="true">
 								<panel title="Roles">
 									<panelchildren>
-										<listbox id="lstboxUsuarios" rows="5"
-											model="@{roles}" height="400px" mold="paging">
+										<listbox id="lstboxUsuarios"
+											height="100%" vflex="true" model="@{roles}" mold="paging">
 											<listhead sizable="true">
 												<listheader width="20%"
 													label="Login" />
 												<listheader width="80%"
-													label="Nombre" />												
+													label="Nombre" />
 											</listhead>
 											<listitem
 												sclass="row-border item" self="@{each=rol}">
@@ -114,24 +112,15 @@
 													label="@{rol.nombre}" />
 												<listcell
 													label="@{rol.descripcion}" />
-												
 											</listitem>
 										</listbox>
-									</panelchildren>									
-								</panel>							
-							</south>
+									</panelchildren>
+								</panel>
+							</center>
 						</borderlayout>
 					</tabpanel>
-
 				</tabpanels>
 			</tabbox>
 		</panelchildren>
 	</panel>
-
-	<zscript>
-	<![CDATA[
-	
-]]>
-</zscript>
-
 </zk>

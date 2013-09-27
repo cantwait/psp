@@ -8,63 +8,46 @@
 
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 
-	<zscript> 
-		tiposNodo = securityService.getTipoTransacciones();
+	<zscript> tiposNodo = securityService.getTipoTransacciones();
 		tipoNodoActual = tiposNodo.get(0);
-	</zscript>
+</zscript>
 
 	<window id="dlgNuevoNodo" title="Nuevo Elemento" maximizable="false"
-		width="500px" border="normal"
-		use="com.obelisco.vista.zk.components.GenericDialog">
+		width="500px" border="normal" use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/mystyle.css" dynamic="true" />
-		<div height="85%">
-			<grid>
-				<columns>
-					<column width="40%" align="right" valign="top" />
-					<column width="60%" />
-				</columns>
-				<rows>
+		<borderlayout>
+			<center autoscroll="true">
+				<grid>
+					<columns>
+						<column width="40%" align="right" valign="top" />
+						<column width="60%" />
+					</columns>
+					<rows>
+						<row>
+							<label value="Tipo de Nodo" />
+							<listbox id="cmbTipo" rows="1" model="@{tiposNodo}" mold="select"
+								selectedItem="@{tipoNodoActual}" width="180px">
+								<listitem self="@{each=c}" label="@{c}" />
+							</listbox>
+						</row>
+					</rows>
+				</grid>
+			</center>
+			<south height="48px">
+				<div align="right" height="100%">
+					<button id="btnAceptar" label="Aceptar" image="/images/icons/disk_blue.png"
+						orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar" image="/images/icons/delete.png"
+						orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
 
-					<row>
-
-						<label value="Tipo de Nodo" />
-						<listbox id="cmbTipo" rows="1"
-							model="@{tiposNodo}" mold="select"
-							selectedItem="@{tipoNodoActual}" width="180px">
-							<listitem self="@{each=c}" label="@{c}" />
-						</listbox>
-
-					</row>
-				</rows>
-			</grid>
-		</div>
-		<div align="right" height="15%" >
-			<button id="btnAceptar" label="Aceptar"
-				image="/images/icons/disk_blue.png" orient="vertical">
-			</button>
-			<button id="btnCancelar" label="Cancelar"
-				image="/images/icons/delete.png" orient="vertical">
-			</button>
-		</div>
-
-
-		<zscript>
-
-		
-		Boolean doValidate() {
-			
-			boolean esValido = true;
-			
-			Boolean valido = new Boolean(esValido);
-			return valido;
-		}		
-				
-				
-		void doSetReturnData() {
-			self.setAttribute("tipoNodo",tipoNodoActual);
-		}
-		
-		</zscript>
+		<zscript> Boolean doValidate() { boolean esValido = true; Boolean
+			valido = new Boolean(esValido); return valido; } void
+			doSetReturnData() { self.setAttribute("tipoNodo", tipoNodoActual); }
+</zscript>
 	</window>
 </zk>

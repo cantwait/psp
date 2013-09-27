@@ -39,7 +39,6 @@
 		maximized="false" border="normal" width="95%" height="90%"
 		use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
 				<grid>
@@ -90,7 +89,7 @@
 							<hbox>
 								<checkbox checked="@{item.activo}" label="Activo">
 								</checkbox>
-								<checkbox checked="@{item.hda}" label="Requiere HDA">
+								<checkbox checked="@{item.hda}" label="Requiere HDA" visible="false">
 								</checkbox>
 								
 							</hbox>

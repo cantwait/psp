@@ -30,18 +30,18 @@ public class ServicioMongo implements IServiciosMongo{
 	private String address;
 	
 	@Override
-	public OpcItemsTransfer getLastItemsByTanque(String nombreServidor, String tanqueNombre) {
+	public OpcItemsTransfer getLastItemsByTanque(String servidor, String tanque) {
 			
 		
-		String url = new String(address + "/cache/consultar?nombreServidor={nombreServidor}&nombreTanque={nombreTanque}");
+		String url = new String(address + "/cache/consultar?servidor={servidor}&tanque={tanque}");
 		
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.TEXT_XML);
 	    HttpEntity<?> request= new HttpEntity<Object>(headers);
 	    
 	    Map<String, Object> uriVariables = new HashMap<String, Object>();
-	    uriVariables.put("nombreServidor", nombreServidor);
-	    uriVariables.put("nombreTanque", tanqueNombre);
+	    uriVariables.put("servidor", servidor);
+	    uriVariables.put("tanque", tanque);
 
 			
 		ResponseEntity<OpcItemsTransfer> response = restTemplate.exchange(url,HttpMethod.GET, request, OpcItemsTransfer.class, uriVariables);

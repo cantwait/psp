@@ -4,17 +4,20 @@
 	xmlns:zk="http://www.zkoss.org/2005/zk">
 
 	<borderlayout height="100%" width="100%">
-		<north border="0" height="98%">
+		<center border="0">
 			<borderlayout width="100%">
-				<west title="Arbol Transacciones" self="@{insert(barra)}" hflex="1" vflex="1" width="20%" ></west>
-				<east title="Area de Trabajo" hflex="1"  vflex="1" width="80%" self="@{insert(areatrabajo)}" >
-					
-				</east>
+				<west title="Arbol Transacciones" width="20%">
+					<borderlayout width="100%" height="100%">
+						<center self="@{insert(barra)}"></center>
+						<south self="@{insert(piepagina)}" border="none"
+							height="34px" splittable="false">
+						</south>
+					</borderlayout>
+				</west>
+				<center self="@{insert(areatrabajo)}">
+				</center>
 			</borderlayout>
-		</north>		
-		<south self="@{insert(piepagina)}" border="none" height="22px"
-			splittable="false">
-		</south>
+		</center>
 	</borderlayout>
 
 </zk>

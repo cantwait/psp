@@ -3,8 +3,7 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./lstErrors"?>
 
 
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
-	xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:h="http://www.w3.org/1999/xhtml">
 
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 	<zscript src="/WEB-INF/obelisco/commons/configureSecurity.zs" />
@@ -23,81 +22,75 @@
 
 	<window id="lstErrors" title="Errores Bus" closable="true"
 		height="100%" width="100%" border="normal" entityList="@{errores}"
-		transaccion="@{transaccion}"
-		use="com.obelisco.vista.zk.components.GenericWindowList">
+		transaccion="@{transaccion}" use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 
-		<panel width="100%" height="120px" border="normal">
+		<borderlayout>
+			<north>
+				<panel width="100%" height="100%" border="normal">
 
-			<panelchildren>
+					<panelchildren>
 
-				<toolbar id="tool" mold="panel"
-					use="com.obelisco.vista.zk.controls.Toolbar">
-				</toolbar>
+						<toolbar id="tool" mold="panel"
+							use="com.obelisco.vista.zk.controls.Toolbar">
+						</toolbar>
 
 
-				<grid align="left">
-					<columns>
-						<column width="10%"></column>
-						<column width="90%"></column>
-					</columns>
-					<rows>
-						<row>
-							<label value="Fecha" />
-							<hbox>
-								<label value="Desde"></label>
-								<datebox id="dateDesde" width="200px"
-									format="dd/MM/yyyy kk:mm:ss"
-									constraint="no empty: No puede estar vacio"
-									onCreate="self.value = new Date()">
-								</datebox>
-								<label value="Hasta"></label>
-								<datebox id="dateHasta" width="200px"
-									format="dd/MM/yyyy kk:mm:ss"
-									constraint="no empty: No puede estar vacio"
-									onCreate="self.value = new Date()">
-								</datebox>
+						<grid >
+							<columns>
+								<column width="20%"></column>
+								<column width="80%"></column>
+							</columns>
+							<rows>
+								<row>
+									<label value="Fecha" />
+									<hbox>
+										<label value="Desde"></label>
+										<datebox id="dateDesde" width="200px" format="dd/MM/yyyy kk:mm:ss"
+											constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()">
+										</datebox>
+										<label value="Hasta"></label>
+										<datebox id="dateHasta" width="200px" format="dd/MM/yyyy kk:mm:ss"
+											constraint="no empty: No puede estar vacio" onCreate="self.value = new Date()">
+										</datebox>
 
-							</hbox>
-						</row>
-						<row>
-							<label value="Tipo de Evento" />
-							<combobox model="@{eventos}" id="cmbEventos"
-								 width="300px" selectedValue="@{eventoSeleccionado}">
-								<comboitem self="@{each=ev}" label="@{ev}" />
-							</combobox>
-						</row>
-					</rows>
-				</grid>
+									</hbox>
+								</row>
+								<row>
+									<label value="Tipo de Evento" />
+									<combobox model="@{eventos}" id="cmbEventos" width="300px"
+										selectedValue="@{eventoSeleccionado}">
+										<comboitem self="@{each=ev}" label="@{ev}" />
+									</combobox>
+								</row>
+							</rows>
+						</grid>
 
 
 
 
-			</panelchildren>
-		</panel>
-		<panel title="Resultados de Búsqueda" border="normal"
-			height="500px" width="100%" collapsible="true">
-			<panelchildren>
-				<listbox id="lstbox" rows="10" model="@{errores}"
-					height="400px">
-					<listhead sizable="true">
-						<listheader width="30%" label="Causa" />
-						<listheader label="Tipo Evento" width="10%" />
-						<listheader width="10%" label="Fecha" />
-						<listheader label="Descripción" width="50%" />
-					</listhead>
-					<listitem sclass="row-border item"
-						self="@{each=e}">
-						<listcell label="@{e.causa}" />
-						<listcell label="@{e.tipoEvento}" />
-						<listcell label="@{e.fecha}" />
-						<listcell label="@{e.descripcion}" />
-					</listitem>
-				</listbox>
-				<paging id="lstBoxPaging" visible="true"
-					pageSize="20">
-					<attribute name="onPaging">
+					</panelchildren>
+				</panel>
+			</north>
+			<center autoscroll="true" title="Resultados de Búsqueda">
+				<panel border="normal" height="100%" width="100%">
+					<panelchildren>
+						<listbox id="lstbox" model="@{errores}" vflex="true" rows="10" >
+							<listhead sizable="true">
+								<listheader width="30%" label="Causa" />
+								<listheader label="Tipo Evento" width="10%" />
+								<listheader width="10%" label="Fecha" />
+								<listheader label="Descripción" width="50%" />
+							</listhead>
+							<listitem sclass="row-border item" self="@{each=e}">
+								<listcell label="@{e.causa}" />
+								<listcell label="@{e.tipoEvento}" />
+								<listcell label="@{e.fecha}" />
+								<listcell label="@{e.descripcion}" />
+							</listitem>
+						</listbox>
+						<paging id="lstBoxPaging" visible="true" pageSize="20">
+							<attribute name="onPaging">
 						<![CDATA[
 	{
 		PAGE_SIZE = lstBoxPaging.getPageSize();
@@ -134,11 +127,14 @@
 
 	}
 ]]>
-					</attribute>
-				</paging>
+							</attribute>
+						</paging>
 
-			</panelchildren>
-		</panel>
+					</panelchildren>
+				</panel>
+			</center>
+		</borderlayout>
+
 		<zscript>
 			<![CDATA[
 	void doFindEntities() {
@@ -156,7 +152,7 @@
 				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, 0, 20);
 				
 				
-				lstBoxPaging.setTotalSize(Integer.valueOf(error.getTotal().toString()));
+				lstBoxPaging.setTotalSize(Integer.valueOf(error.getTotalElements().toString()));
 				if (error != null && error.getContent().size() > 0) {
 					errores = error.getContent();
 				}
@@ -180,7 +176,7 @@
 		return formatter.format(date);
 	}
 ]]>
-			
+
 		</zscript>
 
 	</window>

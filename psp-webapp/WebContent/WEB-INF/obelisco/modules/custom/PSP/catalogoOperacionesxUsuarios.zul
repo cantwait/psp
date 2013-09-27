@@ -3,8 +3,7 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./catOperacionUsuario"?>
 
 
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
-	xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:h="http://www.w3.org/1999/xhtml">
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 
 	<zscript>
@@ -44,43 +43,38 @@ if(operacionModificar != null){
 	
 	
 ]]>
-</zscript>
+	</zscript>
 
-	<window id="catOperacionUsuario" title="Catalogo Operaciones" maximizable="false"
-		mode="modal" maximized="false" border="normal" width="99%"
-		height="99%" selectedEntity="@{entidadCatalogoOpe}"
-		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+	<window id="catOperacionUsuario" title="Permisos" maximizable="false"
+		mode="modal" maximized="false" border="normal" width="100%" height="100%"
+		selectedEntity="@{entidadCatalogoOpe}" use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
-			<north height="50%">
-				<panel height="100%">
-					<panelchildren>
-						<listbox id="lstbox" model="@{operacionesActuales}"
-							selectedItem="@{entidadCatalogoOpe}" mold="paging" rows="10"
-							pageSize="10" preloadSize="10" multiple="false"  vflex="true"
-							checkmark="true">
-							<listhead sizable="true">
-								<listheader label="Codigo"
-									width="150px" /> 
-								<listheader label="Nombre"/>
-							</listhead>
-							<listitem sclass="row-border item"
-								self="@{each=e}">
-								<listcell label="@{e.codigo}" />
-								<listcell label="@{e.nombre}" />
-							</listitem>
-						</listbox>
-
-					</panelchildren>
-				</panel>
-			</north>
-			<center autoscroll="true">
-				<panel title="Usuario" collapsible="false"
-							height="299px">
+			<center>
+				<borderlayout>
+					<west title="Operaciones" width="40%">
+						<panel>
+							<panelchildren>
+								<listbox id="lstbox" model="@{operacionesActuales}"
+									selectedItem="@{entidadCatalogoOpe}" mold="paging" multiple="false"
+									vflex="true" rows="10" pageSize="10" preloadSize="10"
+									checkmark="true">
+									<listhead sizable="true">
+										<listheader label="Código" width="150px" />
+										<listheader label="Nombre" />
+									</listhead>
+									<listitem sclass="row-border item" self="@{each=e}">
+										<listcell label="@{e.codigo}" />
+										<listcell label="@{e.nombre}" />
+									</listitem>
+								</listbox>
+							</panelchildren>
+						</panel>
+					</west>
+					<center autoscroll="true" title="Roles a Asignar">
+						<panel width="100%" height="100%" >
 							<toolbar mold="panel">
-								<button label="Agregar Roles"
-									mold="trendy">
+								<button label="Agregar Roles" mold="trendy">
 									<attribute name="onClick">
 									<![CDATA[
 	{
@@ -103,35 +97,24 @@ if(operacionModificar != null){
 								</button>
 							</toolbar>
 							<panelchildren>
-								<!-- Lista de grupos -->
-								<borderlayout height="100%">
-									<center autoscroll="true">
-										<listbox id="lstBoxUsuarios" preloadSize="10" vflex="true"
-											model="@{entidadCatalogoOpe.roles}" mold="paging" pageSize="10" >
-											<listhead sizable="true">
-												<listheader
-													label="Nombre" width="40%" />
-												<listheader
-													label="Descripción" width="40%" />	
-												<listheader label="Operación" width="20%"/>											
-											</listhead>
-											<listitem
-												sclass="row-border item" self="@{each=rol}">
-												<listcell
-													label="@{rol.nombre}" />
-												<listcell
-													label="@{rol.descripcion}" />
-												
-												<listcell>
-													<hbox
-														spacing="5px">
-														<toolbarbutton
-															style="font-size: 9px; font-weight: normal;"
-															objeto="@{rol}"
-															use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
-															image="/images/icons/16x16/delete2.png"
-															tooltiptext="Eliminar ...">
-															<attribute name="onClick">
+								<listbox id="lstBoxUsuarios" model="@{entidadCatalogoOpe.roles}"
+									mold="paging" vflex="true" rows="10" pageSize="10" preloadSize="10">
+									<listhead sizable="true">
+										<listheader label="Nombre" width="40%" />
+										<listheader label="Descripción" width="40%" />
+										<listheader label="Operación" width="20%" />
+									</listhead>
+									<listitem sclass="row-border item" self="@{each=rol}">
+										<listcell label="@{rol.nombre}" />
+										<listcell label="@{rol.descripcion}" />
+
+										<listcell>
+											<hbox spacing="5px">
+												<toolbarbutton style="font-size: 9px; font-weight: normal;"
+													objeto="@{rol}"
+													use="com.obelisco.vista.zk.controls.OperacionToolbarbutton"
+													image="/images/icons/16x16/delete2.png" tooltiptext="Eliminar ...">
+													<attribute name="onClick">
 											<![CDATA[
 	{
 		c = event.target;
@@ -141,23 +124,20 @@ if(operacionModificar != null){
 
 	}
 ]]>
-											</attribute>
-														</toolbarbutton>
-													</hbox>
-												</listcell>
-											</listitem>
-										</listbox>
-
-
-									</center>
-								</borderlayout>
+													</attribute>
+												</toolbarbutton>
+											</hbox>
+										</listcell>
+									</listitem>
+								</listbox>
 							</panelchildren>
 						</panel>
-				
+
+					</center>
+				</borderlayout>
 			</center>
 			<south height="48px">
-				<div align="right"
-					height="100%">
+				<div align="right" height="100%">
 					<button id="btnAceptar" label="Aceptar" mold="trendy"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>
@@ -165,7 +145,6 @@ if(operacionModificar != null){
 						image="/images/icons/delete.png" orient="vertical">
 					</button>
 				</div>
-
 			</south>
 		</borderlayout>
 	</window>

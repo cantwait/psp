@@ -27,6 +27,11 @@
 	if (gruposServidor == null) {
 		gruposServidor = new ArrayList();
 	}
+	
+	servidor.refAddressBase = 4000;
+	servidor.host_adquisicion = "localhost";
+	servidor.port_adquisicion = 502;
+	
 
 //	rolesServidor = servidorService.getServidorRolByServidor(servidor.id);
 //	if (rolesServidor == null) {
@@ -40,7 +45,6 @@
 		maximized="false" border="normal" width="90%" height="80%"
 		use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
 				<tabbox height="100%">
@@ -56,13 +60,13 @@
 									<grid height="100%">
 										<columns>
 
-											<column width="16%"
+											<column width="20%"
 												align="right" />
-											<column width="17%" />
+											<column width="30%" />
 
-											<column width="16%"
+											<column width="20%"
 												align="right" />
-											<column width="17%" />
+											<column width="30%" />
 
 										</columns>
 										<rows>
@@ -126,24 +130,26 @@
 												<intbox
 													value="@{servidor.socketTimeout}"
 													constraint="no negative, no zero, no empty" />
-												<label
-													value="Direccion Base ModBus" />
-												<intbox
-													value="@{servidor.refAddressBase}"
-													constraint="no negative, no zero, no empty" />
+												<label></label>
+												<label></label>												
+<!-- 												<label -->
+<!-- 													value="Direccion Base ModBus" /> -->
+<!-- 												<intbox -->
+<!-- 													value="@{servidor.refAddressBase}" -->
+<!-- 													constraint="no negative, no zero, no empty" /> -->
 											</row>
-											<row>
-												<label
-													value="Puerta de Enlace Modbus" />
-												<textbox
-													value="@{servidor.host_adquisicion}" />
-												<label
-													value="Puerto Modbus" />
-												<intbox
-													value="@{servidor.port_adquisicion}"
-													constraint="no negative, no zero" />
+<!-- 											<row> -->
+<!-- 												<label -->
+<!-- 													value="Puerta de Enlace Modbus" /> -->
+<!-- 												<textbox -->
+<!-- 													value="@{servidor.host_adquisicion}" /> -->
+<!-- 												<label -->
+<!-- 													value="Puerto Modbus" /> -->
+<!-- 												<intbox -->
+<!-- 													value="@{servidor.port_adquisicion}" -->
+<!-- 													constraint="no negative, no zero" /> -->
 
-											</row>
+<!-- 											</row> -->
 											<row spans="4">
 												<hbox spacing="5">
 													<checkbox
@@ -168,7 +174,7 @@
 								<center autoscroll="true">
 									<panel height="100%">
 										<toolbar mold="panel"
-											style="background:#c5e6ef;">
+											>
 											<button
 												label="Agregar Tanque" mold="os"
 												style="background-color:#fff000;border: 1px solid;	font-size: 9px;">
@@ -206,11 +212,11 @@
 
 													<column
 														label="Nombre" align="center" valign="middle"
-														width="100px" />
+														width="40%" />
 
 													<column
 														label="Producto" align="center" valign="middle"
-														width="200px" />
+														width="20%" />
 
 
 													<column
@@ -301,7 +307,7 @@
 								<center autoscroll="true">
 									<panel height="100%">
 										<toolbar mold="panel"
-											style="background:#c5e6ef;">
+											>
 
 											<button
 												label="Agregar Grupos" mold="os"
@@ -346,15 +352,15 @@
 
 													<column
 														label="Nombre" align="center" valign="middle"
-														width="150px" />
+														width="20%" />
 
 													<column
 														label="Descripción" align="center" valign="middle"
-														width="220px" />
+														width="40%" />
 
 													<column
 														label="Pooling" align="center" valign="middle"
-														width="60px" />
+														width="20%" />
 
 													<column
 														label="Operacion" align="center" valign="middle" />

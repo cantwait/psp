@@ -21,8 +21,8 @@
 		entityList="@{grupos}" transaccion="@{transaccion}"
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
-		<panel border="normal" width="100%">
+		
+		<panel width="100%" height="100%">
 
 			<toolbar id="tool" mold="panel"
 				use="com.obelisco.vista.zk.controls.Toolbar">
@@ -31,8 +31,8 @@
 
 			<panelchildren>
 				<!-- Lista de grupos -->
-				<listbox id="lstbox" rows="10" model="@{grupos}"
-					height="430px" mold="paging" selectedItem="@{grupoAEditar}">
+				<listbox id="lstbox"  model="@{grupos}"
+					mold="paging" vflex="true" rows="10" pageSize="10" preloadSize="10" selectedItem="@{grupoAEditar}">
 					<listhead sizable="true">
 						<listheader width="30%" label="Nombre" />
 						<listheader width="40%" label="Descripciòn" />

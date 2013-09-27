@@ -3,8 +3,7 @@
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./catitems"?>
 
 
-<zk xmlns:n="http://www.zkoss.org/2005/zk/native"
-	xmlns:h="http://www.w3.org/1999/xhtml">
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:h="http://www.w3.org/1999/xhtml">
 	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
 
 	<zscript>
@@ -30,32 +29,26 @@
 
 	}
 ]]>
-</zscript>
+	</zscript>
 
 	<window id="catitems" title="Variables" maximizable="false"
-		mode="modal" maximized="false" border="normal" width="90%"
-		height="80%" selectedEntity="@{entidadCatalogo}"
-		use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
+		mode="modal" maximized="false" border="normal" width="90%" height="80%"
+		selectedEntity="@{entidadCatalogo}" use="com.obelisco.vista.zk.components.SimpleCatalogDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
 				<panel height="100%">
 					<panelchildren>
 						<listbox id="lstbox" model="@{itemsActuales}"
-							selectedItem="@{entidadCatalogo}" mold="paging" rows="10"
-							pageSize="10" preloadSize="10" multiple="true"
-							checkmark="true">
+							selectedItem="@{entidadCatalogo}" mold="paging" multiple="true"
+							vflex="true" rows="10" pageSize="10" preloadSize="10" checkmark="true">
 							<listhead sizable="true">
-								<listheader width="5%" align="center" />
-								<listheader label="Nombre"
-									width="25%" />
-								<listheader label="Descripcion"
-									width="35%" />
-								<listheader label="item-opc" width="35%"/>
+								<listheader width="32px" align="center" />
+								<listheader label="Nombre" width="30%" />
+								<listheader label="Descripcion" width="45%" />
+								<listheader label="item-opc" />
 							</listhead>
-							<listitem sclass="row-border item"
-								self="@{each=e}">
+							<listitem sclass="row-border item" self="@{each=e}">
 								<listcell label="" />
 								<listcell label="@{e.nombre}" />
 								<listcell label="@{e.descripcion}" />
@@ -67,8 +60,7 @@
 				</panel>
 			</center>
 			<south height="48px">
-				<div align="right" 
-					height="100%">
+				<div align="right" height="100%">
 					<button id="btnAceptar" label="Aceptar" mold="trendy"
 						image="/images/icons/disk_blue.png" orient="vertical">
 					</button>

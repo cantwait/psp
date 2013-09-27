@@ -24,7 +24,6 @@
 		closable="true" height="90%"
 		use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
 				<borderlayout>
@@ -57,13 +56,10 @@
 							</rows>
 						</grid>
 					</north>
-					<center>
-						<panel title="Usuarios"
-							collapsible="false" height="299px">
-							<toolbar mold="panel"
-								>
-								<button label="Agregar Usuario" mold="trendy"
-									>
+					<center autoscroll="true" title="Usuarios" >
+						<panel height="100%" width="100%">
+							<toolbar mold="panel">
+								<button label="Agregar Usuario" mold="trendy" >
 									<attribute name="onClick">
 									<![CDATA[
 	{
@@ -75,7 +71,6 @@
 
 		if (command.execute(null) == ActionType.ACEPTAR) {
 			seleccion = command.getReturnValue("CATALOG_RESULT");
-			alert(seleccion.getClass().getName());
 			usuarios.addAll(seleccion);
  
 			binder.loadAll();
@@ -89,9 +84,8 @@
 							</toolbar>
 							<panelchildren>
 								<!-- Lista de usuarios -->
-
-								<grid preloadSize="10" id="gridGrupos"
-									model="@{usuarios}" mold="paging" pageSize="10">
+								<grid id="gridGrupos"
+									model="@{usuarios}" mold="paging" vflex="true"	  >
 									<columns sizable="true">
 
 										<column label="Login"

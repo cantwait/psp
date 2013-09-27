@@ -51,53 +51,41 @@
 		border="normal" width="100%" height="100%"
 		use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/mystyle.css" dynamic="true" />
-		<div height="85%">
-			<textbox visible="false" />
-			<tabbox orient="horizontal" height="100%">
-				<tabs width="120px">
-					<tab label="Datos Generales" />
-					<tab label="Operaciones" visible="false" />
-					<tab label="Seguridad" visible="false" />
-				</tabs>
-				<tabpanels>
-					<tabpanel>
-						<borderlayout>
-							<north height="30%">
-								<grid>
-									<columns>
-										<column width="30%" align="left" />
-										<column width="70%" align="left" />
-									</columns>
-									<rows>
-										<row>
-											<label value="Nombre" />
-											<textbox id="txtNombre" readonly="${executeReadOnly}"
-												maxlength="100" value="@{transaccion.nombre}" />
-										</row>
-										<row>
-											<label value="Descripcion" />
-											<textbox id="txtDescripcion" maxlength="100"
-												value="@{transaccion.descripcion}" />
-										</row>
-										<row>
-											<label value="Tipo Transaccion" />
-											<textbox id="txtAcceso" readonly="true" maxlength="100"
-												value="@{transaccion.tipoTransaccion}" />
-										</row>
-										<row>
-											<label value="Archivo Zul"></label>
-											<textbox width="100%" value="@{transaccion.archivoZul}"></textbox>
-										</row>
-
-									</rows>
-								</grid>
-							</north>
-							<center autoscroll="true">
-										<panel title="Operaciones" height="100%">
-											<toolbar mold="panel">
-												<button label="Agregar" mold="trendy">
-													<attribute name="onClick">
+		<borderlayout>
+			<center autoscroll="true">
+				<borderlayout>
+					<north height="15%">
+						<grid>
+							<columns>
+								<column width="20%" align="left" />
+								<column width="30%" align="left" />
+								<column width="20%" align="left" />
+								<column width="30%" align="left" />
+							</columns>
+							<rows>
+								<row>
+									<label value="Nombre" />
+									<textbox id="txtNombre" readonly="${executeReadOnly}" width="90%"
+										maxlength="100" value="@{transaccion.nombre}" />
+									<label value="Descripcion" />
+									<textbox id="txtDescripcion" maxlength="100" width="90%"
+										value="@{transaccion.descripcion}" />
+								</row>
+								<row>
+									<label value="Tipo Transaccion" />
+									<textbox id="txtAcceso" readonly="true" maxlength="100" width="90%"
+										value="@{transaccion.tipoTransaccion}" />
+									<label value="Archivo Zul"></label>
+									<textbox width="90%" value="@{transaccion.archivoZul}"></textbox>
+								</row>
+							</rows>
+						</grid>
+					</north>
+					<center  title="Permisos" autoscroll="true">
+						<panel height="100%">
+							<toolbar mold="panel">
+								<button label="Agregar" mold="trendy">
+									<attribute name="onClick">
 									<![CDATA[
 	{
 
@@ -118,17 +106,21 @@
 
 	}
 ]]>
-													</attribute>
-												</button>
-											</toolbar>
+									</attribute>
+								</button>
+							</toolbar>
+							<panelchildren>
+								<borderlayout>
+									<west width="50%" title="Operaciones">
+										<panel height="100%">
 											<panelchildren>
-												<listbox id="lstboxOperaciones" rows="3"
-													model="@{operaciones}" mold="paging"
-													selectedItem="@{operacionSelected}">
+												<listbox id="lstboxOperaciones" model="@{operaciones}"
+													mold="paging" selectedItem="@{operacionSelected}" vflex="true"
+													rows="10" pageSize="10" preloadSize="10">
 													<listhead sizable="true">
 														<listheader width="20%" label="Codigo" />
 														<listheader width="60%" label="Nombre" />
-														<listheader width="20%" label="Operaciones" />
+														<listheader label="Operaciones" />
 													</listhead>
 													<listitem sclass="row-border item" self="@{each=op}">
 														<listcell label="@{op.codigo}" />
@@ -202,42 +194,45 @@
 ]]>
 													</attribute>
 												</listbox>
-												
-												<listbox id="lstboxRoles" rows="5" model="@{roles}"
-													height="400px" mold="paging">
+											</panelchildren>
+										</panel>
+									</west>
+									<center title="Roles">
+										<panel height="100%" >
+											<panelchildren>
+												<listbox id="lstboxRoles" model="@{roles}" mold="paging"
+													vflex="true" rows="10" pageSize="10" preloadSize="10">
 													<listhead sizable="true">
 														<listheader width="20%" label="Nombre" />
 														<listheader width="60%" label="Descripcion" />
-														<listheader width="20%" label="Operaciones" />
+														
 													</listhead>
 													<listitem sclass="row-border item" self="@{each=r}">
 														<listcell label="@{r.nombre}" />
-														<listcell label="@{r.descripcion}" />
+														<listcell label="@{r.descripcion}" /> 
 
 													</listitem>
 												</listbox>
-												
 											</panelchildren>
 										</panel>
-
-							</center>
-						</borderlayout>
-
-					</tabpanel>
-					<tabpanel>
-
-					</tabpanel>
-				</tabpanels>
-			</tabbox>
-		</div>
-		<div align="right" height="15%">
-			<button id="btnAceptar" label="Aceptar" mold="trendy"
-				image="/images/icons/disk_blue.png" orient="vertical">
-			</button>
-			<button id="btnCancelar" label="Cancelar" mold="trendy"
-				image="/images/icons/delete.png" orient="vertical">
-			</button>
-		</div>
+									</center>
+								</borderlayout>
+							</panelchildren>
+						</panel>
+					</center>
+				</borderlayout>
+			</center>
+			<south height="48px">
+				<div align="right" height="100%">
+					<button id="btnAceptar" label="Aceptar" mold="trendy"
+						image="/images/icons/disk_blue.png" orient="vertical">
+					</button>
+					<button id="btnCancelar" label="Cancelar" mold="trendy"
+						image="/images/icons/delete.png" orient="vertical">
+					</button>
+				</div>
+			</south>
+		</borderlayout>
 
 		<zscript>
 			<![CDATA[
@@ -266,12 +261,8 @@
 			}
 			
 			securityService.saveTransaccionOperacionUsuario(transaccion, transaccionopeusuario);
-		
-//			servicioAdministrarSeguridad.guardarTransaccion(transaccion);
 		}
 ]]>
 		</zscript>
-
-
 	</window>
 </zk>

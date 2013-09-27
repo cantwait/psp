@@ -19,21 +19,21 @@
 		// NO Existe Pooling debe procederse adecuadamente
 	}
 ]]>
-</zscript>
-
+</zscript>	
 	<panel id="dlgEditServidor" title="Servidor" height="100%"
 		width="100%">
 		<caption image="/images/icons/24x24/window.png" />
+			
 		<panelchildren>
-			<style src="/css/estilo_zk.css" dynamic="true" />
+
 			<borderlayout>
 				<center autoscroll="true">
-					<grid oddRowSclass="background-color: white;">
+					<grid>
 						<columns>
-							<column width="16%" align="right" />
-							<column width="17%" />
-							<column width="16%" align="right" />
-							<column width="17%" />
+							<column width="20%" align="right" />
+							<column width="30%" />
+							<column width="20%" align="right" />
+							<column width="30%" />
 
 						</columns>
 						<rows>
@@ -76,17 +76,17 @@
 								<label
 									value="@{servidor.sleepInterPooling}" />
 							</row>
-							<row>
-								<label
-									value="Tiempo de espera del Socket" />
-								<intbox
-									value="@{servidor.socketTimeout}"
-									constraint="no negative, no zero, no empty" readonly="true" />
-								<label value="Direccion Base ModBus" />
-								<intbox
-									value="@{servidor.refAddressBase}"
-									constraint="no negative, no zero, no empty" readonly="true" />
-							</row>
+<!-- 							<row> -->
+<!-- 								<label -->
+<!-- 									value="Tiempo de espera del Socket" /> -->
+<!-- 								<intbox -->
+<!-- 									value="@{servidor.socketTimeout}" -->
+<!-- 									constraint="no negative, no zero, no empty" readonly="true" /> -->
+<!-- 								<label value="Direccion Base ModBus" /> -->
+<!-- 								<intbox -->
+<!-- 									value="@{servidor.refAddressBase}" -->
+<!-- 									constraint="no negative, no zero, no empty" readonly="true" /> -->
+<!-- 							</row> -->
 							<row if="${existeOPCPooling}">
 								<label value="Metodo de Acceso" />
 								<textbox

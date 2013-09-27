@@ -28,7 +28,6 @@
 		maximizable="true" maximized="false" border="normal" width="50%"
 		height="70%" use="com.obelisco.vista.zk.components.GenericDialog">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
 		<borderlayout>
 			<center autoscroll="true">
 				<grid>

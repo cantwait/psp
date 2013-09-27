@@ -4,108 +4,32 @@ arg0="/WEB-INF/templates/template3.zul"?>
 <?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 <zk>
-	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" >		
+	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs">		
 		<![CDATA[
 		         obeCtx.setUsuarioActual(autenticarUsuario.getCurrentUser());
 ]]>
 	</zscript>
-	<tree width="100%" self="@{define(barra)}" use="com.obelisco.vista.zk.controls.TransactionTree" visible="true" zclass="z-dottree" >
+
+	<tree width="100%" vflex="true" self="@{define(barra)}"
+		use="com.obelisco.vista.zk.controls.TransactionTree" visible="true"
+		zclass="z-dottree">
 	</tree>
-	
-	<window self="@{define(areatrabajo)}" id="targetArea" width="100%" use="com.obelisco.vista.zk.controls.TargetWindow" height="100%" visible="true">
-	
-		
+
+	<window self="@{define(areatrabajo)}" id="targetArea" width="100%"
+		use="com.obelisco.vista.zk.controls.TargetWindow" height="100%"
+		visible="true">
 	</window>
-	
+
 	<toolbar self="@{define(piepagina)}" align="end" visible="true">
-		<toolbarbutton id="toolSalir" label="Salir" mold="toggle" style="background:silver;" >
+		<toolbarbutton id="toolSalir" label="Salir" mold="toggle"
+			style="background:silver;">
 			<attribute name="onClick">
-	{
-		session.invalidate();
-		toolSalir.setHref("/j_spring_security_logout");
-	}
-</attribute>
+				{
+				session.invalidate();
+				toolSalir.setHref("/j_spring_security_logout");
+				}
+			</attribute>
 		</toolbarbutton>
 	</toolbar>
 </zk>
 
-<!-- 
-<zk>
-	<zscript src="/WEB-INF/obelisco/commons/configureContext.zs" />
-	<window self="@{define(areatrabajo)}">
-	 
-		<menubar id="menubar" width="100%">
-			<menu label="Administración">
-				<menupopup>
-					<menuitem label="Jerarquía de Objetos"
-						onClick="verArbolObjetos();" />
-					<menuitem label="Grupos de Variables"
-						onClick="verGruposVariables();" />
-					<menuitem label="Variables Individuales"
-						onClick="verVariablesIndividuales();" />
-					<menuitem label="Usuarios" onClick="verUsuarios();" />
-					<menuitem label="Carga de Variables en Lote"
-						onClick="verUploadLista();" /> 
-					<menuitem label="Tabla Modbus-Opc"
-						onClick="verReporteServidorOpc();" />
-					<menuseparator></menuseparator>
-					<menuitem href="/j_spring_security_logout"
-						label="Salir">
-					</menuitem>
-				</menupopup>
-			</menu>
-		</menubar>
-		<window id="areaDespliegue" defaultActionOnShow="appear"
-			border="normal" height="760px">
-			<image src="/images/pdvsa-2.jpg" height="100%" width="100%" />
-		</window>
-		<zscript>
-		<![CDATA[
-	void verArbolObjetos() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/arbolObjetos.zul";
-		command.execute(areaDespliegue);
-	}
-	void verGruposVariables() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/gruposVariables.zul";
-		command.execute(areaDespliegue);
-	}
-	void verRolesUsuario() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/grupoRoles.zul";
-		command.execute(areaDespliegue);
-	}
-	void verVariablesIndividuales() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/variablesIndividuales.zul";
-		command.execute(areaDespliegue);
-	}
-	void verUsuarios() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/grupoUsuarios.zul";
-		command.execute(areaDespliegue);
-	}
-	void verArbolMonitoreo() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/arbolMonitoreo.zul";
-		command.execute(areaDespliegue);
-	}
-	void verReporteServidorOpc() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/reporteOpcInfo.zul";
-		command.execute(areaDespliegue);
-	}
-	void verUploadLista() {
-		command = new ShowCommand();
-		command.archivoZul = "/WEB-INF/obelisco/modules/custom/PSP/uploadOpcInfo.zul";
-		command.execute(areaDespliegue);
-	}
-]]>
-		</zscript>
-	</window>
-
-
-
-</zk>
- -->

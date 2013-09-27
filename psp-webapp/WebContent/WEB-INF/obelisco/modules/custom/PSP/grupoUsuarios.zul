@@ -11,93 +11,86 @@
 
 	<zscript>
 		<![CDATA[
-		         
-		         usuarioAEditar = null;
-		         usuarios = new ArrayList();
-				 usuarios = userService.getAllUsers();
-				 
-				 
+	usuarioAEditar = null;
+	usuarios = new ArrayList();
+	usuarios = userService.getAllUsers();
 ]]>
 	</zscript>
- 
+
 	<window id="lstUsers" title="Usuarios" closable="true" height="100%"
-		width="100%" border="normal" entity="@{usuarioAEditar}" entityList="@{usuarios}"
-		transaccion="@{transaccion}" 
+		width="100%" border="normal" entity="@{usuarioAEditar}"
+		entityList="@{usuarios}" transaccion="@{transaccion}"
 		use="com.obelisco.vista.zk.components.GenericWindowList">
 		<caption image="/images/icons/24x24/window.png" />
-		<style src="/css/estilo_zk.css" dynamic="true" />
-	
-		<panel  width="100%" height="100%">
-			<toolbar id="tool"  mold="panel" 
+
+		<panel width="100%" height="100%">
+			<toolbar id="tool" mold="panel"
 				use="com.obelisco.vista.zk.controls.Toolbar">
 			</toolbar>
-			
-			
+
+
 			<panelchildren>
-			
-				<listbox id="lstbox" rows="5" model="@{usuarios}" height="400px" mold="paging"
+
+				<listbox id="lstbox" model="@{usuarios}" mold="paging"
+					vflex="true" rows="10" pageSize="10" preloadSize="10"
 					selectedItem="@{usuarioAEditar}">
 					<listhead sizable="true">
-						<listheader width="30%" label="Login" />						
+						<listheader width="30%" label="Login" />
 						<listheader width="50%" label="Nombre" />
-						<listheader label="Activo" width="20%"/>
+						<listheader label="Activo" width="20%" />
 					</listhead>
 					<listitem sclass="row-border item"
 						self="@{each=e}">
 						<listcell label="@{e.login}" />
-						<listcell label="@{e.nombre}"/>
-						<listcell  >
-							<checkbox checked="@{e.activo}" disabled="true" />
-						</listcell>					
+						<listcell label="@{e.nombre}" />
+						<listcell>
+							<checkbox checked="@{e.activo}"
+								disabled="true" />
+						</listcell>
 					</listitem>
 				</listbox>
 
 
-				
+
 
 
 			</panelchildren>
 		</panel>
 		<zscript>
 			<![CDATA[
-			         
-void doNewEntity() {
-	command = new ObjectCommand();
-	user = new com.pdvsa.psp.model.Usuario(); 
-	command.objeto = user;
-	command.dialogo = true;
-	command.operacion = OperacionHelper.getOperacion(com.obelisco.vista.zk.controls.OperationType.INCLUIR);
-	
+	void doNewEntity() {
+		command = new ObjectCommand();
+		user = new com.pdvsa.psp.model.Usuario();
+		command.objeto = user;
+		command.dialogo = true;
+		command.operacion = OperacionHelper
+				.getOperacion(com.obelisco.vista.zk.controls.OperationType.INCLUIR);
 
-	if (command.execute().equals(ActionType.ACEPTAR)) {
-		
-		usuarios = userService.getAllUsers();
-		binder.loadAll();
-	} 
+		if (command.execute().equals(ActionType.ACEPTAR)) {
 
+			usuarios = userService.getAllUsers();
+			binder.loadAll();
+		}
 
-} 
+	}
+	void doEditEntity(Object o) {
+		command = new ObjectCommand();
+		command.objeto = o;
+		command.dialogo = true;
+		command.operacion = OperacionHelper
+				.getOperacion(OperationType.MODIFICAR);
 
-void doEditEntity(Object o){
-	command = new ObjectCommand();
-	command.objeto = o;
-	command.dialogo = true;
-	command.operacion = OperacionHelper.getOperacion(OperationType.MODIFICAR);
+		if (command.execute(null) == ActionType.ACEPTAR) {
+			usuarios = userService.getAllUsers();
 
-	if (command.execute(null) == ActionType.ACEPTAR) {
-		usuarios = userService.getAllUsers();
-
+			binder.loadAll();
+		}
+	}
+	void doDeleteEntity(Object o) {
+		userService.delete(o);
+		usuarios.remove(o);
 		binder.loadAll();
 	}
-}
-
-void doDeleteEntity(Object o) {
-	userService.delete(o);
-	usuarios.remove(o);
-	binder.loadAll();
-}
-
-
 ]]>
 			
 		</zscript>

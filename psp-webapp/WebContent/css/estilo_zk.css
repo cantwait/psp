@@ -1,12 +1,12 @@
 div.z-grid {
-	background: #c5e6ef;
-	border-left: 1px solid #c5e6ef;
-	border-top: 1px solid #c5e6ef;
+	background: black;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
 	border-bottom: 0px;
 	border-right: 0px; overflow : hidden;
 	zoom: 1;
 	overflow: hidden;
-}
+} 
 
 div.z-grid-body {
 	background: white;
@@ -25,8 +25,8 @@ tr.z-row td.z-row-inner {
 	background: white;
 	border-top: none;
 	border-left: 1px solid white;
-	border-right: 1px solid #c5e6ef;
-	border-bottom: 1px solid #c5e6ef;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
 }
 
 tr.z-grid-odd td.z-row-inner,tr.z-grid-odd {

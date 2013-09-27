@@ -28,10 +28,10 @@
 		</attribute>
 		<caption image="/images/icons/24x24/window.png" />
 		<panelchildren>
-			<style src="/css/estilo_zk.css" dynamic="true" />
+
 			<borderlayout>
 				<north>
-					<grid oddRowSclass="background-color: white;">
+					<grid>
 						<columns>
 							<column width="25%" align="right" />
 							<column width="25%" />
@@ -40,29 +40,23 @@
 						</columns>
 						<rows>
 							<row>
-								<label value="Nombre" />
+								<label value="Tanque" />
+								<label value="@{tanque.nombre}" />
+								<label value="Tipo de Producto" />
+								<label value="@{tanque.producto.nombre}" />
+							</row>
+							<row>
+								<label value="Servidor" />
 								<label value="@{tanque.servidorOpc.nombre}" />
-								<label value="Proveedor Opc" />
-								<label value="@{tanque.servidorOpc.proveedorOpc}" />
-							</row>
-							<row>
-								<label value="Clsid" />
-								<label value="@{tanque.servidorOpc.clsid}" />
-								<label value="Progid" />
-								<label value="@{tanque.servidorOpc.progid}" />
-							</row>
-
-							<row>
 								<label value="Host" />
 								<label value="@{tanque.servidorOpc.host}" />
-								<label value="Dominio" />
-								<label value="@{tanque.servidorOpc.domain}" />
 							</row>
+
 						</rows>
 					</grid>
 				</north>				
-				<center autoscroll="true">
-					<panel title="Variables">
+				<center autoscroll="true"  title="Variables">
+					<panel width="100%" height="100%" >
 						<toolbar mold="panel">
 							<button label="Refrescar" mold="trendy">
 								<attribute name="onClick">
@@ -74,21 +68,21 @@
 							</button>
 						</toolbar>
 						<panelchildren>
-							<listbox model="@{registers.opcItems}">
+							<listbox model="@{registers.opcItems}" vflex="true">
 								<listhead sizable="true">
-									<listheader label="Nombre"	valign="middle" width="10%" />
-									<listheader label="Tag OPC"	valign="middle" width="15%" />
+									<listheader label="Nombre"	valign="middle" width="20%" />
+									<listheader label="Tag OPC"	valign="middle" width="20%" />
 									<listheader label="Valor" align="right" valign="middle" width="10%"/>
 									<listheader  label="Unidad Medida" align="left" valign="middle" width="10%"/>
-									<listheader label="Calidad de Lectura" valign="middle" width="15%"/>
-									<listheader label="Fecha de Adquisicion" valign="middle"  width="30%"/>
+									<listheader label="Calidad de Lectura" valign="middle" width="10%"/>
+									<listheader label="Fecha de Adquisicion" valign="middle"  />
 								</listhead>
 								<listitem self="@{each=reg}">
-									<listcell label="@{reg.tagName}" />
-									<listcell label="@{reg.tagOpc}" />
-									<listcell label="@{reg.regValue}" />
+									<listcell label="@{reg.variable}" />
+									<listcell label="@{reg.nombreOPC}" />
+									<listcell label="@{reg.valor}" />
 									<listcell  label="@{reg.unidadMedida}"/>
-									<listcell label="@{reg.quality}"/>
+									<listcell label="@{reg.calidad}"/>
 									<listcell label="@{reg.timestamp}"/>
 								</listitem>
 							</listbox>
