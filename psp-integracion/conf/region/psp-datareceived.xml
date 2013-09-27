@@ -47,9 +47,9 @@
 			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
 		</jersey:resources>
 		<object-to-string-transformer doc:name="Object to String" />
-		<message-filter throwOnUnaccepted="true" doc:name="validation-filter"> 
-			<filter ref="opc-request-schema-validation" /> </message-filter>
-		<mule-xml:dom-to-xml-transformer />
+<!-- 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">  -->
+<!-- 			<filter ref="opc-request-schema-validation" /> </message-filter> -->
+<!-- 		<mule-xml:dom-to-xml-transformer /> -->
 		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
 			<mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
 			<mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
@@ -105,12 +105,13 @@
 		<component>
 		    <spring-object bean="validateTime"/>
 		</component>
+		<expression-filter expression="payload.size() > 0" evaluator="groovy" />		
 		<scripting:transformer doc:name="Groovy">
 			<scripting:script engine="Groovy">
 				<![CDATA[
          			def localidades = []
          			for(item in payload){
-         				localidades = item.localidadNombre
+         				localidades = item.localidad
          			}         			
          			payload = localidades
          			return payload         			
@@ -118,12 +119,11 @@
 			</scripting:script>
 		</scripting:transformer>
 	    <set-payload value="${smtp.body} - #[payload]" doc:name="Set Payload"/>
-        <logger level="INFO" message="#[app.registry.contador]"/>
         <enricher source="#[payload]" target="#[flowVars['addresses']]">
         	<flow-ref name="LookupEmailAddressesSubflow" doc:name="LookupEmailAddressesSubflow" />
         </enricher>
          <smtp:outbound-endpoint to="#[flowVars['addresses']]" user="${smtp.username}" password="${smtp.password}" host="${smtp.host}" port="${smtp.port}" connector-ref="emailConnector"
-              subject="${email.subjectPrefix} N O T I F I C A C I O N" responseTimeout="10000" connector-ref="emailConnector" doc:name="SMTP" >
+              subject="${email.subjectPrefix} N O T I F I C A C I O N" responseTimeout="10000"  >
          </smtp:outbound-endpoint>
 	</flow>
 	

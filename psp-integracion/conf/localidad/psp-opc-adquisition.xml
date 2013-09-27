@@ -65,6 +65,7 @@
 		class="com.pdvsa.psp.mule.transformer.ProcessOpcInfoTransformer" name="ProcessOpcData">
 		<spring:property name="servidorService" ref="servidorService"></spring:property>
 		<spring:property name="itemService" ref="itemService"></spring:property>		
+		<spring:property name="tanqueService" ref="tanqueService"></spring:property>		
 	</custom-transformer>	
 	
 	<flow name="GetOpcDataAdquisition">
