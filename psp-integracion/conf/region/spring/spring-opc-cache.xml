@@ -10,20 +10,31 @@
           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
      
-	 <util:map id="mapCache" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.util.Map">	     
+	 <util:map id="cache" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.util.Map">	     
 	 </util:map>
+	 
+	 <util:map id="notificacionesEnviadas" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.lang.String">
+	 </util:map>
+
+	 <util:map id="controlTransmision" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.util.Date">
+	 </util:map>
+	 	 	 
      
-     <bean id="storeTankOpcDataCache" class="com.pdvsa.psp.mule.component.StoreTankOpcDataCache">  
-         <property name="mapCache" ref="mapCache" />
+     <bean id="storeInCache" class="com.pdvsa.psp.mule.component.StoreDataInCache">  
+         <property name="cache" ref="cache" />
+         <property name="notificacionesEnviadas" ref="notificacionesEnviadas" />
+         <property name="controlTransmision" ref="controlTransmision" />
+     </bean> 
+     
+     <bean id="queryCache" class="com.pdvsa.psp.mule.rest.QueryCacheRest">
+         <property name="cache" ref="cache" />
      </bean>
      
-     <bean id="itemsFromCache" class="com.pdvsa.psp.mule.rest.CacheItemsRest">
-         <property name="mapCache" ref="mapCache" />
-     </bean>
-     
-     <bean id="validateTime" class="com.pdvsa.psp.mule.component.ValidateTimeTransmission">
-         <property name="mapCache" ref="mapCache"/>
-         <property name="tiempoMinutos" value="${global.transmitIdleTime}"/>
+     <bean id="testTransmissionIdleTime" class="com.pdvsa.psp.mule.component.TestTransmissionIdleTime">
+         <property name="cache" ref="cache"/>
+         <property name="notificacionesEnviadas" ref="notificacionesEnviadas" />
+         <property name="controlTransmision" ref="controlTransmision" />
+         <property name="intervalTime" value="${psp.transmitIdleTime}"/>
      </bean>     
      
 	

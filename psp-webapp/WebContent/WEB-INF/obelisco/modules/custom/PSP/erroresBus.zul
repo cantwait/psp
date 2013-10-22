@@ -12,7 +12,7 @@
 		<![CDATA[
 	usuarioAEditar = null;
 	errores = new ArrayList();
-	response = new OpcErrorResponse();
+	//response = new OpcErrorResponse();
 
 	eventos = MongoLogger.getEventos();
 
@@ -107,7 +107,7 @@
 		errores.clear();
 		if (dateDesde != null && dateHasta != null) {
 			if (!dateDesde.getValue().after(dateHasta.getValue())) {
-				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, pagno, PAGE_SIZE);
+				error = serviciosMongo.queryLog(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, pagno, PAGE_SIZE);
 				if (error != null && error.getContent().size() > 0) {
 					errores = error.getContent();
 				}
@@ -149,7 +149,7 @@
 
 				
 				
-				error = servicioMongo.findLogByPropertiesOnDemand(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, 0, 20);
+				error = serviciosMongo.queryLog(formatDate(dateDesde.getValue()),	formatDate(dateHasta.getValue()), te, 0, 20);
 				
 				
 				lstBoxPaging.setTotalSize(Integer.valueOf(error.getTotalElements().toString()));

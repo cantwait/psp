@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps"
-	xmlns:pop3="http://www.mulesoft.org/schema/mule/pop3" xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp"
-	xmlns:pop3s="http://www.mulesoft.org/schema/mule/pop3s" xmlns:imap="http://www.mulesoft.org/schema/mule/imap"
-	xmlns:imaps="http://www.mulesoft.org/schema/mule/imaps" xmlns:email="http://www.mulesoft.org/schema/mule/email"
-	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:https="http://www.mulesoft.org/schema/mule/https"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc"
-	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:json="http://www.mulesoft.org/schema/mule/json"
-	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+	xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps" xmlns:pop3="http://www.mulesoft.org/schema/mule/pop3"
+	xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:pop3s="http://www.mulesoft.org/schema/mule/pop3s"
+	xmlns:imap="http://www.mulesoft.org/schema/mule/imap" xmlns:imaps="http://www.mulesoft.org/schema/mule/imaps"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
 	xmlns:management="http://www.mulesoft.org/schema/mule/management"
 	xmlns:ognl="http://www.mulesoft.org/schema/mule/ognl" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
 	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
 	xmlns:mule-xml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey"
 	xsi:schemaLocation=" 
+		  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd	
           http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
           http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
           http://www.mulesoft.org/schema/mule/pop3 http://www.mulesoft.org/schema/mule/pop3/3.1/mule-pop3.xsd
@@ -38,35 +39,35 @@
           http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
           http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
-	
-	<flow name="ReceiveOPCData" >
+
+	<flow name="receiveOpcData">
 		<http:inbound-endpoint exchange-pattern="request-response"
-			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/opcdata"
-			doc:name="http-save-opc-endpoint" />
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/opcdata" />
 		<jersey:resources doc:name="REST">
-			<component class="com.pdvsa.psp.mule.rest.OpcInfoRestService" />
+			<component class="com.pdvsa.psp.mule.rest.TransferOpcInfoRegisterRest" />
 		</jersey:resources>
-		<object-to-string-transformer doc:name="Object to String" />
-<!-- 		<message-filter throwOnUnaccepted="true" doc:name="validation-filter">  -->
-<!-- 			<filter ref="opc-request-schema-validation" /> </message-filter> -->
-<!-- 		<mule-xml:dom-to-xml-transformer /> -->
-		<mule-xml:xml-to-object-transformer returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8" mimeType="text/xml">
-			<mule-xml:alias name="opcItemsTransfer" class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
-			<mule-xml:alias name="opc" class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
+		<object-to-string-transformer />
+		<mule-xml:xml-to-object-transformer
+			returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8"
+			mimeType="text/xml">
+			<mule-xml:alias name="opcItemsTransfer"
+				class="com.pdvsa.psp.model.xml.OpcItemsTransfer" />
+			<mule-xml:alias name="opc"
+				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
 		<all>
 <!-- 			<component> -->
-<!-- 				<spring-object bean="mongoInsertComponent" /> -->
+<!-- 				<spring-object bean="mongoInsertItemToTransferComponent" /> -->
 <!-- 			</component> -->
 			<component>
-				<spring-object bean="storeTankOpcDataCache" />
+				<spring-object bean="storeInCache" />
 			</component>
 			<component>
 				<spring-object bean="mongoSaveHistoricItemsComponent" />
 			</component>
 		</all>
-		<scripting:transformer doc:name="Groovy">
+		<scripting:transformer>
 			<scripting:script engine="Groovy">
 				<![CDATA[
          			import java.text.SimpleDateFormat;
@@ -90,50 +91,64 @@
       			]]>
 			</scripting:script>
 		</scripting:transformer>
-		<mule-xml:object-to-xml-transformer	encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
-			<mule-xml:alias name="response" class="com.pdvsa.psp.model.xml.MongoLogger" />
+		<mule-xml:object-to-xml-transformer
+			encoding="UTF-8" mimeType="text/xml">
+			<mule-xml:alias name="response"
+				class="com.pdvsa.psp.model.xml.MongoLogger" />
 		</mule-xml:object-to-xml-transformer>
-		<exception-strategy ref="Choice_Exception_Strategy"	doc:name="Catch_Exception_Strategy_DEFAULT" />
+		<exception-strategy ref="Choice_Exception_Strategy" />
 	</flow>
-	
-	<flow name="ValidateTiempoFlow">
-	    <quartz:inbound-endpoint jobName="job-validate-data-recieved-localidad"
-			repeatInterval="${psp.transmitFrecuency}" repeatCount="-1" connector-ref="Quartz-Connector"
-			doc:name="Quartz">
+
+	<custom-transformer name="velocityNotificacionErrorTransmision"
+		class="com.pdvsa.psp.mule.transformer.VelocityPayloadTransformer">
+		<spring:property name="velocityEngine" ref="velocityEngine" />
+		<spring:property name="templateName" value="errorTransmision.vm" />
+	</custom-transformer>
+
+	<flow name="validarTiempoInactividad">
+		<quartz:inbound-endpoint jobName="jobvalidarTiempoInactividad"
+			repeatInterval="${psp.transmitFrecuency}" repeatCount="-1"
+			connector-ref="quartzConnector">
 			<quartz:event-generator-job />
 		</quartz:inbound-endpoint>
 		<component>
-		    <spring-object bean="validateTime"/>
+			<spring-object bean="testTransmissionIdleTime" />
 		</component>
-		<expression-filter expression="payload.size() > 0" evaluator="groovy" />		
-		<scripting:transformer doc:name="Groovy">
-			<scripting:script engine="Groovy">
-				<![CDATA[
-         			def localidades = []
-         			for(item in payload){
-         				localidades = item.localidad
-         			}         			
-         			payload = localidades
-         			return payload         			
-      			]]>
-			</scripting:script>
-		</scripting:transformer>
-	    <set-payload value="${smtp.body} - #[payload]" doc:name="Set Payload"/>
-        <enricher source="#[payload]" target="#[flowVars['addresses']]">
-        	<flow-ref name="LookupEmailAddressesSubflow" doc:name="LookupEmailAddressesSubflow" />
-        </enricher>
-         <smtp:outbound-endpoint to="#[flowVars['addresses']]" user="${smtp.username}" password="${smtp.password}" host="${smtp.host}" port="${smtp.port}" connector-ref="emailConnector"
-              subject="${email.subjectPrefix} N O T I F I C A C I O N" responseTimeout="10000"  >
-         </smtp:outbound-endpoint>
+		<expression-filter expression="payload.size() > 0"
+			evaluator="groovy" />
+<!-- 		<scripting:transformer> -->
+<!-- 			<scripting:script engine="Groovy"> -->
+<!-- 				<![CDATA[ -->
+<!--          			def localidades = [] -->
+<!--          			for(item in payload){ -->
+<!--          				localidades = item.localidad -->
+<!--          			}         			 -->
+<!--          			payload = localidades -->
+<!--          			return payload         			 -->
+<!--       			]]> -->
+<!-- 			</scripting:script> -->
+<!-- 		</scripting:transformer> -->
+<!-- 		<set-payload value="${smtp.body} - #[payload]" /> -->
+		<enricher source="#[payload]" target="#[flowVars['addresses']]">
+			<flow-ref name="obtenerDireccionCorreoSubflow" />
+		</enricher>
+
+		<smtp:outbound-endpoint host="${smtp.host}"
+			port="${smtp.port}" user="${smtp.username}" password="${smtp.password}"
+			subject="${email.subjectPrefix} N O T I F I C A C I O N" from="${email.fromAddress}"
+			to="#[flowVars['addresses']]" transformer-refs="velocityNotificacionErrorTransmision"
+			responseTimeout="10000" connector-ref="emailConnector">
+		</smtp:outbound-endpoint>
+
 	</flow>
-	
-	<sub-flow name="LookupEmailAddressesSubflow">
-       <set-payload value="ADMIN" doc:name="ROLE NAME" />
-       <http:outbound-endpoint exchange-pattern="request-response"  method="POST" doc:name="/psp/services/rol"
-      		address="${soap.urlBase}/rol" >
-       <cxf:jaxws-client doc:name="getEmailAdressesByRole" operation="getEmailAdressesByRole"
-       serviceClass="com.pdvsa.psp.service.IRolService" />
-     </http:outbound-endpoint>
-   </sub-flow>
+
+	<sub-flow name="obtenerDireccionCorreoSubflow">
+		<set-payload value="ADMIN" />
+		<http:outbound-endpoint exchange-pattern="request-response"
+			method="POST" address="${soap.urlBase}/rol">
+			<cxf:jaxws-client operation="getEmailAdressesByRole"
+				serviceClass="com.pdvsa.psp.service.IRolService" />
+		</http:outbound-endpoint>
+	</sub-flow>
 
 </mule>

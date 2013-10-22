@@ -13,7 +13,7 @@
 	         registers = new OpcItemsTransfer();
 	tanqueNombre = arg.get("tanqueNombre");
 	servidorNombre = arg.get("servidorNombre");
-	registers = servicioMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
+	registers = serviciosMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
 	
 	
 	
@@ -39,7 +39,7 @@
 							<button label="Refrescar" mold="trendy">
 								<attribute name="onClick">
 									<![CDATA[
-									     	registers = servicioMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
+									     	registers = serviciosMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
 	binder.loadAll();
 ]]>
 									</attribute>
@@ -79,7 +79,7 @@
 			<![CDATA[
 	{
 
-		registers = servicioMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
+		registers = serviciosMongo.getLastItemsByTanque(servidorNombre, tanqueNombre);
 		binder.loadAll();
 
 	}

@@ -10,22 +10,14 @@ import com.sun.xml.bind.AnyTypeAdapter;
 
 
 @XmlJavaTypeAdapter(AnyTypeAdapter.class)
-@XmlSeeAlso({ PageOpcInfoResponseImpl.class, PageLoggerResponseImpl.class })
+@XmlSeeAlso({ PageOpcInfoRegisterResponseImpl.class, PageLogResponseImpl.class })
 @XmlRootElement(name="PageResponse")
 public interface PageResponse {
 	
-	public Integer getNumber();	
-	public Integer getNumberOfElements();
-	public Integer getSize();
-	public Long getTotal();
-	public Integer getTotalPages();	
+	public Long getTotalElements();	
 	public Integer getPageNumber();
 	public Integer getPageSize();
 	
-	
-	public void setTotal(Long total);
-	public void setPageNumber(Integer pageNumber);
-	public void setPageSize(Integer size);
 	
 
 }

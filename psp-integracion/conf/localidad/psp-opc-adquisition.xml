@@ -57,36 +57,35 @@
 
 	<!-- Almacenamiento de Datos OPC en MongoDB -->
 	<custom-transformer
-		class="com.pdvsa.psp.mule.component.OpcInfoPollingService" name="OpcData">
+		class="com.pdvsa.psp.mule.transformer.OpcInfoRegisterToOpcInfoRegisterMongoTransformer" name="opcInfoRegisterToOpcInfoRegisterMongo">
 		<spring:property name="opcControllerService" ref="opcControllerService"></spring:property>
 	</custom-transformer>
 
 	<custom-transformer
-		class="com.pdvsa.psp.mule.transformer.ProcessOpcInfoTransformer" name="ProcessOpcData">
+		class="com.pdvsa.psp.mule.transformer.CompleteOpcInfoRegisterMongoTransformer" name="completeOpcInfoRegisterMongo">
 		<spring:property name="servidorService" ref="servidorService"></spring:property>
 		<spring:property name="itemService" ref="itemService"></spring:property>		
 		<spring:property name="tanqueService" ref="tanqueService"></spring:property>		
 	</custom-transformer>	
 	
-	<flow name="GetOpcDataAdquisition">
-		<quartz:inbound-endpoint jobName="job-get-opcdata-from-adquisition"
-			repeatInterval="${psp.poolingFrecuency}" repeatCount="-1" connector-ref="Quartz-Connector">
+	<flow name="getOpcData">
+		<quartz:inbound-endpoint jobName="getOpcData"
+			repeatInterval="${psp.poolingFrecuency}" repeatCount="-1" connector-ref="quartzConnector">
 			<quartz:event-generator-job />
 		</quartz:inbound-endpoint>
-		<transformer ref="OpcData" />
+		<transformer ref="opcInfoRegisterToOpcInfoRegisterMongo" />
 		<foreach collection="#[payload.opcItems]">
-			<transformer ref="ProcessOpcData" />
+			<transformer ref="completeOpcInfoRegisterMongo" />
 		</foreach>
 		<all>
 			<component>
-				<spring-object bean="mongoInsertComponent" />
+				<spring-object bean="mongoInsertItemToTransferComponent" />
 			</component>
 			<component>
-				<spring-object bean="storeTankOpcDataCache" />
+				<spring-object bean="storeInCache" />
 			</component>
 		</all>
-		<exception-strategy ref="Choice_Exception_Strategy"
-			doc:name="Catch_Exception_Strategy_DEFAULT" />
+		<exception-strategy ref="Choice_Exception_Strategy"  />
 	</flow>
 
 </mule>

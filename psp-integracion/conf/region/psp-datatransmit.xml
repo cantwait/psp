@@ -40,14 +40,14 @@
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
 
 
-	<flow name="SendOpcData">
-		<quartz:inbound-endpoint jobName="job-send-data-to-master"
-			repeatInterval="${psp.transmitFrecuency}" repeatCount="-1" connector-ref="Quartz-Connector"
-			doc:name="Quartz">
+	<flow name="sendData">
+		<quartz:inbound-endpoint jobName="jobSendData"
+			repeatInterval="${psp.transmitFrecuency}" repeatCount="-1"
+			connector-ref="quartzConnector">
 			<quartz:event-generator-job />
 		</quartz:inbound-endpoint>
 		<component>
-			<spring-object bean="mongoFindComponentTransfer" />
+			<spring-object bean="mongoFindItemsToTransferComponent" />
 		</component>
 		<expression-filter expression="payload.opcItems.size() > 0"
 			evaluator="groovy" />
@@ -62,10 +62,10 @@
 		</mule-xml:object-to-xml-transformer>
 		<set-variable variableName="xmlPayload" value="#[payload]" />
 		<http:outbound-endpoint exchange-pattern="request-response"
-			host="${rest.master.host}" port="${rest.master.port}" responseTimeout="20000"
-			path="${rest.master.pathBase}/opcdata/transferir" method="POST"
-			doc:name="HTTP-ED" />
-		<object-to-string-transformer doc:name="Object to String" />
+			host="${rest.master.host}" port="${rest.master.port}"
+			responseTimeout="20000" path="${rest.master.pathBase}/opcdata/transferir"
+			method="POST" />
+		<object-to-string-transformer />
 		<mule-xml:xml-to-object-transformer
 			returnClass="com.pdvsa.psp.model.xml.MongoLogger" encoding="UTF-8"
 			mimeType="text/xml">
@@ -86,17 +86,16 @@
 				</component>
 				<set-payload value="#[flowVars['xmlPayload']]" />
 				<vm:outbound-endpoint exchange-pattern="one-way"
-					path="update-opc-endpoint" doc:name="VM" />
+					path="removeTransferedItems" />
 			</otherwise>
 		</choice>
 
-		<exception-strategy ref="Choice_Exception_Strategy"
-			doc:name="Catch_Exception_Strategy_DEFAULT" />
+		<exception-strategy ref="Choice_Exception_Strategy" />
 	</flow>
 
-	<flow name="UpdateOpcItemLocalidad" doc:name="UpdateOpcItemRegion">
+	<flow name="removeTransferedItems">
 		<vm:inbound-endpoint exchange-pattern="one-way"
-			path="update-opc-endpoint" doc:name="vm-update-opc-endpoint" />
+			path="removeTransferedItems" />
 		<mule-xml:xml-to-object-transformer
 			returnClass="com.pdvsa.psp.model.xml.OpcItemsTransfer" encoding="UTF-8"
 			mimeType="text/xml">
@@ -106,13 +105,12 @@
 				class="com.pdvsa.psp.model.xml.OpcInfoRegisterMongo" />
 			<mule-xml:converter class="com.pdvsa.psp.converter.DateConverterMapper" />
 		</mule-xml:xml-to-object-transformer>
-		<all doc:name="All">
+		<all>
 			<component>
-				<spring-object bean="mongoRemoveItemsComponent" />
+				<spring-object bean="mongoRemoveTransferedItemsComponent" />
 			</component>
 		</all>
-		<exception-strategy ref="Choice_Exception_Strategy"
-			doc:name="Catch_Exception_Strategy_DEFAULT" />
+		<exception-strategy ref="Choice_Exception_Strategy" />
 	</flow>
 
 </mule>

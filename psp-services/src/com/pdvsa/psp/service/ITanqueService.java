@@ -15,6 +15,10 @@ public interface ITanqueService {
 	@WebMethod
 	@WebResult(name = "tanque")
 	public Tanque getTanqueById(@WebParam(name = "idTanque") Long idTanque);
+	
+	@WebMethod
+	@WebResult(name="tanque")
+	Tanque  getTanquesByServidorAndNombreAndActivo(Long idServidor,String nombreTanque);	
 
 	@WebMethod
 	@WebResult(name = "tanque")

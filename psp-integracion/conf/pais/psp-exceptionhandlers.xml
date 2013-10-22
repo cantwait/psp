@@ -43,7 +43,7 @@
 
 		<catch-exception-strategy
 			when="#[exception.causedBy(org.mule.api.routing.filter.FilterUnacceptedException)]">
-			<scripting:transformer doc:name="Groovy">
+			<scripting:transformer>
 				<scripting:script engine="Groovy">
 				<![CDATA[
                 import java.text.SimpleDateFormat;
@@ -71,15 +71,15 @@
 				<spring-object bean="mongoInsertLogComponent" />
 			</component>
 			<mule-xml:object-to-xml-transformer
-				encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+				encoding="UTF-8" mimeType="text/xml">
 				<mule-xml:alias name="response"
 					class="com.pdvsa.psp.model.xml.MongoLogger" />
 			</mule-xml:object-to-xml-transformer>
 		</catch-exception-strategy>
 
-		<catch-exception-strategy doc:name="Catch Exception Strategy"
+		<catch-exception-strategy 
 			when="#[exception.causedBy(java.net.ConnectException)]">
-			<scripting:transformer doc:name="Groovy">
+			<scripting:transformer >
 				<scripting:script engine="Groovy">
 				<![CDATA[
                 import java.text.SimpleDateFormat;
@@ -111,9 +111,8 @@
 		</catch-exception-strategy>
 		
 		<catch-exception-strategy
-			when="#[exception.causedBy(com.pdvsa.psp.mule.rest.exception.BadRequestException)]"
-			doc:name="Catch Exception Strategy">
-			<scripting:transformer doc:name="Groovy">
+			when="#[exception.causedBy(com.pdvsa.psp.mule.rest.exception.BadRequestException)]">
+			<scripting:transformer>
 				<scripting:script engine="Groovy">
 				<![CDATA[
                 import java.text.SimpleDateFormat;
@@ -141,14 +140,14 @@
 				<spring-object bean="mongoInsertLogComponent" />
 			</component>
 			<mule-xml:object-to-xml-transformer
-				encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+				encoding="UTF-8" mimeType="text/xml" >
 				<mule-xml:alias name="response"
 					class="com.pdvsa.psp.model.xml.MongoLogger" />
 			</mule-xml:object-to-xml-transformer>
 		</catch-exception-strategy>
 
-		<catch-exception-strategy doc:name="Catch Exception Strategy">
-			<scripting:transformer doc:name="Groovy">
+		<catch-exception-strategy>
+			<scripting:transformer>
 				<scripting:script engine="Groovy">
 				<![CDATA[
 				import java.text.SimpleDateFormat;
@@ -176,7 +175,7 @@
 				<spring-object bean="mongoInsertLogComponent" />
 			</component>
 			<mule-xml:object-to-xml-transformer
-				encoding="UTF-8" mimeType="text/xml" doc:name="Object to XML">
+				encoding="UTF-8" mimeType="text/xml" >
 				<mule-xml:alias name="response"
 					class="com.pdvsa.psp.model.xml.MongoLogger" />
 			</mule-xml:object-to-xml-transformer>

@@ -44,15 +44,16 @@
 		<spring:import resource="classpath:psp-config-level.xml" />
 	</spring:beans>
 	
+	<spring:bean name="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<spring:property name="resourceLoaderPath" value="classpath:templates" />
+	</spring:bean>	
+	
 	
 	<!-- PROPIEDADES GLOBALES -->
-	
-	<mule-xml:schema-validation-filter schemaLocations="xsd/opcerrorrequest.xsd" returnResult="true" name="opc-error-request-schema-validation" doc:name="Schema Validation"/>
-	<mule-xml:schema-validation-filter schemaLocations="xsd/opcinfotransfer.xsd" returnResult="true" name="opc-request-schema-validation" />
-	
-		
-	<quartz:connector name="Quartz-Connector"
-		validateConnections="true" doc:name="Quartz">
+
+	<quartz:connector name="quartzConnector"
+		validateConnections="true" >
 		<quartz:factory-property key="rg.quartz.scheduler.instanceName"
 			value="MuleScheduler1" />
 		<quartz:factory-property key="org.quartz.threadPool.class"
@@ -67,11 +68,7 @@
 			value="org.quartz.simpl.RAMJobStore" />
 	</quartz:connector>
 
-	<custom-transformer
-		class="com.pdvsa.psp.mule.transformer.JSONArrayToOpcInfoArray" name="Java"
-		doc:name="Java" />
-
-	<flow name="PingFlow">
+	<flow name="pingFlow">
 		<http:inbound-endpoint host="localhost" port="8084"
 			exchange-pattern="request-response" />
 		<logger message="Ping - #[message:payload]" level="INFO" />
@@ -94,7 +91,7 @@
 	<!-- *********** C O N N E C T O R S *********** -->
 
 	<smtp:gmail-connector name="emailConnector"
-		fromAddress="${email.fromAddress}" />
+		fromAddress="${email.fromAddress}" contentType="text/plain" />
 
 	<http:connector name="httpConnector" proxyHostname="${proxy.hostname}"
 		proxyPassword="${proxy.password}" proxyPort="${proxy.port}"

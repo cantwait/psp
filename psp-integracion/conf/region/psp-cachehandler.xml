@@ -40,11 +40,11 @@
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
     
     
-	<flow name="ItemsFromCacheFlow">
-   	    <http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/cache" doc:name="HTTP" method="GET"/>
+	<flow name="queryCacheFlow">
+   	    <http:inbound-endpoint exchange-pattern="request-response" host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/cache" method="GET"/>
 		<jersey:resources doc:name="REST">
 			<component>
-			    <spring-object bean="itemsFromCache" />
+			    <spring-object bean="queryCache" />
 			</component>
 		</jersey:resources>
    	</flow>

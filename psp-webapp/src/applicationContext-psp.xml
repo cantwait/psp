@@ -160,13 +160,13 @@ http://www.springframework.org/schema/security
     	<property name="classesToBeBound">
     		<list>
     		    <value>com.pdvsa.psp.model.xml.OpcItemsTransfer</value>
-    			<value>com.pdvsa.psp.model.xml.PageOpcInfoResponseImpl</value>
-    			<value>com.pdvsa.psp.model.xml.PageLoggerResponseImpl</value>
+    			<value>com.pdvsa.psp.model.xml.PageOpcInfoRegisterResponseImpl</value>
+    			<value>com.pdvsa.psp.model.xml.PageLogResponseImpl</value>
     		</list>
     	</property>
     </bean>
     
-	<bean id="servicioMongo" class="com.obelisco.modelo.servicios.rest.impl.ServicioMongo">
+	<bean id="serviciosMongo" class="com.obelisco.modelo.servicios.rest.impl.ServiciosMongo">
 	    <property name="restTemplate" ref="restTemplate"></property>
 		<property name="address" value="http://${rest-address}:${rest-port}${rest-pathBase}" />	    
 	</bean>

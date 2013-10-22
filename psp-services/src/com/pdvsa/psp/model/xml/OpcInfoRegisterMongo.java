@@ -13,8 +13,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-//@XmlRootElement(name="object")
-//@XmlAccessorType(XmlAccessType.FIELD)
 @Document(collection="opcInfoRegister")
 public class OpcInfoRegisterMongo implements Serializable{
 
@@ -28,17 +26,17 @@ public class OpcInfoRegisterMongo implements Serializable{
 	@Transient
 	private Long idServidor;
 	
-	private String tagOpc;
-	private String tagName;
+	private String nombreOPC;
+	private String variable;
 	private Date timestamp;
-	private String regValue = "";
-	private Short quality = 0;	
+	private String valor = "";
+	private Short calidad = 0;	
 	private String unidadMedida;	
-	private String localidadNombre;	
-	private String tanqueNombre;	
-	private String regionNombre;	
-	private String paisNombre;
-	private String productoNombre;
+	private String localidad;	
+	private String tanque;	
+	private String region;	
+	private String pais;
+	private String producto;
 	
 	@Indexed	
 	private String nombreServidor;
@@ -56,23 +54,22 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.id = id;
 	}
 
-	public String getTagOpc() {
-		return tagOpc;
+	public String getNombreOPC() {
+		return nombreOPC;
 	}
 	
-	public void setTagOpc(String tagOpc) {
-		this.tagOpc = tagOpc;
+	public void setNombreOPC(String tagOpc) {
+		this.nombreOPC = tagOpc;
 	}
 	
-	public String getTagName() {
-		return tagName;
+	public String getVariable() {
+		return variable;
 	}
 	
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+	public void setVariable(String tagName) {
+		this.variable = tagName;
 	}
 	
-//	@JsonSerialize(using= JsonTimeSerializer.class)
 	@XmlElement(name = "timestamp", required = true) 
     @XmlJavaTypeAdapter(com.pdvsa.psp.serializer.DateAdapter.class)
 	public Date getTimestamp() {
@@ -83,52 +80,52 @@ public class OpcInfoRegisterMongo implements Serializable{
 		this.timestamp = timestamp;
 	}
 	
-	public String getRegValue() {
-		return regValue;
+	public String getValor() {
+		return valor;
 	}
 	
-	public void setRegValue(String regValue) {
-		this.regValue = regValue;
+	public void setValor(String regValue) {
+		this.valor = regValue;
 	}
 
-	public void setQuality(Short quality) {
-		this.quality = quality;
+	public void setCalidad(Short quality) {
+		this.calidad = quality;
 	}
 
-	public Short getQuality() {
-		return quality;
+	public Short getCalidad() {
+		return calidad;
 	}
 
-	public String getLocalidadNombre() {
-		return localidadNombre;
+	public String getLocalidad() {
+		return localidad;
 	}
 
-	public void setLocalidadNombre(String localidadNombre) {
-		this.localidadNombre = localidadNombre;
+	public void setLocalidad(String localidadNombre) {
+		this.localidad = localidadNombre;
 	}
 
-	public String getRegionNombre() {
-		return regionNombre;
+	public String getRegion() {
+		return region;
 	}
 
-	public void setRegionNombre(String regionNombre) {
-		this.regionNombre = regionNombre;
+	public void setRegion(String regionNombre) {
+		this.region = regionNombre;
 	}
 
-	public String getPaisNombre() {
-		return paisNombre;
+	public String getPais() {
+		return pais;
 	}
 
-	public void setPaisNombre(String paisNombre) {
-		this.paisNombre = paisNombre;
+	public void setPais(String paisNombre) {
+		this.pais = paisNombre;
 	}
 
-	public String getTanqueNombre() {
-		return tanqueNombre;
+	public String getTanque() {
+		return tanque;
 	}
 
-	public void setTanqueNombre(String tankeNombre) {
-		this.tanqueNombre = tankeNombre;
+	public void setTanque(String tankeNombre) {
+		this.tanque = tankeNombre;
 	}
 
 	public String getNombreServidor() {
@@ -144,14 +141,14 @@ public class OpcInfoRegisterMongo implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((localidadNombre == null) ? 0 : localidadNombre.hashCode());
+				+ ((localidad == null) ? 0 : localidad.hashCode());
 		result = prime * result
 				+ ((nombreServidor == null) ? 0 : nombreServidor.hashCode());
 		result = prime * result
-				+ ((paisNombre == null) ? 0 : paisNombre.hashCode());
+				+ ((pais == null) ? 0 : pais.hashCode());
 		result = prime * result
-				+ ((regionNombre == null) ? 0 : regionNombre.hashCode());
-		result = prime * result + ((tagOpc == null) ? 0 : tagOpc.hashCode());
+				+ ((region == null) ? 0 : region.hashCode());
+		result = prime * result + ((nombreOPC == null) ? 0 : nombreOPC.hashCode());
 		return result;
 	}
 
@@ -164,30 +161,30 @@ public class OpcInfoRegisterMongo implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		OpcInfoRegisterMongo other = (OpcInfoRegisterMongo) obj;
-		if (localidadNombre == null) {
-			if (other.localidadNombre != null)
+		if (localidad == null) {
+			if (other.localidad != null)
 				return false;
-		} else if (!localidadNombre.equals(other.localidadNombre))
+		} else if (!localidad.equals(other.localidad))
 			return false;
 		if (nombreServidor == null) {
 			if (other.nombreServidor != null)
 				return false;
 		} else if (!nombreServidor.equals(other.nombreServidor))
 			return false;
-		if (paisNombre == null) {
-			if (other.paisNombre != null)
+		if (pais == null) {
+			if (other.pais != null)
 				return false;
-		} else if (!paisNombre.equals(other.paisNombre))
+		} else if (!pais.equals(other.pais))
 			return false;
-		if (regionNombre == null) {
-			if (other.regionNombre != null)
+		if (region == null) {
+			if (other.region != null)
 				return false;
-		} else if (!regionNombre.equals(other.regionNombre))
+		} else if (!region.equals(other.region))
 			return false;
-		if (tagOpc == null) {
-			if (other.tagOpc != null)
+		if (nombreOPC == null) {
+			if (other.nombreOPC != null)
 				return false;
-		} else if (!tagOpc.equals(other.tagOpc))
+		} else if (!nombreOPC.equals(other.nombreOPC))
 			return false;
 		return true;
 	}
@@ -213,13 +210,13 @@ public class OpcInfoRegisterMongo implements Serializable{
 	}
 
 
-	public String getProductoNombre() {
-		return productoNombre;
+	public String getProducto() {
+		return producto;
 	}
 
 
-	public void setProductoNombre(String productoNombre) {
-		this.productoNombre = productoNombre;
+	public void setProducto(String productoNombre) {
+		this.producto = productoNombre;
 	}
 
 	

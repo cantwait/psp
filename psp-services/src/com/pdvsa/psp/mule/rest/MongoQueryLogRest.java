@@ -23,9 +23,8 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import com.pdvsa.psp.converter.DateFormatParam;
 import com.pdvsa.psp.model.xml.MongoLogger;
-import com.pdvsa.psp.model.xml.OpcErrorResponse;
 import com.pdvsa.psp.model.xml.OpcInfoRegisterMongo;
-import com.pdvsa.psp.model.xml.PageLoggerResponseImpl;
+import com.pdvsa.psp.model.xml.PageLogResponseImpl;
 import com.pdvsa.psp.model.xml.PageResponse;
 
 @Path("/")
@@ -37,7 +36,7 @@ public class MongoQueryLogRest {
 	@Produces("text/xml")
 	@Path("/consultar")
 	@XmlJavaTypeAdapter(PageAdapter.class)
-	public PageResponse getLogByPropertiesOnDemand(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta, @QueryParam("evento") String evento, @QueryParam("pagina") Integer pagina, @QueryParam("tamano")Integer tamano){
+	public PageResponse queryLogData(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta, @QueryParam("evento") String evento, @QueryParam("pagina") Integer pagina, @QueryParam("tamano")Integer tamano){
 		
 		List<MongoLogger> items = new ArrayList<MongoLogger>();
 		Query qry = new Query();
@@ -48,7 +47,7 @@ public class MongoQueryLogRest {
 		DateFormatParam hastaFomatted = new DateFormatParam(hasta);
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
-		criterias.add(Criteria.where("fecha").gt(desdeFomatted.getValue()));
+		criterias.add(Criteria.where("fecha").gte(desdeFomatted.getValue()));
 		criterias.add(Criteria.where("fecha").lte(hastaFomatted.getValue()));
 		
 		if(evento != null && evento.length() > 0){
@@ -58,17 +57,14 @@ public class MongoQueryLogRest {
 		qry.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));
 		qryCount.addCriteria(new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()])));
 		
-		qry.with(new Sort(new Order(Direction.ASC, "fecha")));
-		
+		qry.with(new Sort(new Order(Direction.ASC, "fecha")));		
 		qry.with(new PageRequest(pagina, tamano));
-		
-		
 		
 		long cant = getMongoTemplate().count(qryCount, "opcErrorTransaction");
 				
 		items = getMongoTemplate().find(qry, MongoLogger.class, "opcErrorTransaction");
 		
-		PageResponse resp = new PageLoggerResponseImpl(items, pagina, tamano, cant);
+		PageResponse resp = new PageLogResponseImpl(items, pagina, tamano, cant);
 		
 		
 		return resp;

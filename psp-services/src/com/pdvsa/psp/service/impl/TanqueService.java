@@ -78,5 +78,27 @@ public class TanqueService implements ITanqueService {
 		
 	}
 
+	@Override
+	public Tanque getTanquesByServidorAndNombreAndActivo(Long idServidor,String nombreTanque) {
+		Search s = new Search();
+		
+		s.addFilterEqual("activo", Boolean.TRUE);
+
+		if (!StringUtils.isBlank(nombreTanque)) {
+			s.addFilterEqual("nombre", nombreTanque);
+		}
+
+		if (idServidor != null) {
+			s.addFilterEqual("servidorOpc.id", idServidor);
+		}
+
+		Tanque tanque = null;
+		List<Tanque> tanques = getTanqueDAO().search(s);
+		if (tanques.size() > 0) {
+			tanque = tanques.get(0);
+		}
+		return tanque;
+	}
+
 
 }

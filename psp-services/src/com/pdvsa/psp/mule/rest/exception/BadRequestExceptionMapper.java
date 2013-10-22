@@ -10,6 +10,5 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
 	@Override
 	public Response toResponse(BadRequestException exception) {
 		return Response.status(400).entity(exception.getMessage()).type("text/xml").build();
-
 	}
 }

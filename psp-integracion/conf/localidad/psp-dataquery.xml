@@ -39,25 +39,24 @@
           http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/2.0/mule-mongo.xsd
           http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd">
     
-	<flow name="ConsultarDataPentahoGet">
+	<flow name="consultarDataHistorica">
 		<http:inbound-endpoint exchange-pattern="request-response"
-			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/historico"
-			doc:name="HTTP" method="GET" />
-		<jersey:resources doc:name="REST">
+			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/historico" method="GET" />
+		<jersey:resources>
 			<component>
-				<spring-object bean="mongoFindItemsPentahoRest" />
+				<spring-object bean="mongoQueryHistoricRest" />
 			</component>
 		</jersey:resources>
-		<exception-strategy ref="Choice_Exception_Strategy" doc:name="Catch_Exception_Strategy_DEFAULT" />
+		<exception-strategy ref="Choice_Exception_Strategy" />
 	</flow>
 	
-	<flow name="ConsultarLogBus">
+	<flow name="consultarLog">
 		<http:inbound-endpoint exchange-pattern="request-response"
 			host="${rest.host}" port="${rest.port}" path="${rest.pathBase}/log"
-			doc:name="HTTP" method="GET" />
-		<jersey:resources doc:name="REST">
+			method="GET" />
+		<jersey:resources>
 			<component>
-				<spring-object bean="mongoFindLogRest" />
+				<spring-object bean="mongoQueryLogRest" />
 			</component>
 		</jersey:resources>
 	</flow>
