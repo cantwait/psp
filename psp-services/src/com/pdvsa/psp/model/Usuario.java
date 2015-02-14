@@ -23,28 +23,39 @@ import org.hibernate.annotations.Cascade;
 @Table(name = "usuarios", schema = "public")
 public class Usuario implements Serializable, BizEntity {
 	private static final long serialVersionUID = 8073553667213665976L;
+	
 	private String email;
+
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
 	@SequenceGenerator(name = "USUARIOS_ID_GENERATOR", sequenceName = "PUBLIC.USUARIOS_ID_SEQ", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "USUARIOS_ID_GENERATOR")
 	private Long id = Long.MIN_VALUE;
 	private Boolean activo = true;
+	
 	@Column(name = "login", unique = true, nullable = false, length = 30)
 	private String login;
+	
 	@Column(name = "numero_celular", length = 20)
 	private String numeroCelular;
+	
 	private String nombre;
+	
 	@Column(name = "password", nullable = false, length = 100)
 	private String password;
+	
 	@Column(name = "numero_telefonico", length = 20)
 	private String numeroTelefonico;
 	private Integer version = 0;
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
 	private Set<UsuarioRol> usuarioRoles = new HashSet<UsuarioRol>(0);
-//	@OneToMany(mappedBy="usuario", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-//	@XmlTransient
-//	private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario = new HashSet<TransaccionOperacionUsuario>();	
+
+	// @OneToMany(mappedBy="usuario", cascade=CascadeType.ALL,
+	// fetch=FetchType.LAZY)
+	// @XmlTransient
+	// private Set<TransaccionOperacionUsuario> transaccionOperacionUsuario =
+	// new HashSet<TransaccionOperacionUsuario>();
 
 	public Usuario() {
 	}
@@ -67,7 +78,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.usuarioRoles = usuarioRoles;
 	}
 
-	
 	public Long getId() {
 		return this.id;
 	}
@@ -76,7 +86,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.id = id;
 	}
 
-	
 	public String getEmail() {
 		return this.email;
 	}
@@ -85,7 +94,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.email = email;
 	}
 
-	
 	public Boolean getActivo() {
 		return this.activo;
 	}
@@ -94,7 +102,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.activo = activo;
 	}
 
-	
 	public String getLogin() {
 		return this.login;
 	}
@@ -103,7 +110,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.login = login;
 	}
 
-	
 	public String getNumeroCelular() {
 		return this.numeroCelular;
 	}
@@ -112,7 +118,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.numeroCelular = numeroCelular;
 	}
 
-	
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -121,7 +126,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.nombre = nombre;
 	}
 
-	
 	public String getPassword() {
 		return password;
 	}
@@ -130,7 +134,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.password = password;
 	}
 
-	
 	public String getNumeroTelefonico() {
 		return this.numeroTelefonico;
 	}
@@ -149,7 +152,6 @@ public class Usuario implements Serializable, BizEntity {
 		this.version = version;
 	}
 
-
 	@XmlTransient
 	public Set<UsuarioRol> getUsuarioRoles() {
 		return this.usuarioRoles;
@@ -157,17 +159,18 @@ public class Usuario implements Serializable, BizEntity {
 
 	public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
 		this.usuarioRoles = usuarioRoles;
-	}	
+	}
 
-//	@XmlTransient	
-//	public Set<TransaccionOperacionUsuario> getTransaccionOperacionUsuario() {
-//		return transaccionOperacionUsuario;
-//	}
-//
-//	public void setTransaccionOperacionUsuario(
-//			Set<TransaccionOperacionUsuario> transaccionOperacionUsuario) {
-//		this.transaccionOperacionUsuario = transaccionOperacionUsuario;
-//	}
+	// @XmlTransient
+	// public Set<TransaccionOperacionUsuario> getTransaccionOperacionUsuario()
+	// {
+	// return transaccionOperacionUsuario;
+	// }
+	//
+	// public void setTransaccionOperacionUsuario(
+	// Set<TransaccionOperacionUsuario> transaccionOperacionUsuario) {
+	// this.transaccionOperacionUsuario = transaccionOperacionUsuario;
+	// }
 
 	@Transient
 	public boolean isNew() {
@@ -199,7 +202,5 @@ public class Usuario implements Serializable, BizEntity {
 	public String toString() {
 		return nombre + " (" + login + ")";
 	}
-
-	
 
 }

@@ -312,4 +312,7 @@
 
 	</dependencies>
 
+	<properties>
+		<mule.version>3.4.0</mule.version>
+	</properties>
 </project>

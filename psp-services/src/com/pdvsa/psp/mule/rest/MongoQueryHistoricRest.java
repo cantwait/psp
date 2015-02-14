@@ -35,7 +35,7 @@ public class MongoQueryHistoricRest {
 
 	private MongoTemplate mongoTemplate;
 
-	@GET
+		@GET
 	@Produces("text/xml")
 	@Path("/consultar")
 	public PageResponse queryHistoricData(@QueryParam("desde") String desde, @QueryParam("hasta") String hasta,  @QueryParam(value = "pais") String pais,	@QueryParam(value = "region") String region, @QueryParam(value = "tanque") String tanque,@QueryParam(value="variable") String variable, @QueryParam(value = "localidad") String localidad, @QueryParam("pagina") Integer pagina, @QueryParam("tamano") Integer tamano) throws BadRequestException {

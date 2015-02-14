@@ -16,6 +16,7 @@ public class Rol implements Serializable, BizEntity {
 	private Boolean activo = true;
 	private String nombre;
 	private Integer version = 0;
+	
 	private Set<UsuarioRol> usuarioRoles = new HashSet<UsuarioRol>(0);
 
 	public Rol() {

@@ -7,8 +7,8 @@
 
 
 	<properties>
-		<mule.version>3.3.1</mule.version>
-		<spring.version>3.1.0.RELEASE</spring.version>
+		<mule.version>3.4.0</mule.version>
+		<spring.version>3.2.1.RELEASE</spring.version>
 		<aspectj.version>1.6.11</aspectj.version>
 	</properties>
 
@@ -22,8 +22,13 @@
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases</name>
 			<url>http://repository.mulesoft.org/releases/</url>
+		</repository> 
+		<repository>
+			<id>trg-dao-repo</id>
+			<name>Repository for The Revere Group's Hibernate Generic DAO framework</name>
+			<url>http://hibernate-generic-dao.googlecode.com/svn/trunk/maven-repo/</url>
 		</repository>
-	</repositories>
+	</repositories> 
 
 
 	<dependencies>
@@ -65,7 +70,7 @@
 		<dependency>
 			<groupId>org.openscada.jinterop</groupId>
 			<artifactId>org.openscada.jinterop.core</artifactId>
-			<version>1.1.0.v20130529</version>
+			<version>1.1.0.v20130529</version> 
 		</dependency>
 
 		<dependency>
@@ -103,6 +108,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-jersey</artifactId>
+			<version>${mule.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-json</artifactId>
+			<version>${mule.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -197,19 +215,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.1.Final</version>
 		</dependency>
-
-		<!-- <dependency> <groupId>org.hibernate.java-persistence</groupId> <artifactId>jpa-api</artifactId> 
-			<version>2.0-cr-1</version> <type>jar</type> <scope>compile</scope> </dependency> 
-			<dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-entitymanager</artifactId> 
-			<version>3.6.4.Final</version> <exclusions> <exclusion> <artifactId>antlr</artifactId> 
-			<groupId>antlr</groupId> </exclusion> </exclusions> </dependency> -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -236,7 +246,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
@@ -254,25 +263,30 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-jersey</artifactId>
-			<version>${mule.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-json</artifactId>
-			<version>${mule.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
@@ -304,7 +318,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -316,13 +329,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
 			<version>1.6.4</version>
 		</dependency>
-
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+		</dependency>
 	</dependencies>
 
 	<packaging>pom</packaging>
